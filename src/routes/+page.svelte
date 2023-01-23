@@ -7,6 +7,7 @@
 	import { displayTime } from '$lib/utils/timer-utils'
 	import { randomScrambleForEvent } from 'cubing/scramble'
 	import { onMount } from 'svelte'
+  import { browser } from '$app/environment'
 
 	let session: Session
 	let cubeType = CubeType.n3x3
@@ -49,12 +50,18 @@
 	}
 
 	async function getSessionData() {
-		const response = await axios.get<Session>(`sessions/${sessionId}`)
+		const response = await axios.get<Session>(`sessions?cube=${cubeType}`)
 
 		initialSolves(response.data.solves)
 		session = response.data
 		cubeType = response.data.cube
 		sessionId = response.data.id
+
+		await generateScramble()
+		
+		if(browser) {
+			localStorage.setItem('cube', cubeType)
+		}
 	}
 
 	async function createSolve(time: number) {
@@ -88,6 +95,10 @@
 		if (response.status === 200) deleteSolves(lastId)
 	}
 
+	if(browser){
+		cubeType = localStorage.getItem('cube') as CubeType || CubeType.n3x3
+	}
+
 	onMount(async () => {
 		window.addEventListener('keyup', e => {
 			if (e.key === ' ') {
@@ -113,43 +124,43 @@
 						break
 					case 'Digit1':
 						cubeType = CubeType.Sq1
-						await generateScramble()
+						await getSessionData()
 						break
 					case 'Digit2':
 						cubeType = CubeType.n2x2
-						await generateScramble()
+						await getSessionData()
 						break
 					case 'Digit3':
 						cubeType = CubeType.n3x3
-						await generateScramble()
+						await getSessionData()
 						break
 					case 'Digit4':
 						cubeType = CubeType.n4x4
-						await generateScramble()
+						await getSessionData()
 						break
 					case 'Digit5':
 						cubeType = CubeType.n5x5
-						await generateScramble()
+						await getSessionData()
 						break
 					case 'Digit6':
 						cubeType = CubeType.n6x6
-						await generateScramble()
+						await getSessionData()
 						break
 					case 'Digit7':
 						cubeType = CubeType.n7x7
-						await generateScramble()
+						await getSessionData()
 						break
 					case 'KeyM':
 						cubeType = CubeType.Megaminx
-						await generateScramble()
+						await getSessionData()
 						break
 					case 'KeyC':
 						cubeType = CubeType.Clock
-						await generateScramble()
+						await getSessionData()
 						break
 					case 'KeyP':
 						cubeType = CubeType.Pyraminx
-						await generateScramble()
+						await getSessionData()
 						break
 				}
 			}
@@ -189,7 +200,7 @@
 		</div>
 		<div class="grid grid-cols-3">
 			<div class="bg-sidebarBg col-start-3 rounded-xl">
-				<scramble-display {scramble} type={cubeType} visualization="3D" />
+				<scramble-display {scramble} event={cubeType} visualization="3D" />
 				<div class="flex justify-around items-center p-3">
 					<span class="text-white text-xl py-2">Function</span>
 					<select class="bg-sidebarElement text-white py-2 px-4 text-xl rounded-xl">
