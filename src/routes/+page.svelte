@@ -177,7 +177,7 @@
 	})
 </script>
 
-<div class="h-screen flex">
+<div class="h-screen grid grid-cols-[minmax(300px,_1fr)_4fr]">
 	<Sidebar {cubeType} {session} bind:solvesDiv />
 	<div class="bg-[#363C41] p-4 flex flex-col w-full">
 		<div class="flex justify-center pt-10">
@@ -193,7 +193,7 @@
 		<div class="h-3/5 flex justify-center items-center">
 			<p class={`${textColor} text-[200px] leading-6 font-mono`}>{displayTime(time)}</p>
 		</div>
-		<div class="grid grid-cols-3">
+		<div class="grid grid-cols-[2fr,_1fr] max-h-[30vh]">
 			<div class="bg-sidebarBg col-start-3 rounded-xl">
 				<scramble-display
 					{scramble}
