@@ -183,7 +183,7 @@
 		<div class="flex justify-center pt-10">
 			<img src={timerLogo} alt="Nomad Team" />
 		</div>
-		<div class="mt-12 flex justify-center items-center h-1/6 p-20 text-center">
+		<div class="mt-[3vh] flex justify-center items-center h-1/6 p-20 text-center">
 			<p class="text-5xl text-scramble">
 				{#await scramble then scramble}
 					{scramble}
