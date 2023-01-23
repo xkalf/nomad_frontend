@@ -11,7 +11,7 @@
 
 	async function login() {
 		const response = await axios.post('/auth/login', {
-			email,
+			email: email.toLowerCase(),
 			password
 		})
 
