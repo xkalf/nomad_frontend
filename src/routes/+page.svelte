@@ -7,7 +7,6 @@
 	import { displayTime } from '$lib/utils/timer-utils'
 	import { randomScrambleForEvent } from 'cubing/scramble'
 	import { onMount } from 'svelte'
-	import { goto } from '$app/navigation'
 
 	let session: Session
 	let cubeType = CubeType.n3x3
@@ -175,6 +174,9 @@
 <div class="h-screen flex">
 	<Sidebar {cubeType} {session} bind:solvesDiv />
 	<div class="bg-[#363C41] p-4 flex flex-col w-full">
+		<div class="flex justify-center pt-10">
+			<img src={timerLogo} alt="Nomad Team" />
+		</div>
 		<div class="mt-12 flex justify-center items-center h-1/6 p-20 text-center">
 			<p class="text-5xl text-scramble">
 				{#await scramble then scramble}
@@ -185,8 +187,22 @@
 		<div class="h-3/5 flex justify-center items-center">
 			<p class={`${textColor} text-[200px] leading-6 font-mono`}>{displayTime(time)}</p>
 		</div>
-		<div class="flex justify-center items-end h-1/6">
-			<img src={timerLogo} alt="Nomad Team" />
+		<div class="grid grid-cols-3">
+			<div class="bg-sidebarBg col-start-3 rounded-xl">
+				<scramble-display {scramble} type={cubeType} visualization="3D" />
+				<div class="flex justify-around items-center p-3">
+					<span class="text-white text-xl py-2">Function</span>
+					<select class="bg-sidebarElement text-white py-2 px-4 text-xl rounded-xl">
+						<option>Draw Scramble</option>
+					</select>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
+
+<style>
+	scramble-display {
+		width: 100%;
+	}
+</style>
