@@ -4,7 +4,7 @@
 	import axios from 'axios'
 	import { browser } from '$app/environment'
 
-	axios.defaults.baseURL = 'http://localhost:4000'
+	axios.defaults.baseURL = 'https://nomad-backend.onrender.com'
 
 	if (browser) {
 		const token = localStorage.getItem('access_token')
