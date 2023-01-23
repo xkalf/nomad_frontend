@@ -44,7 +44,7 @@
 	class="lg:w-1/4 w-1/3 max-w-[500px] bg-sidebarBg p-6 max-h-screen overflow-hidden flex flex-col"
 >
 	<div class="py-4 text-white">
-		<p>{$user.firstname}</p>
+		<p class="capitalize">{$user.firstname}</p>
 	</div>
 	<div class="flex justify-between">
 		<div class="w-14 h-14 rounded bg-[#5f6469]" />
