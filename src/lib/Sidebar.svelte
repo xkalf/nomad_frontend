@@ -105,10 +105,10 @@
 </div>
 
 <style>
-	scramble-display {
+	/* scramble-display {
 		width: 100%;
 		padding: 8px;
-	}
+	} */
 
 	@media screen and (max-height: 800px) {
 		.average {
