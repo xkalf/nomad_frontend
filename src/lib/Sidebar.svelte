@@ -3,7 +3,7 @@
 	import Average from './Average.svelte'
 	import Solve from './Solve.svelte'
 	import { solves } from './stores/solves'
-  import { user } from './stores/user'
+	import { user } from './stores/user'
 	import { CubeType, type Session, type Solve as SolveType } from './types'
 	import { displayTime, getAvg, getBest } from './utils/timer-utils'
 
@@ -34,6 +34,8 @@
 				return 'Mega'
 			case CubeType.Clock:
 				return 'Clock'
+			case CubeType.Bld:
+				return '3Bld'
 			default:
 				return ''
 		}
@@ -97,7 +99,9 @@
 			<div class="bg-[#424B53] py-1 flex justify-center items-center text-xl rounded-xl flex-grow">
 				<button>{cubeTypeMapper(cubeType)}</button>
 			</div>
-			<div class="flex-grow flex justify-center items-center text-green-400 bg-[#424b53] py-1 rounded-xl text-xl">
+			<div
+				class="flex-grow flex justify-center items-center text-green-400 bg-[#424b53] py-1 rounded-xl text-xl"
+			>
 				<button>+ New Session</button>
 			</div>
 		</div>

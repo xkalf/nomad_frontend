@@ -7,7 +7,7 @@
 	import { displayTime } from '$lib/utils/timer-utils'
 	import { randomScrambleForEvent } from 'cubing/scramble'
 	import { onMount } from 'svelte'
-  import { browser } from '$app/environment'
+	import { browser } from '$app/environment'
 
 	let session: Session
 	let cubeType = CubeType.n3x3
@@ -58,8 +58,8 @@
 		sessionId = response.data.id
 
 		await generateScramble()
-		
-		if(browser) {
+
+		if (browser) {
 			localStorage.setItem('cube', cubeType)
 		}
 	}
@@ -95,8 +95,8 @@
 		if (response.status === 200) deleteSolves(lastId)
 	}
 
-	if(browser){
-		cubeType = localStorage.getItem('cube') as CubeType || CubeType.n3x3
+	if (browser) {
+		cubeType = (localStorage.getItem('cube') as CubeType) || CubeType.n3x3
 	}
 
 	onMount(async () => {
@@ -118,51 +118,46 @@
 				switch (e.code) {
 					case 'KeyD':
 						await removeSolves()
-						break
+						return
 					case 'KeyZ':
 						await deleteLastSolve()
-						break
+						return
 					case 'Digit1':
 						cubeType = CubeType.Sq1
-						await getSessionData()
 						break
 					case 'Digit2':
 						cubeType = CubeType.n2x2
-						await getSessionData()
 						break
 					case 'Digit3':
 						cubeType = CubeType.n3x3
-						await getSessionData()
 						break
 					case 'Digit4':
 						cubeType = CubeType.n4x4
-						await getSessionData()
 						break
 					case 'Digit5':
 						cubeType = CubeType.n5x5
-						await getSessionData()
 						break
 					case 'Digit6':
 						cubeType = CubeType.n6x6
-						await getSessionData()
 						break
 					case 'Digit7':
 						cubeType = CubeType.n7x7
-						await getSessionData()
 						break
 					case 'KeyM':
 						cubeType = CubeType.Megaminx
-						await getSessionData()
 						break
 					case 'KeyC':
 						cubeType = CubeType.Clock
-						await getSessionData()
 						break
 					case 'KeyP':
 						cubeType = CubeType.Pyraminx
-						await getSessionData()
+						break
+					case 'KeyB':
+						cubeType = CubeType.Bld
 						break
 				}
+
+				await getSessionData()
 			}
 
 			if (state === 'running') {
@@ -200,7 +195,11 @@
 		</div>
 		<div class="grid grid-cols-3">
 			<div class="bg-sidebarBg col-start-3 rounded-xl">
-				<scramble-display {scramble} event={cubeType} visualization="3D" />
+				<scramble-display
+					{scramble}
+					event={cubeType}
+					visualization={cubeType === CubeType.Pyraminx ? '2D' : '3D'}
+				/>
 				<div class="flex justify-around items-center p-3">
 					<span class="text-white text-xl py-2">Function</span>
 					<select class="bg-sidebarElement text-white py-2 px-4 text-xl rounded-xl">
