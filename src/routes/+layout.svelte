@@ -1,6 +1,5 @@
 <script lang="ts">
 	import '../app.css'
-	import 'scramble-display'
 	import axios from 'axios'
 	import { browser } from '$app/environment'
 	import { onMount } from 'svelte'
