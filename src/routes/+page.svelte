@@ -7,6 +7,7 @@
 	import { displayTime } from '$lib/utils/timer-utils'
 	import { randomScrambleForEvent } from 'cubing/scramble'
 	import { onMount } from 'svelte'
+	import { goto } from '$app/navigation'
 
 	let session: Session
 	let cubeType = CubeType.n3x3
@@ -14,7 +15,7 @@
 	let time = 0
 	let state: 'stopped' | 'running' | 'ready' | 'stopping' = 'stopped'
 	let interval: NodeJS.Timer
-	let sessionId = 24
+	let sessionId = 0
 	let solvesDiv: HTMLDivElement
 
 	$: textColor = state === 'ready' ? 'text-green-500' : 'text-white'
@@ -49,16 +50,12 @@
 	}
 
 	async function getSessionData() {
-		try {
-			const response = await axios.get<Session>(`sessions/${sessionId}`)
+		const response = await axios.get<Session>(`sessions/${sessionId}`)
 
-			initialSolves(response.data.solves)
-			session = response.data
-			cubeType = response.data.cube
-			sessionId = response.data.id
-		} catch {
-			window.location.href = '/login'
-		}
+		initialSolves(response.data.solves)
+		session = response.data
+		cubeType = response.data.cube
+		sessionId = response.data.id
 	}
 
 	async function createSolve(time: number) {
@@ -72,7 +69,7 @@
 	}
 
 	async function removeSolves() {
-		if(!confirm('Уг эвлүүлэлтүүдийг устгахдаа итгэлтэй байна уу?')) {
+		if (!confirm('Уг эвлүүлэлтүүдийг устгахдаа итгэлтэй байна уу?')) {
 			return
 		}
 
@@ -82,7 +79,7 @@
 	}
 
 	async function deleteLastSolve() {
-		if(!confirm('Уг эвлүүлэлтийг устгахдаа итгэлтэй байна уу?')) {
+		if (!confirm('Уг эвлүүлэлтийг устгахдаа итгэлтэй байна уу?')) {
 			return
 		}
 
@@ -176,7 +173,7 @@
 </script>
 
 <div class="h-screen flex">
-	<Sidebar {scramble} {cubeType} {session} bind:solvesDiv />
+	<Sidebar {cubeType} {session} bind:solvesDiv />
 	<div class="bg-[#363C41] p-4 flex flex-col w-full">
 		<div class="mt-12 flex justify-center items-center h-1/6 p-20 text-center">
 			<p class="text-5xl text-scramble">

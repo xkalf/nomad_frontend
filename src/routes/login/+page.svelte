@@ -4,6 +4,7 @@
 	import axios from 'axios'
 	import type { Session } from '$lib/types'
 	import { browser } from '$app/environment'
+  import { goto } from '$app/navigation'
 
 	let email: string = ''
 	let password: string = ''
@@ -18,7 +19,7 @@
 			const token = `Bearer ${response.data.access_token}`
 			if (browser) {
 				localStorage.setItem('access_token', token)
-				window.location.href = '/'
+				goto('/')
 			}
 		}
 	}

@@ -3,10 +3,10 @@
 	import Average from './Average.svelte'
 	import Solve from './Solve.svelte'
 	import { solves } from './stores/solves'
+  import { user } from './stores/user'
 	import { CubeType, type Session, type Solve as SolveType } from './types'
 	import { displayTime, getAvg, getBest } from './utils/timer-utils'
 
-	export let scramble: string
 	export let cubeType: CubeType
 	export let session: Session
 
@@ -44,7 +44,7 @@
 	class="lg:w-1/4 w-1/3 max-w-[500px] bg-sidebarBg p-6 max-h-screen overflow-hidden flex flex-col"
 >
 	<div class="py-4 text-white">
-		<p>Билгүүнтамир</p>
+		<p>{$user.firstname}</p>
 	</div>
 	<div class="flex justify-between">
 		<div class="w-14 h-14 rounded bg-[#5f6469]" />
@@ -105,11 +105,6 @@
 </div>
 
 <style>
-	/* scramble-display {
-		width: 100%;
-		padding: 8px;
-	} */
-
 	@media screen and (max-height: 800px) {
 		.average {
 			display: none;
