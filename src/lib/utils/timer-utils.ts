@@ -48,3 +48,8 @@ export const getAvg = (arr: Solve[]) => {
 
 	return displayTime(avg)
 }
+
+export function formatMegaminxScramble(scramble: string) {
+	const formatted = scramble.replace(/\n/g, '<br />')
+	return formatted
+}

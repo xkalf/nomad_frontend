@@ -4,7 +4,7 @@
 	import Sidebar from '$lib/Sidebar.svelte'
 	import { addSolves, initialSolves, resetSolves, deleteSolves, solves } from '$lib/stores/solves'
 	import { CubeType, type Session, type Solve } from '$lib/types'
-	import { displayTime } from '$lib/utils/timer-utils'
+	import { displayTime, formatMegaminxScramble } from '$lib/utils/timer-utils'
 	import { randomScrambleForEvent } from 'cubing/scramble'
 	import { onMount } from 'svelte'
 	import { browser } from '$app/environment'
@@ -43,6 +43,9 @@
 				.toString()
 				.replace(/2/g, "'")
 				.replace("''", '')
+			return
+		} else if(cubeType === CubeType.Megaminx) {
+			scramble = formatMegaminxScramble(s.toString())
 			return
 		}
 
@@ -179,22 +182,26 @@
 
 <div class="h-screen grid grid-cols-[minmax(300px,_1fr)_4fr]">
 	<Sidebar {cubeType} {session} bind:solvesDiv />
-	<div class="bg-[#363C41] p-4 flex flex-col w-full">
-		<div class="flex justify-center pt-10">
-			<img src={timerLogo} alt="Nomad Team" />
-		</div>
+	<div class="bg-[#363C41] p-4 flex flex-col overflow-hidden justify-between">
+		<!-- Scramble -->
 		<div class="mt-[3vh] flex justify-center items-center h-1/6 p-20 text-center">
-			<p class="text-5xl text-scramble">
-				{#await scramble then scramble}
-					{scramble}
+			<p class={`text-5xl text-scramble ${cubeType === CubeType.Megaminx && 'text-justify text-3xl lg:text-4xl font-mono mt-10'} ${cubeType === CubeType.n7x7 && 'text-2xl lg:text-3xl'}`}>
+				{#await scramble}
+					Холилт хийж байна
+				{:then scramble}
+					{@html scramble}
 				{/await}
 			</p>
 		</div>
-		<div class="h-3/5 flex justify-center items-center">
+		<div class="flex justify-center items-center">
 			<p class={`${textColor} text-[200px] leading-6 font-mono`}>{displayTime(time)}</p>
 		</div>
-		<div class="grid grid-cols-[2fr,_1fr] max-h-[30vh]">
-			<div class="bg-sidebarBg col-start-3 rounded-xl">
+		<div class="grid grid-cols-[3fr,_minmax(70px,_1fr)]">
+			<div class="flex justify-center items-end mb-10 col-span-3">
+				<img src={timerLogo} alt="Nomad Team" />
+			</div>
+			<!-- Tools -->
+			<div class="bg-sidebarBg col-start-4 rounded-xl">
 				<scramble-display
 					{scramble}
 					event={cubeType}
@@ -214,5 +221,11 @@
 <style>
 	scramble-display {
 		width: 100%;
+	}
+
+	@media screen and (max-width: 1024px) {
+		scramble-display {
+			width: 60%
+		}
 	}
 </style>
