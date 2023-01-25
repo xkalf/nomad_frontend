@@ -40,8 +40,5 @@
 		"bcrypt": "^5.1.0",
 		"cubing": "^0.35.6",
 		"tailwind-scrollbar": "^2.1.0"
-	},
-	"engines": {
-		"node": ">=19"
 	}
 }
