@@ -1,23 +1,21 @@
 <script lang="ts">
 	import RubikLogo from '$lib/assets/rubik-logo.png'
 	import NomadLogo from '$lib/assets/nomad-logo.png'
-	import { browser } from '$app/environment'
-	import { goto } from '$app/navigation'
 	import type { ActionData } from './$types'
 
 	export let form: ActionData
 </script>
 
-<div class="flex min-h-screen">
-	<div class="h-screen w-1/2 bg-black" />
-	<div class="flex w-1/2 flex-col justify-between p-3">
+<div class="h-screen grid grid-cols-2">
+	<div class="bg-black" />
+	<div class="flex flex-col p-3">
 		<div class="flex justify-end">
 			<button class="rounded-md bg-[#121315] p-2 text-white">
 				<!-- <FontAwesomeIcon icon={faGlobe} class="mr-1" /> -->
 				MN
 			</button>
 		</div>
-		<div class="mx-auto flex h-3/5 w-4/5 flex-col">
+		<div class="mx-auto flex w-4/5 flex-col">
 			<div class="flex flex-col items-center">
 				<img src={RubikLogo} alt="rubik logo" class="w-1/6 rounded-full p-4 shadow-lg" />
 				<img src={NomadLogo} alt="nomad logo" />
@@ -28,7 +26,7 @@
 				</p>
 			</div>
 			<!-- Form -->
-			<form class="mt-14 flex flex-col items-center gap-6" action="?/login" method="POST">
+			<form class="flex mt-4 flex-col items-center gap-6" action="?/login" method="POST">
 				<div class="relative w-4/5 text-[#cecfd5]">
 					<!-- <fontawesomeicon
                 icon={faenvelope}
@@ -62,7 +60,7 @@
 					</div>
 					<a href="/forgot-password" class="text-black underline"> Нууц үг мартсан? </a>
 				</div>
-				<p>{form?.message || ''}</p>
+				<p class="text-red-500 w-4/5">{form?.message || ''}</p>
 				<div class="relative w-4/5 text-[#cecfd5]">
 					<input
 						type="submit"
@@ -75,7 +73,7 @@
 				</div>
 			</form>
 		</div>
-		<div>
+		<div class="mt-4">
 			<p class="text-center text-[#cecfd5]">
 				Бүртгэл хэрэгтэй байна ?
 				<a href="/register" class="text-black underline"> БҮРТГҮҮЛЭХ </a>
