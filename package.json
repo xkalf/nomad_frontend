@@ -38,9 +38,7 @@
 	"type": "module",
 	"dependencies": {
 		"@prisma/client": "^4.9.0",
-		"axios": "^1.2.3",
 		"bcrypt": "^5.1.0",
-		"cubing": "^0.35.6",
-		"tailwind-scrollbar": "^2.1.0"
+		"cubing": "^0.35.6"
 	}
 }

@@ -15,12 +15,13 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 			solves: {
 				orderBy: {
 					createdAt: 'asc'
+				},
+				where: {
+					deleted: null
 				}
 			}
 		}
 	})
-
-	console.log(cube)
 
 	return new Response(JSON.stringify({ session }))
 }

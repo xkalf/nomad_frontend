@@ -4,8 +4,9 @@ import type { RequestHandler } from './$types'
 
 export const DELETE: RequestHandler = async ({ params: { id } }) => {
 	try {
-		await db.solve.delete({
-			where: { id: Number(id) }
+		await db.solve.update({
+			where: { id: Number(id) },
+			data: { deleted: new Date() }
 		})
 
 		return new Response(JSON.stringify({ success: true }))

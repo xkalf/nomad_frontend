@@ -6,10 +6,6 @@
 	import type { ActionData } from './$types'
 
 	export let form: ActionData
-
-	if (form?.status === 201 && browser) {
-		goto('/')
-	}
 </script>
 
 <div class="flex min-h-screen">

@@ -10,8 +10,13 @@ export const POST: RequestHandler = async event => {
 		password: string
 		birthdate: string
 	}
-
 	try {
+		const user = await db.user.findUnique({ where: { email: data.email } })
+
+		if (user) {
+			return new Response(JSON.stringify({ success: false, error: 'Хэрэглэгч бүртгэлтэй байна.' }))
+		}
+
 		await db.user.create({
 			data: {
 				...data,
@@ -39,6 +44,6 @@ export const POST: RequestHandler = async event => {
 		return new Response(JSON.stringify({ success: true }))
 	} catch (error) {
 		console.log(error)
-		return new Response(JSON.stringify({ success: false }))
+		return new Response(JSON.stringify({ success: false, error: 'Алдаа гарлаа.' }))
 	}
 }

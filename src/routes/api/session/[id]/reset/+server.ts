@@ -3,9 +3,12 @@ import type { RequestHandler } from './$types'
 
 export const DELETE: RequestHandler = async ({ params: { id } }) => {
 	try {
-		await db.solve.deleteMany({
+		await db.solve.updateMany({
 			where: {
 				sessionId: +id
+			},
+			data: {
+				deleted: new Date()
 			}
 		})
 

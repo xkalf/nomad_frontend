@@ -45,7 +45,7 @@
 
 <div class="bg-sidebarBg p-6 max-h-screen overflow-hidden flex flex-col">
 	<div class="py-4 text-white">
-		<p class="capitalize">{$page?.data?.user?.email}</p>
+		<p class="lowercase">{$page?.data?.user?.email}</p>
 	</div>
 	<div class="flex justify-between">
 		<div class="w-14 h-14 rounded bg-[#5f6469]" />
@@ -77,7 +77,7 @@
 		</div>
 	</div>
 	<div
-		class="bg-sidebarElement flex-grow rounded-xl mx-4 p-4 overflow-y-auto scrollbar-thumb-[#c4c4c4] scrollbar-thin"
+		class="bg-sidebarElement flex-grow rounded-xl mx-4 p-4 overflow-y-auto scrollbar"
 		bind:this={solvesDiv}
 	>
 		{#each $solves as solve, index}
@@ -85,7 +85,6 @@
 		{/each}
 	</div>
 	<div class="bg-sidebarElement m-4 rounded-xl py-2 px-4 text-white">
-		<!-- <scramble-display visualization="3D" event={cubeType} {scramble} /> -->
 		<p class="ml-2 my-2">{session?.name || ''}</p>
 		<div class="flex items-center gap-1">
 			<Icon
@@ -111,6 +110,29 @@
 	@media screen and (max-height: 800px) {
 		.average {
 			display: none;
+		}
+	}
+
+	.scrollbar::-webkit-scrollbar {
+		width: 10px;
+	}
+
+	.scrollbar::-webkit-scrollbar-thumb {
+		background-color: #c4c4c4;
+		border-radius: 10px;
+	}
+
+	.scrollbar::-webkit-scrollbar-track {
+		background-color: none;
+	}
+
+	@media (max-width: 1024px) {
+		.scrollbar::-webkit-scrollbar {
+			width: 5px;
+		}
+		.scrollbar::-webkit-scrollbar-thumb {
+			background-color: #c4c4c4;
+			border-radius: 5px;
 		}
 	}
 </style>

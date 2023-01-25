@@ -45,13 +45,11 @@ export const actions: Actions = {
 				secure: process.env.NODE_ENV === 'production',
 				maxAge: 60 * 60 * 24 * 30
 			})
+
+			throw redirect(302, '/')
 		} catch (err) {
 			console.log(err)
 			return fail(500, { message: 'Нууц үг буруу байна.1' })
-		}
-
-		return {
-			status: 201
 		}
 	}
 }

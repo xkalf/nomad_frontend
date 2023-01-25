@@ -8,44 +8,45 @@ datasource db {
 }
 
 model Session {
-  id        Int               @id @default(autoincrement())
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
   name      String
   cube      String
   userId    Int?
-  main      Boolean           @default(false)
-  User      User?             @relation(fields: [userId], references: [id])
+  main      Boolean   @default(false)
+  User      User?     @relation(fields: [userId], references: [id])
   solves    Solve[]
 }
 
 model Solve {
-  id          Int               @id @default(autoincrement())
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
   scramble    String
   time        Int
-  status      String @default("ok")
-  description String?           @db.VarChar
+  status      String    @default("ok")
+  description String?   @db.VarChar
   sessionId   Int?
-  Session     Session?          @relation(fields: [sessionId], references: [id])
+  deleted     DateTime?
+  Session     Session?  @relation(fields: [sessionId], references: [id])
 }
 
 model User {
-  id        Int            @id @default(autoincrement())
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
-  email     String         @unique
+  email     String    @unique
   firstname String
   lastname  String
   birthdate DateTime
   password  String
-  token     String         @unique() @default(uuid())
-  role      String @default("user")
-  sessions   Session[]
+  token     String    @unique() @default(uuid())
+  role      String    @default("user")
+  sessions  Session[]
 }
 
 enum session_cube_enum {
