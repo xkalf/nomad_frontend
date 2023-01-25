@@ -3,7 +3,7 @@ import type { LayoutServerLoad } from './$types'
 
 export const load: LayoutServerLoad = async ({ locals }) => {
 	const ok = locals.user ? true : false
-	if (ok) {
+	if (!ok) {
 		throw redirect(302, '/login')
 	}
 

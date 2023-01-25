@@ -4,7 +4,8 @@ import bcrypt from 'bcrypt'
 import type { PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (locals.user) {
+	const ok = locals.user ? true : false
+	if (ok) {
 		throw redirect(302, '/')
 	}
 }
