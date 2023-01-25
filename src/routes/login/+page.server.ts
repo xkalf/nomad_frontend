@@ -50,7 +50,7 @@ export const actions: Actions = {
 			throw redirect(302, '/')
 		} catch (err) {
 			console.log(err)
-			return fail(500, { message: 'Нууц үг буруу байна.1' })
+			return fail(500, { message: 'Нууц үг буруу байна.' })
 		}
 	}
 }

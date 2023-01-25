@@ -8,6 +8,11 @@
 	import type { CubeType } from './utils/enum-adapter'
 	import { displayTime, getAvg, getBest } from './utils/timer-utils'
 
+	export let user: {
+		id: number
+		email: string
+		role: string
+	}
 	export let session: Session
 	export let cubeType: CubeType
 
@@ -45,7 +50,7 @@
 
 <div class="bg-sidebarBg p-6 max-h-screen overflow-hidden flex flex-col">
 	<div class="py-4 text-white">
-		<p class="lowercase">{$page?.data?.user?.email}</p>
+		<p class="lowercase">{user.email}</p>
 	</div>
 	<div class="flex justify-between">
 		<div class="w-14 h-14 rounded bg-[#5f6469]" />

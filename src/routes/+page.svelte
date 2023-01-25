@@ -7,8 +7,9 @@
 	import { browser } from '$app/environment'
 	import type { Session, Solve } from '@prisma/client'
 	import type { CubeType } from '$lib/utils/enum-adapter'
-	import { page } from '$app/stores'
-	import { goto } from '$app/navigation'
+	import type { PageServerData } from './$types'
+
+	export let data: PageServerData
 
 	let scramble: string | null
 	let session: Session
@@ -92,11 +93,6 @@
 	}
 
 	onMount(async () => {
-		if (!$page.data.user) {
-			goto('/login')
-			return
-		}
-
 		if (browser) {
 			changeCubeType((localStorage.getItem('cube') as CubeType) || '333')
 
@@ -174,7 +170,7 @@
 </script>
 
 <div class="h-screen grid grid-cols-[minmax(300px,_1fr)_4fr]">
-	<Sidebar {session} {cubeType} bind:solvesDiv />
+	<Sidebar {session} {cubeType} user={data.user} bind:solvesDiv />
 	<div class="bg-[#363C41] p-4 flex flex-col overflow-hidden justify-between">
 		<!-- Scramble -->
 		<div class="mt-[3vh] flex justify-center items-center h-1/6 p-20 text-center">
