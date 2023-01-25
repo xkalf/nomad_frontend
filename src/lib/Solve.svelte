@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { solve_status_enum, type Solve } from '@prisma/client'
-	import axios from 'axios'
+	import type { Solve } from '@prisma/client'
 	import { changeSolveStats, deleteSolves } from './stores/solves'
+	import type { SolveStatus } from './utils/enum-adapter'
 	import { displayTime } from './utils/timer-utils'
 
 	export let order: number
@@ -16,14 +16,14 @@
 		if (data.success === true) deleteSolves(solve.id)
 	}
 
-	async function updateSolve(status: solve_status_enum) {
-		let st: solve_status_enum
+	async function updateSolve(status: SolveStatus) {
+		let st: SolveStatus
 
 		if (solve.status === status) {
-			st = solve_status_enum.ok
+			st = 'ok'
 		} else {
 			st = status
-			if (status !== solve_status_enum.ok && solve.status !== solve_status_enum.ok) {
+			if (status !== 'ok' && solve.status !== 'ok') {
 				return
 			}
 		}
@@ -39,16 +39,16 @@
 </script>
 
 <div class="flex justify-between text-white p-2">
-	{#if solve.status === solve_status_enum.ok}
+	{#if solve.status === 'ok'}
 		<span>{order}. {displayTime(solve.time)}</span>
-	{:else if solve.status === solve_status_enum.dnf}
+	{:else if solve.status === 'dnf'}
 		<span>{order}. (DNF)</span>
-	{:else if solve.status === solve_status_enum.plus2}
+	{:else if solve.status === '+2'}
 		<span>{order}. +{displayTime(solve.time + 2000)}</span>
 	{/if}
 	<div class="flex gap-1">
-		<button class="text-red-500" on:click={() => updateSolve(solve_status_enum.plus2)}>+2</button>
-		<button class="text-white" on:click={() => updateSolve(solve_status_enum.dnf)}>DNF</button>
+		<button class="text-red-500" on:click={() => updateSolve('+2')}>+2</button>
+		<button class="text-white" on:click={() => updateSolve('dnf')}>DNF</button>
 		<button class="text-red-500" on:click={deleteSolve}> X </button>
 	</div>
 </div>

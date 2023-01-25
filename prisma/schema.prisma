@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  binaryTargets = ["native", "debian-openssl-1.1.x"]
 }
 
 datasource db {
@@ -14,7 +13,7 @@ model Session {
   updatedAt DateTime          @updatedAt
   deletedAt DateTime?
   name      String
-  cube      session_cube_enum
+  cube      String
   userId    Int?
   main      Boolean           @default(false)
   User      User?             @relation(fields: [userId], references: [id])
@@ -28,7 +27,7 @@ model Solve {
   deletedAt   DateTime?
   scramble    String
   time        Int
-  status      solve_status_enum @default(ok)
+  status      String @default("ok")
   description String?           @db.VarChar
   sessionId   Int?
   Session     Session?          @relation(fields: [sessionId], references: [id])
@@ -45,7 +44,7 @@ model User {
   birthdate DateTime
   password  String
   token     String         @unique() @default(uuid())
-  role      user_role_enum @default(user)
+  role      String @default("user")
   sessions   Session[]
 }
 
@@ -63,15 +62,4 @@ enum session_cube_enum {
   bld3     @map("333bf")
   bld4     @map("444bf")
   bld5     @map("555bf")
-}
-
-enum solve_status_enum {
-  ok
-  plus2 @map("+2")
-  dnf
-}
-
-enum user_role_enum {
-  admin
-  user
 }

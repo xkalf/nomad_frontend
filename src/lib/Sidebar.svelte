@@ -1,40 +1,41 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import Icon from '@iconify/svelte'
-	import { session_cube_enum, type Session } from '@prisma/client'
+	import type { Session } from '@prisma/client'
 	import Average from './Average.svelte'
 	import Solve from './Solve.svelte'
 	import { solves } from './stores/solves'
+	import type { CubeType } from './utils/enum-adapter'
 	import { displayTime, getAvg, getBest } from './utils/timer-utils'
 
 	export let session: Session
-	export let cubeType: session_cube_enum
+	export let cubeType: CubeType
 
 	export let solvesDiv: HTMLDivElement
 
-	function cubeTypeMapper(type: session_cube_enum) {
+	function cubeTypeMapper(type: CubeType) {
 		switch (type) {
-			case session_cube_enum.n2x2:
+			case '222':
 				return '2x2'
-			case session_cube_enum.n3x3:
+			case '333':
 				return '3x3'
-			case session_cube_enum.n4x4:
+			case '444':
 				return '4x4'
-			case session_cube_enum.n5x5:
+			case '555':
 				return '5x5'
-			case session_cube_enum.n6x6:
+			case '666':
 				return '6x6'
-			case session_cube_enum.n7x7:
+			case '777':
 				return '7x7'
-			case session_cube_enum.sq1:
+			case 'sq1':
 				return 'Sq 1'
-			case session_cube_enum.pyraminx:
+			case 'pyram':
 				return 'Pyra'
-			case session_cube_enum.megaminx:
+			case 'minx':
 				return 'Mega'
-			case session_cube_enum.clock:
+			case 'clock':
 				return 'Clock'
-			case session_cube_enum.bld3:
+			case '333bf':
 				return '3Bld'
 			default:
 				return ''

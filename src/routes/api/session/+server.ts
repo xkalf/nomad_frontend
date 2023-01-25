@@ -1,11 +1,9 @@
 import type { RequestHandler } from './$types'
 import db from '$lib/db'
-import type { session_cube_enum } from '@prisma/client'
+import type { CubeType } from '$lib/utils/enum-adapter'
 
 export const GET: RequestHandler = async ({ locals, url }) => {
-	const cube = url.searchParams.get('cube') as session_cube_enum
-
-	console.log(cube)
+	const cube = url.searchParams.get('cube') as CubeType
 
 	const session = await db.session.findFirst({
 		where: {
@@ -21,6 +19,8 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 			}
 		}
 	})
+
+	console.log(cube)
 
 	return new Response(JSON.stringify({ session }))
 }

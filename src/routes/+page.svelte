@@ -1,13 +1,14 @@
 <script lang="ts">
-	import axios from 'axios'
 	import timerLogo from '$lib/assets/timer-logo.png'
 	import Sidebar from '$lib/Sidebar.svelte'
 	import { resetSolves, deleteSolves, solves, addSolves, initialSolves } from '$lib/stores/solves'
 	import { displayTime, formatMegaminxScramble, generateScramble } from '$lib/utils/timer-utils'
 	import { onMount } from 'svelte'
-	import { session_cube_enum, type Session, type Solve } from '@prisma/client'
-	import { getCube } from '$lib/utils/enum-adapter'
 	import { browser } from '$app/environment'
+	import type { Session, Solve } from '@prisma/client'
+	import type { CubeType } from '$lib/utils/enum-adapter'
+	import { page } from '$app/stores'
+	import { goto } from '$app/navigation'
 
 	let scramble: string | null
 	let session: Session
@@ -15,7 +16,7 @@
 	let state: 'stopped' | 'running' | 'ready' | 'stopping' = 'stopped'
 	let interval: NodeJS.Timer
 	let solvesDiv: HTMLDivElement
-	let cubeType: session_cube_enum = session_cube_enum.n3x3
+	let cubeType: CubeType = '333'
 
 	$: textColor = state === 'ready' ? 'text-green-500' : 'text-white'
 
@@ -83,7 +84,7 @@
 		initialSolves(result.session.solves)
 	}
 
-	async function changeCubeType(type: session_cube_enum) {
+	async function changeCubeType(type: CubeType) {
 		cubeType = type
 		await getSession()
 		scramble = await generateScramble(type)
@@ -91,8 +92,14 @@
 	}
 
 	onMount(async () => {
+		if (!$page.data.user) {
+			goto('/login')
+			return
+		}
+
 		if (browser) {
-			changeCubeType((localStorage.getItem('cube') as session_cube_enum) || session_cube_enum.n3x3)
+			changeCubeType((localStorage.getItem('cube') as CubeType) || '333')
+
 			window.addEventListener('keyup', e => {
 				if (e.key === ' ') {
 					if (state === 'ready') {
@@ -116,37 +123,37 @@
 							await deleteLastSolve()
 							break
 						case 'Digit1':
-							changeCubeType(session_cube_enum.sq1)
+							changeCubeType('sq1')
 							break
 						case 'Digit2':
-							changeCubeType(session_cube_enum.n2x2)
+							changeCubeType('222')
 							break
 						case 'Digit3':
-							changeCubeType(session_cube_enum.n3x3)
+							changeCubeType('333')
 							break
 						case 'Digit4':
-							changeCubeType(session_cube_enum.n4x4)
+							changeCubeType('444')
 							break
 						case 'Digit5':
-							changeCubeType(session_cube_enum.n5x5)
+							changeCubeType('555')
 							break
 						case 'Digit6':
-							changeCubeType(session_cube_enum.n6x6)
+							changeCubeType('666')
 							break
 						case 'Digit7':
-							changeCubeType(session_cube_enum.n7x7)
+							changeCubeType('777')
 							break
 						case 'KeyM':
-							changeCubeType(session_cube_enum.megaminx)
+							changeCubeType('minx')
 							break
 						case 'KeyC':
-							changeCubeType(session_cube_enum.clock)
+							changeCubeType('clock')
 							break
 						case 'KeyP':
-							changeCubeType(session_cube_enum.pyraminx)
+							changeCubeType('pyram')
 							break
 						case 'KeyB':
-							changeCubeType(session_cube_enum.bld3)
+							changeCubeType('333bf')
 							break
 					}
 				}
@@ -173,13 +180,12 @@
 		<div class="mt-[3vh] flex justify-center items-center h-1/6 p-20 text-center">
 			<p
 				class={`text-5xl text-scramble ${
-					cubeType === session_cube_enum.megaminx &&
-					'text-justify text-3xl lg:text-4xl font-mono mt-10'
-				} ${cubeType === session_cube_enum.n7x7 && 'text-2xl lg:text-3xl'}`}
+					cubeType === 'minx' && 'text-justify text-3xl lg:text-4xl font-mono mt-10'
+				} ${cubeType === '777' || cubeType === '666' ? 'text-2xl lg:text-3xl' : ''}`}
 			>
 				{#if !scramble}
 					Холилт хийж байна
-				{:else if cubeType === session_cube_enum.megaminx}
+				{:else if cubeType === 'minx'}
 					{@html formatMegaminxScramble(scramble)}
 				{:else}
 					{scramble}
@@ -198,8 +204,8 @@
 			<div class="bg-sidebarBg col-start-4 rounded-xl">
 				<scramble-display
 					{scramble}
-					event={getCube(cubeType)}
-					visualization={cubeType === session_cube_enum.pyraminx ? '2D' : '3D'}
+					event={cubeType}
+					visualization={cubeType === 'pyram' ? '2D' : '3D'}
 				/>
 				<div class="flex justify-around items-center p-3">
 					<span class="text-white text-xl py-2">Function</span>
