@@ -1,40 +1,40 @@
 <script lang="ts">
+	import { page } from '$app/stores'
 	import Icon from '@iconify/svelte'
+	import { session_cube_enum, type Session } from '@prisma/client'
 	import Average from './Average.svelte'
 	import Solve from './Solve.svelte'
 	import { solves } from './stores/solves'
-	import { user } from './stores/user'
-	import { CubeType, type Session, type Solve as SolveType } from './types'
 	import { displayTime, getAvg, getBest } from './utils/timer-utils'
 
-	export let cubeType: CubeType
 	export let session: Session
+	export let cubeType: session_cube_enum
 
 	export let solvesDiv: HTMLDivElement
 
-	function cubeTypeMapper(type: CubeType) {
+	function cubeTypeMapper(type: session_cube_enum) {
 		switch (type) {
-			case CubeType.n2x2:
+			case session_cube_enum.n2x2:
 				return '2x2'
-			case CubeType.n3x3:
+			case session_cube_enum.n3x3:
 				return '3x3'
-			case CubeType.n4x4:
+			case session_cube_enum.n4x4:
 				return '4x4'
-			case CubeType.n5x5:
+			case session_cube_enum.n5x5:
 				return '5x5'
-			case CubeType.n6x6:
+			case session_cube_enum.n6x6:
 				return '6x6'
-			case CubeType.n7x7:
+			case session_cube_enum.n7x7:
 				return '7x7'
-			case CubeType.Sq1:
+			case session_cube_enum.sq1:
 				return 'Sq 1'
-			case CubeType.Pyraminx:
+			case session_cube_enum.pyraminx:
 				return 'Pyra'
-			case CubeType.Megaminx:
+			case session_cube_enum.megaminx:
 				return 'Mega'
-			case CubeType.Clock:
+			case session_cube_enum.clock:
 				return 'Clock'
-			case CubeType.Bld:
+			case session_cube_enum.bld3:
 				return '3Bld'
 			default:
 				return ''
@@ -42,11 +42,9 @@
 	}
 </script>
 
-<div
-	class="bg-sidebarBg p-6 max-h-screen overflow-hidden flex flex-col"
->
+<div class="bg-sidebarBg p-6 max-h-screen overflow-hidden flex flex-col">
 	<div class="py-4 text-white">
-		<p class="capitalize">{$user.firstname}</p>
+		<p class="capitalize">{$page?.data?.user?.email}</p>
 	</div>
 	<div class="flex justify-between">
 		<div class="w-14 h-14 rounded bg-[#5f6469]" />

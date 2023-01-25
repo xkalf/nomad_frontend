@@ -1,27 +1,14 @@
 <script lang="ts">
 	import RubikLogo from '$lib/assets/rubik-logo.png'
 	import NomadLogo from '$lib/assets/nomad-logo.png'
-	import axios from 'axios'
-	import type { Session } from '$lib/types'
 	import { browser } from '$app/environment'
-  import { goto } from '$app/navigation'
+	import { goto } from '$app/navigation'
+	import type { ActionData } from './$types'
 
-	let email: string = ''
-	let password: string = ''
+	export let form: ActionData
 
-	async function login() {
-		const response = await axios.post('/auth/login', {
-			email: email.toLowerCase(),
-			password
-		})
-
-		if (response.status === 201) {
-			const token = `Bearer ${response.data.access_token}`
-			if (browser) {
-				localStorage.setItem('access_token', token)
-				goto('/')
-			}
-		}
+	if (form?.status === 201 && browser) {
+		goto('/')
 	}
 </script>
 
@@ -44,7 +31,8 @@
 					байна
 				</p>
 			</div>
-			<form class="mt-14 flex flex-col items-center gap-6" on:submit={login}>
+			<!-- Form -->
+			<form class="mt-14 flex flex-col items-center gap-6" action="?/login" method="POST">
 				<div class="relative w-4/5 text-[#cecfd5]">
 					<!-- <fontawesomeicon
                 icon={faenvelope}
@@ -55,7 +43,7 @@
 						class="drop-shadow-lg py-5 align-top content-center rounded-lg w-full px-10 focus:text-black"
 						type="email"
 						placeholder="и-мэйл"
-						bind:value={email}
+						name="email"
 					/>
 				</div>
 				<div class="relative w-4/5 text-[#cecfd5]">
@@ -64,7 +52,7 @@
 						class="drop-shadow-lg py-5 align-top content-center rounded-lg w-full px-10 focus:text-black"
 						type="password"
 						placeholder="нууц үг"
-						bind:value={password}
+						name="password"
 					/>
 				</div>
 				<div class="relative w-4/5 text-[#cecfd5] flex justify-between">
@@ -78,6 +66,7 @@
 					</div>
 					<a href="/forgot-password" class="text-black underline"> Нууц үг мартсан? </a>
 				</div>
+				<p>{form?.message || ''}</p>
 				<div class="relative w-4/5 text-[#cecfd5]">
 					<input
 						type="submit"

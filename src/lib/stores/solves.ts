@@ -1,4 +1,4 @@
-import type { Solve, SolveStatus } from '$lib/types'
+import type { Solve, solve_status_enum } from '@prisma/client'
 import { writable } from 'svelte/store'
 
 export const solves = writable<Solve[]>([])
@@ -15,7 +15,7 @@ export function deleteSolves(id: number) {
 	solves.update(state => state.filter(i => i.id !== id))
 }
 
-export function changeSolveStats(id: number, status: SolveStatus) {
+export function changeSolveStats(id: number, status: solve_status_enum) {
 	solves.update(state => state.map(i => (i.id === id ? { ...i, status } : i)))
 }
 
