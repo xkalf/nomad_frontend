@@ -29,8 +29,7 @@
 
 	async function stopTime() {
 		clearInterval(interval)
-		await createSolve(time)
-		await newScramble()
+		await Promise.all([newScramble(), createSolve(time)])
 	}
 
 	async function createSolve(time: number) {
@@ -86,8 +85,7 @@
 	async function changeCubeType(type: CubeType) {
 		scramble = null
 		cubeType = type
-		await getSession()
-		await newScramble()
+		await Promise.all([newScramble(), getSession()])
 		if (browser) [localStorage.setItem('cube', type)]
 	}
 

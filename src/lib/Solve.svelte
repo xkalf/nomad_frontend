@@ -19,13 +19,14 @@
 	async function updateSolve(status: SolveStatus) {
 		let st: SolveStatus
 
+		if (status !== 'ok' && solve.status !== 'ok') {
+			return
+		}
+
 		if (solve.status === status) {
 			st = 'ok'
 		} else {
 			st = status
-			if (status !== 'ok' && solve.status !== 'ok') {
-				return
-			}
 		}
 
 		const response = await fetch(`/api/solve/${solve.id}`, {

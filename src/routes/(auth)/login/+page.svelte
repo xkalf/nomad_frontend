@@ -10,7 +10,6 @@
 	let showPassword = false
 
 	let emailEl: HTMLInputElement
-	let showEl: HTMLButtonElement
 
 	function toggleShowPassword() {
 		showPassword = !showPassword
@@ -19,7 +18,6 @@
 	onMount(() => {
 		if (browser) {
 			emailEl.focus()
-			showEl.blur()
 		}
 	})
 </script>
@@ -58,11 +56,7 @@
 						placeholder="нууц үг"
 						name="password"
 					/>
-					<button
-						class="absolute right-0"
-						on:click|preventDefault={toggleShowPassword}
-						bind:this={showEl}
-					>
+					<button class="absolute right-0" on:click|preventDefault={toggleShowPassword}>
 						{#if showPassword}
 							<Icon icon="bx:show" width="30" color="#c4c4c4" />
 						{:else}
