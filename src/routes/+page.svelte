@@ -86,6 +86,7 @@
 	}
 
 	async function changeCubeType(type: CubeType) {
+		scramble = null
 		cubeType = type
 		await getSession()
 		scramble = await generateScramble(type)

@@ -2,18 +2,25 @@
 	import RubikLogo from '$lib/assets/rubik-logo.png'
 	import NomadLogo from '$lib/assets/nomad-logo.png'
 	import type { ActionData } from './$types'
+	import { onMount } from 'svelte'
+	import { browser } from '$app/environment'
 
 	export let form: ActionData
+
+	let emailEl: HTMLInputElement
+
+	onMount(() => {
+		if (browser) {
+			emailEl.focus()
+		}
+	})
 </script>
 
 <div class="h-screen grid grid-cols-2">
 	<div class="bg-black" />
-	<div class="flex flex-col p-3">
+	<div class="grid grid-rows-[minmax(50px, 70px),_3fr,_1fr] p-3">
 		<div class="flex justify-end">
-			<button class="rounded-md bg-[#121315] p-2 text-white">
-				<!-- <FontAwesomeIcon icon={faGlobe} class="mr-1" /> -->
-				MN
-			</button>
+			<button class="rounded-md bg-[#121315] p-2 text-white max-h-[50px]"> MN </button>
 		</div>
 		<div class="mx-auto flex w-4/5 flex-col">
 			<div class="flex flex-col items-center">
@@ -28,20 +35,15 @@
 			<!-- Form -->
 			<form class="flex mt-4 flex-col items-center gap-6" action="?/login" method="POST">
 				<div class="relative w-4/5 text-[#cecfd5]">
-					<!-- <fontawesomeicon
-                icon={faenvelope}
-                type="regular"
-                class={icon}
-              /> -->
 					<input
 						class="drop-shadow-lg py-5 align-top content-center rounded-lg w-full px-10 focus:text-black"
 						type="email"
 						placeholder="и-мэйл"
 						name="email"
+						bind:this={emailEl}
 					/>
 				</div>
 				<div class="relative w-4/5 text-[#cecfd5]">
-					<!-- <fontawesomeicon icon={falock} type="regular" class={icon} /> -->
 					<input
 						class="drop-shadow-lg py-5 align-top content-center rounded-lg w-full px-10 focus:text-black"
 						type="password"
@@ -56,7 +58,7 @@
 							class="mt-1 h-4 w-4 appearance-none rounded-full border border-[#d2d4da] checked:bg-[#d2d4da]"
 							id="remember"
 						/>
-						<label for="remember" class="cursor-pointer"> Намайг санах </label>
+						<label for="remember" class="cursor-pointer">Намайг санах </label>
 					</div>
 					<a href="/forgot-password" class="text-black underline"> Нууц үг мартсан? </a>
 				</div>
@@ -73,7 +75,7 @@
 				</div>
 			</form>
 		</div>
-		<div class="mt-4">
+		<div class="my-4 self-end">
 			<p class="text-center text-[#cecfd5]">
 				Бүртгэл хэрэгтэй байна ?
 				<a href="/register" class="text-black underline"> БҮРТГҮҮЛЭХ </a>
