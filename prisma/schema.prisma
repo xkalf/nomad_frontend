@@ -11,20 +11,20 @@ model Session {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
   name      String
   cube      String
   userId    Int?
   main      Boolean   @default(false)
   User      User?     @relation(fields: [userId], references: [id])
   solves    Solve[]
+  
+  @@index([userId])
 }
 
 model Solve {
   id          Int       @id @default(autoincrement())
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  deletedAt   DateTime?
   scramble    String
   time        Int
   status      String    @default("ok")
@@ -32,13 +32,14 @@ model Solve {
   sessionId   Int?
   deleted     DateTime?
   Session     Session?  @relation(fields: [sessionId], references: [id])
+
+  @@index([sessionId])
 }
 
 model User {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
   email     String    @unique
   firstname String
   lastname  String
@@ -47,20 +48,4 @@ model User {
   token     String    @unique() @default(uuid())
   role      String    @default("user")
   sessions  Session[]
-}
-
-enum session_cube_enum {
-  n2x2     @map("222")
-  n3x3     @map("333")
-  n4x4     @map("444")
-  n5x5     @map("555")
-  n6x6     @map("666")
-  n7x7     @map("777")
-  megaminx @map("minx")
-  pyraminx @map("pyram")
-  clock
-  sq1
-  bld3     @map("333bf")
-  bld4     @map("444bf")
-  bld5     @map("555bf")
 }

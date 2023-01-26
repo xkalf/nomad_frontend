@@ -34,12 +34,9 @@ export const actions: Actions = {
 				return fail(400)
 			}
 
-			const authUser = await db.user.update({
-				where: { email },
-				data: { token: crypto.randomUUID() }
-			})
+			console.log(ok)
 
-			cookies.set('session', authUser.token || '', {
+			cookies.set('session', user.token || '', {
 				path: '/',
 				httpOnly: true,
 				sameSite: 'strict',

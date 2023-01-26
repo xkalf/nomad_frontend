@@ -2,7 +2,7 @@ import { redirect } from '@sveltejs/kit'
 import type { Actions } from './$types'
 
 export const actions: Actions = {
-	register: async ({ request, fetch, cookies }) => {
+	register: async ({ request, fetch }) => {
 		const { email, password, firstname, lastname, birthdate } = Object.fromEntries(
 			await request.formData()
 		)
