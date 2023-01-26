@@ -91,8 +91,8 @@
 		class="bg-sidebarElement flex-grow rounded-xl mx-4 p-4 overflow-y-auto scrollbar"
 		bind:this={solvesDiv}
 	>
-		{#each $solves as solve, index}
-			<Solve order={index + 1} {solve} />
+		{#each $solves.reverse() as solve, index}
+			<Solve order={$solves.length - index} {solve} />
 		{/each}
 	</div>
 	<div class="bg-sidebarElement m-4 rounded-xl py-2 px-4 text-white">
