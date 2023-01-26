@@ -128,6 +128,7 @@
 
 	.scrollbar::-webkit-scrollbar-track {
 		background-color: none;
+		margin-block: 0.5em;
 	}
 
 	@media (max-width: 1024px) {

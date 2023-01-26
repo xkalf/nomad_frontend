@@ -57,7 +57,11 @@
 						name="password"
 					/>
 					<button class="absolute right-0" on:click|preventDefault={toggleShowPassword}>
-						<Icon icon="bx:show" width="30" color="#c4c4c4" />
+						{#if showPassword}
+							<Icon icon="bx:show" width="30" color="#c4c4c4" />
+						{:else}
+							<Icon icon="bx:hide" width="30" color="#c4c4c4" />
+						{/if}
 					</button>
 				</div>
 				<div class="relative w-4/5 text-black flex justify-between">
