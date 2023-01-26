@@ -4,10 +4,16 @@
 	import type { ActionData } from './$types'
 	import { onMount } from 'svelte'
 	import { browser } from '$app/environment'
+	import Icon from '@iconify/svelte'
 
 	export let form: ActionData
+	let showPassword = false
 
 	let emailEl: HTMLInputElement
+
+	function toggleShowPassword() {
+		showPassword = !showPassword
+	}
 
 	onMount(() => {
 		if (browser) {
@@ -34,7 +40,7 @@
 			</div>
 			<!-- Form -->
 			<form class="flex mt-4 flex-col items-center gap-6" action="?/login" method="POST">
-				<div class="relative w-4/5 text-[#cecfd5]">
+				<div class="relative w-4/5 text-black">
 					<input
 						class="drop-shadow-lg py-5 align-top content-center rounded-lg w-full px-10 focus:text-black"
 						type="email"
@@ -43,15 +49,18 @@
 						bind:this={emailEl}
 					/>
 				</div>
-				<div class="relative w-4/5 text-[#cecfd5]">
+				<div class="relative w-4/5 text-black flex items-center">
 					<input
 						class="drop-shadow-lg py-5 align-top content-center rounded-lg w-full px-10 focus:text-black"
-						type="password"
+						type={showPassword ? 'text' : 'password'}
 						placeholder="нууц үг"
 						name="password"
 					/>
+					<button class="absolute right-0" on:click|preventDefault={toggleShowPassword}>
+						<Icon icon="bx:show" width="30" color="#c4c4c4" />
+					</button>
 				</div>
-				<div class="relative w-4/5 text-[#cecfd5] flex justify-between">
+				<div class="relative w-4/5 text-black flex justify-between">
 					<div class="flex gap-2">
 						<input
 							type="checkbox"

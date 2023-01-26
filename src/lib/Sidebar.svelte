@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores'
 	import Icon from '@iconify/svelte'
 	import type { Session } from '@prisma/client'
 	import Average from './Average.svelte'

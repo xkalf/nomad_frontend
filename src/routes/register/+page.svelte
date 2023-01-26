@@ -1,8 +1,6 @@
 <form action="?/register" method="post" class="bg-[#111826] p-4">
 	<div class="mb-6">
-		<label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-			>Имэйл хаяг</label
-		>
+		<label for="email" class="block mb-2 text-sm font-medium text-white">Имэйл хаяг</label>
 		<input
 			type="email"
 			id="email"
@@ -13,9 +11,7 @@
 		/>
 	</div>
 	<div class="mb-6">
-		<label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-			>Нууц үг</label
-		>
+		<label for="password" class="block mb-2 text-sm font-medium text-white">Нууц үг</label>
 		<input
 			type="password"
 			id="password"
@@ -25,9 +21,7 @@
 		/>
 	</div>
 	<div class="mb-6">
-		<label for="lastname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-			>Овог</label
-		>
+		<label for="lastname" class="block mb-2 text-sm font-medium text-white">Овог</label>
 		<input
 			type="text"
 			id="lastname"
@@ -37,9 +31,7 @@
 		/>
 	</div>
 	<div class="mb-6">
-		<label for="firstname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-			>Нэр</label
-		>
+		<label for="firstname" class="block mb-2 text-sm font-medium text-white">Нэр</label>
 		<input
 			type="text"
 			id="firstname"
@@ -49,9 +41,7 @@
 		/>
 	</div>
 	<div class="mb-6">
-		<label for="birthdate" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-			>Төрсөн өдөр</label
-		>
+		<label for="birthdate" class="block mb-2 text-sm font-medium text-white">Төрсөн өдөр</label>
 		<input
 			type="date"
 			id="birthdate"
@@ -61,7 +51,7 @@
 		/>
 	</div>
 	<!-- <div class="mb-6">
-		<label for="gender" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+		<label for="gender" class="block mb-2 text-sm font-medium text-white"
 			>Хүйс</label
 		>
 		<select
