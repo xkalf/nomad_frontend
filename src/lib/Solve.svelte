@@ -19,7 +19,7 @@
 	async function updateSolve(status: SolveStatus) {
 		let st: SolveStatus
 
-		if (status !== 'ok' && solve.status !== 'ok') {
+		if (status !== 'ok' && solve.status !== 'ok' && status !== solve.status) {
 			return
 		}
 
