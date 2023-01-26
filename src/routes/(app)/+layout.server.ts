@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit'
-import type { PageServerLoad } from './$types'
+import type { LayoutServerLoad } from './$types'
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: LayoutServerLoad = async ({ locals }) => {
 	const ok = locals.user ? true : false
 
 	if (!ok) {

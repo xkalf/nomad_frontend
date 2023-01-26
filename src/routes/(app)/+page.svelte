@@ -7,9 +7,6 @@
 	import { browser } from '$app/environment'
 	import type { Session, Solve } from '@prisma/client'
 	import type { CubeType } from '$lib/utils/enum-adapter'
-	import type { PageServerData } from './$types'
-
-	export let data: PageServerData
 
 	let scramble: string | null
 	let session: Session
@@ -18,6 +15,7 @@
 	let interval: NodeJS.Timer
 	let solvesDiv: HTMLDivElement
 	let cubeType: CubeType = '333'
+	let lastScramble: string | null = null
 
 	$: textColor = state === 'ready' ? 'text-green-500' : 'text-white'
 
@@ -32,7 +30,7 @@
 	async function stopTime() {
 		clearInterval(interval)
 		await createSolve(time)
-		scramble = await generateScramble(cubeType)
+		await newScramble()
 	}
 
 	async function createSolve(time: number) {
@@ -89,8 +87,13 @@
 		scramble = null
 		cubeType = type
 		await getSession()
-		scramble = await generateScramble(type)
+		await newScramble()
 		if (browser) [localStorage.setItem('cube', type)]
+	}
+
+	async function newScramble() {
+		lastScramble = scramble
+		scramble = await generateScramble(cubeType)
 	}
 
 	onMount(async () => {
@@ -113,6 +116,12 @@
 					}
 				} else if (e.altKey) {
 					switch (e.code) {
+						case 'ArrowLeft':
+							scramble = lastScramble
+							break
+						case 'ArrowRight':
+							await newScramble()
+							break
 						case 'KeyD':
 							await removeSolves()
 							break
@@ -171,7 +180,7 @@
 </script>
 
 <div class="h-screen grid grid-cols-[minmax(300px,_1fr)_4fr]">
-	<Sidebar {session} {cubeType} user={data.user} bind:solvesDiv />
+	<Sidebar {session} {cubeType} bind:solvesDiv />
 	<div class="bg-[#363C41] p-4 flex flex-col overflow-hidden justify-between">
 		<!-- Scramble -->
 		<div class="mt-[3vh] flex justify-center items-center h-1/6 p-20 text-center">

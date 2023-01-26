@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores'
 	import Icon from '@iconify/svelte'
 	import type { Session } from '@prisma/client'
 	import Average from './Average.svelte'
@@ -7,11 +8,6 @@
 	import type { CubeType } from './utils/enum-adapter'
 	import { displayTime, getAvg, getBest } from './utils/timer-utils'
 
-	export let user: {
-		id: number
-		email: string
-		role: string
-	}
 	export let session: Session
 	export let cubeType: CubeType
 
@@ -48,14 +44,25 @@
 </script>
 
 <div class="bg-sidebarBg p-6 max-h-screen overflow-hidden flex flex-col">
-	<div class="py-4 text-white">
-		<p class="lowercase">{user.email}</p>
+	<div class="py-4 text-white flex justify-between">
+		<p class="lowercase">{$page.data.user.email}</p>
+		<form action="/logout" method="POST">
+			<button type="submit">Гарах</button>
+		</form>
 	</div>
 	<div class="flex justify-between">
-		<div class="w-14 h-14 rounded bg-[#5f6469]" />
-		<div class="w-14 h-14 rounded bg-[#5f6469]" />
-		<div class="w-14 h-14 rounded bg-[#5f6469]" />
-		<div class="w-14 h-14 rounded bg-[#5f6469]" />
+		<div class={`w-14 h-14 rounded bg-[#5f6469] flex justify-center items-center`}>
+			<Icon icon="iconoir:rubik-cube" width="35" color="#A3A7AB" />
+		</div>
+		<div class="w-14 h-14 rounded bg-[#5f6469] flex justify-center items-center">
+			<Icon icon="ri:pie-chart-2-fill" width="35" color="#A3A7AB" />
+		</div>
+		<div class="w-14 h-14 rounded bg-[#5f6469] flex justify-center items-center">
+			<Icon icon="material-symbols:person" width="35" color="#A3A7AB" />
+		</div>
+		<div class="w-14 h-14 rounded bg-[#5f6469] flex justify-center items-center">
+			<Icon icon="uiw:setting" width="35" color="#A3A7AB" />
+		</div>
 	</div>
 	<div class="mt-4 border-t border-[#797878] p-4 flex flex-col justify-center gap-4">
 		<Average label="Best" value={getBest($solves)} best={true} />
