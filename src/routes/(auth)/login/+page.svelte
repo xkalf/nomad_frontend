@@ -46,6 +46,7 @@
 						type="email"
 						placeholder="и-мэйл"
 						name="email"
+						autocomplete="email"
 						bind:this={emailEl}
 					/>
 				</div>
@@ -54,15 +55,17 @@
 						class="drop-shadow-lg py-5 align-top content-center rounded-lg w-full px-10 focus:text-black"
 						type={showPassword ? 'text' : 'password'}
 						placeholder="нууц үг"
+						autocomplete="current-password"
 						name="password"
 					/>
-					<button class="absolute right-0" on:click|preventDefault={toggleShowPassword}>
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
+					<span class="absolute right-0" on:click={toggleShowPassword}>
 						{#if showPassword}
 							<Icon icon="bx:show" width="30" color="#c4c4c4" />
 						{:else}
 							<Icon icon="bx:hide" width="30" color="#c4c4c4" />
 						{/if}
-					</button>
+					</span>
 				</div>
 				<div class="relative w-4/5 text-black flex justify-between">
 					<div class="flex gap-2">

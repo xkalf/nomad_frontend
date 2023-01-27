@@ -17,37 +17,35 @@ export const actions: Actions = {
 			password: string
 		}
 
-		try {
-			const user = await db.user.findUnique({
-				where: {
-					email
-				}
-			})
-
-			if (!user) {
-				return fail(401, { message: 'Хэрэглэгч олдсонгүй.' })
+		const user = await db.user.findUnique({
+			where: {
+				email
 			}
+		})
 
-			const ok = await bcrypt.compare(password, user.password)
-
-			if (!ok) {
-				return fail(400)
-			}
-
-			console.log(ok)
-
-			cookies.set('session', user.token || '', {
-				path: '/',
-				httpOnly: true,
-				sameSite: 'strict',
-				secure: process.env.NODE_ENV === 'production',
-				maxAge: 60 * 60 * 24 * 30
-			})
-
-			throw redirect(302, '/')
-		} catch (err) {
-			console.log(err)
-			return fail(500, { message: 'Нууц үг буруу байна.' })
+		if (!user) {
+			return fail(401, { message: 'Хэрэглэгч олдсонгүй.' })
 		}
+
+		const ok = await bcrypt.compare(password, user.password)
+
+		if (!ok) {
+			return fail(400, { message: 'Нууц үг буруу байна.' })
+		}
+
+		const authUser = await db.user.update({
+			where: { email },
+			data: { token: crypto.randomUUID() }
+		})
+
+		cookies.set('session', authUser.token, {
+			path: '/',
+			httpOnly: true,
+			sameSite: 'strict',
+			secure: process.env.NODE_ENV === 'production',
+			maxAge: 60 * 60 * 24 * 30
+		})
+
+		throw redirect(302, '/')
 	}
 }
