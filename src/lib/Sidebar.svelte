@@ -51,16 +51,16 @@
 		</form>
 	</div>
 	<div class="flex justify-between">
-		<div class={`w-14 h-14 rounded bg-[#5f6469] flex justify-center items-center`}>
+		<div class={`w-14 h-14 rounded-lg bg-[#5f6469] flex justify-center items-center`}>
 			<Icon icon="iconoir:rubik-cube" width="35" color="#A3A7AB" />
 		</div>
-		<div class="w-14 h-14 rounded bg-[#5f6469] flex justify-center items-center">
+		<div class="w-14 h-14 rounded-lg bg-[#5f6469] flex justify-center items-center">
 			<Icon icon="ri:pie-chart-2-fill" width="35" color="#A3A7AB" />
 		</div>
-		<div class="w-14 h-14 rounded bg-[#5f6469] flex justify-center items-center">
+		<div class="w-14 h-14 rounded-lg bg-[#5f6469] flex justify-center items-center">
 			<Icon icon="material-symbols:person" width="35" color="#A3A7AB" />
 		</div>
-		<div class="w-14 h-14 rounded bg-[#5f6469] flex justify-center items-center">
+		<div class="w-14 h-14 rounded-lg bg-[#5f6469] flex justify-center items-center">
 			<Icon icon="uiw:setting" width="35" color="#A3A7AB" />
 		</div>
 	</div>

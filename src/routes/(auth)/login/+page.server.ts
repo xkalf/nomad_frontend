@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	}
 }
 
-const login: Action = async ({ request, cookies }) => {
+const defaults: Action = async ({ request, cookies }) => {
 	const { email, password } = Object.fromEntries(await request.formData()) as {
 		email: string
 		password: string
@@ -48,4 +48,4 @@ const login: Action = async ({ request, cookies }) => {
 	throw redirect(302, '/')
 }
 
-export const actions: Actions = { login }
+export const actions: Actions = { default: defaults }

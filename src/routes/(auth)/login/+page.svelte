@@ -39,7 +39,7 @@
 				</p>
 			</div>
 			<!-- Form -->
-			<form class="flex mt-4 flex-col items-center gap-6" action="?/login" method="POST">
+			<form class="flex mt-4 flex-col items-center gap-6" action="/login" method="POST">
 				<div class="relative w-4/5 text-black">
 					<input
 						class="drop-shadow-lg py-5 align-top content-center rounded-lg w-full px-10 focus:text-black"
