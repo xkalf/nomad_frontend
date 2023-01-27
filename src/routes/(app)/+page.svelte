@@ -1,6 +1,6 @@
 <script lang="ts">
 	import timerLogo from '$lib/assets/timer-logo.png'
-	import Sidebar from '$lib/Sidebar.svelte'
+	import Sidebar from './Sidebar.svelte'
 	import { resetSolves, deleteSolves, solves, addSolves, initialSolves } from '$lib/stores/solves'
 	import { displayTime, formatMegaminxScramble, generateScramble } from '$lib/utils/timer-utils'
 	import { onMount } from 'svelte'
@@ -16,6 +16,7 @@
 	let solvesDiv: HTMLDivElement
 	let lastScramble: string | null = null
 	let cubeType: CubeType = '333'
+	let sessions: Session[]
 
 	$: textColor = state === 'ready' ? 'text-green-500' : 'text-white'
 
@@ -73,27 +74,90 @@
 
 	async function getSession() {
 		if (browser) {
-			const result = (await (await fetch(`/api/session?cube=${cubeType}`)).json()) as {
-				session: Session & {
-					solves: Solve[]
-				}
+			const sessionId = localStorage.getItem('sessionId')
+
+			if (!sessionId) {
+				await getSessionByCube(cubeType)
+				return
 			}
 
-			session = result.session
-			initialSolves(result.session.solves)
+			const id = parseFloat(sessionId)
+
+			if (isNaN(id)) {
+				await getSessionByCube(cubeType)
+				return
+			}
+
+			await getSessionById(id)
+			return
 		}
+	}
+
+	async function getSessionByCube(type: CubeType) {
+		const result = (await (await fetch(`/api/session?cube=${type}`)).json()) as {
+			sessions: Session[]
+		}
+
+		sessions = result.sessions
+
+		const id = result.sessions.find(i => i.main === true)?.id
+
+		const currentSession = (await (await fetch(`/api/session/${id}`)).json()) as {
+			session: Session & { solves: Solve[] }
+		}
+
+		session = currentSession.session
+		initialSolves(currentSession.session.solves)
+
+		localStorage.setItem('sessionId', id?.toString() || '')
+	}
+
+	async function getSessionById(id: number) {
+		const currentSession = (await (await fetch(`/api/session/${id}`)).json()) as {
+			session: Session & { solves: Solve[] }
+		}
+
+		const result = (await (
+			await fetch(`/api/session?cube=${currentSession.session.cube}`)
+		).json()) as {
+			sessions: Session[]
+		}
+
+		sessions = result.sessions
+
+		cubeType = session.cube as CubeType
+		session = currentSession.session
+		initialSolves(currentSession.session.solves)
 	}
 
 	async function changeCubeType(type: CubeType) {
 		scramble = null
 		cubeType = type
-		await Promise.all([newScramble(), getSession()])
-		if (browser) localStorage.setItem('cube', type)
+		await Promise.all([newScramble(), getSessionByCube(type)])
 	}
 
 	async function newScramble() {
 		lastScramble = scramble
 		scramble = await generateScramble(cubeType)
+	}
+
+	function shorcutMapper(code: string) {
+		const mapper: { [key: string]: CubeType } = {
+			Digit1: 'sq1',
+			Digit2: '222',
+			Digit3: '333',
+			Digit4: '444',
+			Digit5: '555',
+			Digit6: '666',
+			Digit7: '777',
+			KeyM: 'minx',
+			KeyC: 'clock',
+			KeyP: 'pyram',
+			KeyB: '333bf',
+			keyS: 'skewb'
+		}
+
+		return mapper[code]
 	}
 
 	onMount(async () => {
@@ -118,52 +182,18 @@
 					switch (e.code) {
 						case 'ArrowLeft':
 							scramble = lastScramble
-							break
+							return
 						case 'ArrowRight':
 							await newScramble()
-							break
+							return
 						case 'KeyD':
 							await removeSolves()
-							break
+							return
 						case 'KeyZ':
 							await deleteLastSolve()
-							break
-						case 'Digit1':
-							changeCubeType('sq1')
-							break
-						case 'Digit2':
-							changeCubeType('222')
-							break
-						case 'Digit3':
-							changeCubeType('333')
-							break
-						case 'Digit4':
-							changeCubeType('444')
-							break
-						case 'Digit5':
-							changeCubeType('555')
-							break
-						case 'Digit6':
-							changeCubeType('666')
-							break
-						case 'Digit7':
-							changeCubeType('777')
-							break
-						case 'KeyM':
-							changeCubeType('minx')
-							break
-						case 'KeyC':
-							changeCubeType('clock')
-							break
-						case 'KeyP':
-							changeCubeType('pyram')
-							break
-						case 'KeyB':
-							changeCubeType('333bf')
-							break
-						case 'keyS':
-							changeCubeType('skewb')
-							break
+							return
+						default:
+							changeCubeType(shorcutMapper(e.code))
 					}
 				}
 

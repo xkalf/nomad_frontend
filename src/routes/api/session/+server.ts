@@ -6,25 +6,15 @@ import { cubeTypeMapper } from '$lib/utils/timer-utils'
 export const GET: RequestHandler = async ({ locals, url }) => {
 	const cube = url.searchParams.get('cube') as CubeType
 
-	const session = await db.session.findFirst({
+	const sessions = await db.session.findMany({
 		where: {
 			userId: locals.user.id,
 			main: true,
 			cube
-		},
-		include: {
-			solves: {
-				orderBy: {
-					createdAt: 'asc'
-				},
-				where: {
-					deleted: null
-				}
-			}
 		}
 	})
 
-	if (!session) {
+	if (sessions.length === 0) {
 		const newSession = await db.session.create({
 			data: {
 				userId: locals.user.id,
@@ -34,8 +24,8 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 			}
 		})
 
-		return new Response(JSON.stringify({ session: newSession }))
+		return new Response(JSON.stringify({ sessions: [newSession] }))
 	}
 
-	return new Response(JSON.stringify({ session }))
+	return new Response(JSON.stringify({ sessions }))
 }

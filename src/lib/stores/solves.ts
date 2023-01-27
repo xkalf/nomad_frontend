@@ -17,7 +17,17 @@ export function deleteSolves(id: number) {
 }
 
 export function changeSolveStats(id: number, status: SolveStatus) {
-	solves.update(state => state.map(i => (i.id === id ? { ...i, status } : i)))
+	solves.update(state => {
+		const index = state.findIndex(i => i.id === id)
+		if (index !== -1) {
+			state[index] = {
+				...state[index],
+				status
+			}
+		}
+
+		return state
+	})
 }
 
 export function resetSolves() {

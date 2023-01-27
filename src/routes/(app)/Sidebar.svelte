@@ -4,9 +4,9 @@
 	import type { Session } from '@prisma/client'
 	import Average from './Average.svelte'
 	import Solve from './Solve.svelte'
-	import { solves } from './stores/solves'
-	import { cubeTypes, type CubeType } from './utils/enum-adapter'
-	import { cubeTypeMapper, displayTime, getAvg, getBest } from './utils/timer-utils'
+	import { solves } from '../../lib/stores/solves'
+	import { cubeTypes, type CubeType } from '../../lib/utils/enum-adapter'
+	import { cubeTypeMapper, displayTime, getAvg, getBest } from '../../lib/utils/timer-utils'
 
 	export let session: Session
 	export let solvesDiv: HTMLDivElement
@@ -73,7 +73,7 @@
 		class="bg-sidebarElement flex-grow rounded-xl mx-4 p-4 overflow-y-auto scrollbar"
 		bind:this={solvesDiv}
 	>
-		{#each $solves.reverse() as solve, index}
+		{#each $solves.slice().reverse() as solve, index}
 			<Solve order={$solves.length - index} {solve} />
 		{/each}
 	</div>
