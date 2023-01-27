@@ -59,7 +59,7 @@
 						name="password"
 					/>
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
-					<span class="absolute right-0" on:click={toggleShowPassword}>
+					<span class="absolute right-0 cursor-pointer" on:click={toggleShowPassword}>
 						{#if showPassword}
 							<Icon icon="bx:show" width="30" color="#c4c4c4" />
 						{:else}

@@ -5,41 +5,23 @@
 	import Average from './Average.svelte'
 	import Solve from './Solve.svelte'
 	import { solves } from './stores/solves'
-	import type { CubeType } from './utils/enum-adapter'
-	import { displayTime, getAvg, getBest } from './utils/timer-utils'
+	import { cubeTypes, type CubeType } from './utils/enum-adapter'
+	import { cubeTypeMapper, displayTime, getAvg, getBest } from './utils/timer-utils'
 
 	export let session: Session
-	export let cubeType: CubeType
-
 	export let solvesDiv: HTMLDivElement
+	export let cubeType: CubeType
+	export let changeCubeType: (type: CubeType) => Promise<void>
 
-	function cubeTypeMapper(type: CubeType) {
-		switch (type) {
-			case '222':
-				return '2x2'
-			case '333':
-				return '3x3'
-			case '444':
-				return '4x4'
-			case '555':
-				return '5x5'
-			case '666':
-				return '6x6'
-			case '777':
-				return '7x7'
-			case 'sq1':
-				return 'Sq 1'
-			case 'pyram':
-				return 'Pyra'
-			case 'minx':
-				return 'Mega'
-			case 'clock':
-				return 'Clock'
-			case '333bf':
-				return '3Bld'
-			default:
-				return ''
-		}
+	let isCubeTypeOpen = false
+
+	function toggleCubeTypes() {
+		isCubeTypeOpen = !isCubeTypeOpen
+	}
+
+	async function changeCurrentCubeType(type: CubeType) {
+		isCubeTypeOpen = false
+		await changeCubeType(type)
 	}
 </script>
 
@@ -101,17 +83,34 @@
 			<Icon
 				icon="material-symbols:keyboard-arrow-up-rounded"
 				color="#b8b8b8"
-				width="30"
-				height="30"
+				width="25"
+				height="25"
 				inline={true}
 			/>
-			<div class="bg-[#424B53] py-1 flex justify-center items-center text-xl rounded-xl flex-grow">
-				<button>{cubeTypeMapper(cubeType)}</button>
-			</div>
+			<!-- CubeType -->
 			<div
-				class="flex-grow flex justify-center items-center text-green-400 bg-[#424b53] py-1 rounded-xl text-xl"
+				class="bg-[#424B53] py-1 flex justify-center items-center text-xl rounded-xl flex-grow relative"
 			>
-				<button>+ New Session</button>
+				<div
+					class={`flex flex-col absolute left-0 bottom-0 bg-[#424B53] pt-3 rounded-xl pb-10 z-0 w-full ${
+						isCubeTypeOpen ? 'block' : 'hidden'
+					}`}
+				>
+					{#each cubeTypes.filter(i => i !== cubeType) as type}
+						<button
+							class="hover:bg-[#606C76] w-full px-1 text-center"
+							on:click={async () => await changeCurrentCubeType(type)}
+							>{cubeTypeMapper(type)}</button
+						>
+					{/each}
+				</div>
+				<button class="px-1 z-10" on:click={toggleCubeTypes}>{cubeTypeMapper(cubeType)}</button>
+			</div>
+			<!-- Session -->
+			<div
+				class="flex-grow flex justify-center items-center text-green-400 bg-[#424b53] py-1 rounded-xl text-xl z-10"
+			>
+				<button>+ Session</button>
 			</div>
 		</div>
 	</div>

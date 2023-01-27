@@ -11,7 +11,8 @@ export const cubeTypes = [
 	'sq1',
 	'333bf',
 	'444bf',
-	'555bf'
+	'555bf',
+	'skewb'
 ] as const
 
 export type CubeType = (typeof cubeTypes)[number]

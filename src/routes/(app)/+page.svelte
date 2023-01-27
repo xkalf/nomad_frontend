@@ -14,8 +14,8 @@
 	let state: 'stopped' | 'running' | 'ready' | 'stopping' = 'stopped'
 	let interval: NodeJS.Timer
 	let solvesDiv: HTMLDivElement
-	let cubeType: CubeType = '333'
 	let lastScramble: string | null = null
+	let cubeType: CubeType = '333'
 
 	$: textColor = state === 'ready' ? 'text-green-500' : 'text-white'
 
@@ -38,7 +38,7 @@
 			body: JSON.stringify({
 				time,
 				scramble,
-				sessionId: session?.id
+				sessionId: session.id
 			})
 		})
 
@@ -72,21 +72,23 @@
 	}
 
 	async function getSession() {
-		const result = (await (await fetch(`/api/session?cube=${cubeType}`)).json()) as {
-			session: Session & {
-				solves: Solve[]
+		if (browser) {
+			const result = (await (await fetch(`/api/session?cube=${cubeType}`)).json()) as {
+				session: Session & {
+					solves: Solve[]
+				}
 			}
-		}
 
-		session = result.session
-		initialSolves(result.session.solves)
+			session = result.session
+			initialSolves(result.session.solves)
+		}
 	}
 
 	async function changeCubeType(type: CubeType) {
 		scramble = null
 		cubeType = type
 		await Promise.all([newScramble(), getSession()])
-		if (browser) [localStorage.setItem('cube', type)]
+		if (browser) localStorage.setItem('cube', type)
 	}
 
 	async function newScramble() {
@@ -159,6 +161,9 @@
 						case 'KeyB':
 							changeCubeType('333bf')
 							break
+						case 'keyS':
+							changeCubeType('skewb')
+							break
 					}
 				}
 
@@ -177,8 +182,8 @@
 	})
 </script>
 
-<div class="h-screen grid grid-cols-[minmax(300px,_1fr)_4fr]">
-	<Sidebar {session} {cubeType} bind:solvesDiv />
+<div class="h-screen grid grid-cols-[minmax(350px,_1fr)_4fr]">
+	<Sidebar {session} {cubeType} {changeCubeType} bind:solvesDiv />
 	<div class="bg-[#363C41] p-4 flex flex-col overflow-hidden justify-between">
 		<!-- Scramble -->
 		<div class="mt-[3vh] flex justify-center items-center h-1/6 p-20 text-center">
