@@ -17,7 +17,8 @@ model Session {
   main      Boolean   @default(false)
   User      User?     @relation(fields: [userId], references: [id])
   solves    Solve[]
-  
+  deleted   DateTime?
+
   @@index([userId])
 }
 
@@ -31,7 +32,7 @@ model Solve {
   description String?   @db.VarChar
   sessionId   Int?
   deleted     DateTime?
-  Session     Session?  @relation(fields: [sessionId], references: [id])
+  Session     Session?  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
   @@index([sessionId])
 }

@@ -11,9 +11,13 @@
 	export let session: Session
 	export let solvesDiv: HTMLDivElement
 	export let cubeType: CubeType
+	export let sessions: Session[] = []
 	export let changeCubeType: (type: CubeType) => Promise<void>
+	export let removeSession: (id: number) => void
+	export let getSessionById: (id: number) => Promise<void>
 
 	let isCubeTypeOpen = false
+	let isSessionOpen = false
 
 	function toggleCubeTypes() {
 		isCubeTypeOpen = !isCubeTypeOpen
@@ -22,6 +26,17 @@
 	async function changeCurrentCubeType(type: CubeType) {
 		isCubeTypeOpen = false
 		await changeCubeType(type)
+	}
+
+	async function deleteSession(id: number) {
+		const response = await fetch(`api/session/${id}`, {
+			method: 'DELETE'
+		})
+		const data = (await response.json()) as {
+			success: boolean
+		}
+
+		if (data.success === true) removeSession(id)
 	}
 </script>
 
@@ -78,7 +93,31 @@
 		{/each}
 	</div>
 	<div class="bg-sidebarElement m-4 rounded-xl py-2 px-4 text-white">
-		<p class="ml-2 my-2">{session?.name || ''}</p>
+		<div>
+			{#if isSessionOpen}
+				<ul class="w-full my-2 ml-2 max-h-12 overflow-y-auto">
+					{#each sessions as s}
+						<li class="flex justify-between pr-4">
+							<button
+								on:click={async () => {
+									getSessionById(s.id)
+								}}>{s.name}</button
+							>
+							{#if s.main === false}
+								<button
+									class="text-red-500 text-lg"
+									on:click={async () => {
+										deleteSession(s.id)
+									}}>X</button
+								>
+							{/if}
+						</li>
+					{/each}
+				</ul>
+			{:else}
+				<p class="ml-2 my-2">{session?.name || ''}</p>
+			{/if}
+		</div>
 		<div class="flex items-center gap-1">
 			<Icon
 				icon="material-symbols:keyboard-arrow-up-rounded"
@@ -91,20 +130,20 @@
 			<div
 				class="bg-[#424B53] py-1 flex justify-center items-center text-xl rounded-xl flex-grow relative"
 			>
-				<div
+				<ul
 					class={`flex flex-col absolute left-0 bottom-0 bg-[#424B53] pt-3 rounded-xl pb-10 z-0 w-full ${
 						isCubeTypeOpen ? 'block' : 'hidden'
 					}`}
 				>
 					{#each cubeTypes.filter(i => i !== cubeType) as type}
-						<button
-							class="hover:bg-[#606C76] w-full px-1 text-center"
-							on:click={async () => await changeCurrentCubeType(type)}
-							>{cubeTypeMapper(type)}</button
-						>
+						<li class="hover:bg-[#606C76] w-full px-1 text-center">
+							<button class="w-full" on:click={async () => await changeCurrentCubeType(type)}
+								>{cubeTypeMapper[type]}</button
+							>
+						</li>
 					{/each}
-				</div>
-				<button class="px-1 z-10" on:click={toggleCubeTypes}>{cubeTypeMapper(cubeType)}</button>
+				</ul>
+				<button class="px-1 z-10" on:click={toggleCubeTypes}>{cubeTypeMapper[cubeType]}</button>
 			</div>
 			<!-- Session -->
 			<div

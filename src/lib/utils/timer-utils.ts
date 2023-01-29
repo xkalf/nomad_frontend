@@ -66,33 +66,34 @@ export const generateScramble = async (cubeType: CubeType) => {
 	return s.toString()
 }
 
-export function cubeTypeMapper(type: CubeType) {
-	switch (type) {
-		case '222':
-			return '2x2'
-		case '333':
-			return '3x3'
-		case '444':
-			return '4x4'
-		case '555':
-			return '5x5'
-		case '666':
-			return '6x6'
-		case '777':
-			return '7x7'
-		case 'sq1':
-			return 'Sq 1'
-		case 'pyram':
-			return 'Pyra'
-		case 'minx':
-			return 'Mega'
-		case 'clock':
-			return 'Clock'
-		case '333bf':
-			return '3Bld'
-		case 'skewb':
-			return 'skewb'
-		default:
-			return type
-	}
+export const cubeTypeMapper: Record<CubeType, string> = {
+	'222': '2x2',
+	'333': '3x3',
+	'444': '4x4',
+	'555': '5x5',
+	'666': '6x6',
+	'777': '7x7',
+	'333bf': '3Bld',
+	'444bf': '4Bld',
+	'555bf': '5Bld',
+	sq1: 'Sq1',
+	pyram: 'Pyra',
+	minx: 'Mega',
+	clock: 'Clock',
+	skewb: 'skewb'
+}
+
+export const shortcutMapper: { [key: string]: CubeType } = {
+	Digit1: 'sq1',
+	Digit2: '222',
+	Digit3: '333',
+	Digit4: '444',
+	Digit5: '555',
+	Digit6: '666',
+	Digit7: '777',
+	KeyM: 'minx',
+	KeyC: 'clock',
+	KeyP: 'pyram',
+	KeyB: '333bf',
+	KeyS: 'skewb'
 }

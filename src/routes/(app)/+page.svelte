@@ -2,7 +2,12 @@
 	import timerLogo from '$lib/assets/timer-logo.png'
 	import Sidebar from './Sidebar.svelte'
 	import { resetSolves, deleteSolves, solves, addSolves, initialSolves } from '$lib/stores/solves'
-	import { displayTime, formatMegaminxScramble, generateScramble } from '$lib/utils/timer-utils'
+	import {
+		displayTime,
+		formatMegaminxScramble,
+		generateScramble,
+		shortcutMapper
+	} from '$lib/utils/timer-utils'
 	import { onMount } from 'svelte'
 	import { browser } from '$app/environment'
 	import type { Session, Solve } from '@prisma/client'
@@ -141,23 +146,8 @@
 		scramble = await generateScramble(cubeType)
 	}
 
-	function shorcutMapper(code: string) {
-		const mapper: { [key: string]: CubeType } = {
-			Digit1: 'sq1',
-			Digit2: '222',
-			Digit3: '333',
-			Digit4: '444',
-			Digit5: '555',
-			Digit6: '666',
-			Digit7: '777',
-			KeyM: 'minx',
-			KeyC: 'clock',
-			KeyP: 'pyram',
-			KeyB: '333bf',
-			keyS: 'skewb'
-		}
-
-		return mapper[code]
+	function removeSession(id: number) {
+		sessions = sessions.filter(i => i.id !== id)
 	}
 
 	onMount(async () => {
@@ -192,8 +182,10 @@
 						case 'KeyZ':
 							await deleteLastSolve()
 							return
-						default:
-							changeCubeType(shorcutMapper(e.code))
+					}
+
+					if (Object.keys(shortcutMapper).includes(e.code)) {
+						await changeCubeType(shortcutMapper[e.code])
 					}
 				}
 
@@ -213,7 +205,15 @@
 </script>
 
 <div class="h-screen grid grid-cols-[minmax(350px,_1fr)_4fr]">
-	<Sidebar {session} {cubeType} {changeCubeType} bind:solvesDiv />
+	<Sidebar
+		{getSessionById}
+		{removeSession}
+		{session}
+		{cubeType}
+		{changeCubeType}
+		{sessions}
+		bind:solvesDiv
+	/>
 	<div class="bg-[#363C41] p-4 flex flex-col overflow-hidden justify-between">
 		<!-- Scramble -->
 		<div class="mt-[3vh] flex justify-center items-center h-1/6 p-20 text-center">

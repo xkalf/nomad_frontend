@@ -9,6 +9,7 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 	const sessions = await db.session.findMany({
 		where: {
 			userId: locals.user.id,
+			deleted: null,
 			main: true,
 			cube
 		}
