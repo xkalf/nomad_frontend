@@ -23,7 +23,7 @@
 </script>
 
 <div class={`modal p-12 pb-4 absolute top-1/2 left-1/2 ${isOpen ? 'block' : 'hidden'}`}>
-	<img alt="ads" src={image} />
+	<img alt="ads" src={image} class="lg:w-[500px] lg:h-[500px] w-[400px] h-[400px]" />
 	<p class="my-4 text-white text-xl text-center">{label}</p>
 	<div class="flex justify-center gap-12 items-center">
 		<button class="button py-2 px-4 text-xl text-white" on:click={cancelFunction}>Болих</button>
