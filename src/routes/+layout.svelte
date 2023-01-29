@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css'
-	import logo from '$lib/assets/vertical-logo.png'
+	import logo from '$lib/assets/logo.png'
 </script>
 
 <svelte:head>
