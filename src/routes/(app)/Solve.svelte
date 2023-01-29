@@ -1,4 +1,5 @@
 <script lang="ts">
+	import DeleteModal from '$lib/DeleteModal.svelte'
 	import type { Solve } from '@prisma/client'
 	import { changeSolveStats, deleteSolves } from '../../lib/stores/solves'
 	import type { SolveStatus } from '../../lib/utils/enum-adapter'

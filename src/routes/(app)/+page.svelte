@@ -12,6 +12,7 @@
 	import { browser } from '$app/environment'
 	import type { Session, Solve } from '@prisma/client'
 	import type { CubeType } from '$lib/utils/enum-adapter'
+	import DeleteModal from '$lib/DeleteModal.svelte'
 
 	let scramble: string | null
 	let session: Session
@@ -205,6 +206,7 @@
 </script>
 
 <div class="h-screen grid grid-cols-[minmax(350px,_1fr)_4fr]">
+	<!-- <DeleteModal label="abcd" /> -->
 	<Sidebar
 		{getSessionById}
 		{removeSession}

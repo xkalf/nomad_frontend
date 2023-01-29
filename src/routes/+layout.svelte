@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css'
-	import logo from '$lib/assets/timer-black.png'
+	import logo from '$lib/assets/vertical-logo.png'
 </script>
 
 <svelte:head>
