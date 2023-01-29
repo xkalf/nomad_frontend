@@ -9,7 +9,6 @@
 	import { cubeTypeMapper, displayTime, getAvg, getBest } from '../../lib/utils/timer-utils'
 
 	export let session: Session
-	export let solvesDiv: HTMLDivElement
 	export let cubeType: CubeType
 	export let sessions: Session[] = []
 	export let changeCubeType: (type: CubeType) => Promise<void>
@@ -84,10 +83,7 @@
 			/>
 		</div>
 	</div>
-	<div
-		class="bg-sidebarElement flex-grow rounded-xl mx-4 p-4 overflow-y-auto scrollbar"
-		bind:this={solvesDiv}
-	>
+	<div class="bg-sidebarElement flex-grow rounded-xl mx-4 p-4 overflow-y-auto scrollbar">
 		{#each $solves.slice().reverse() as solve, index}
 			<Solve order={$solves.length - index} {solve} />
 		{/each}

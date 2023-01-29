@@ -1,14 +1,35 @@
 <script lang="ts">
-	import image from '$lib/assets/sample.png'
+	import { browser } from '$app/environment'
+	import image from '$lib/assets/ads.png'
+	import { onMount } from 'svelte'
 	export let label: string
+	export let deleteFunction: () => Promise<void>
+	export let cancelFunction: () => void
+	export let isOpen = false
+
+	onMount(() => {
+		if (browser) {
+			window.addEventListener('keydown', e => {
+				if (isOpen === true) {
+					if (e.code === 'Enter') {
+						deleteFunction()
+					} else if (e.code === 'Escape') {
+						cancelFunction()
+					}
+				}
+			})
+		}
+	})
 </script>
 
-<div class="modal p-12 pb-4 absolute top-1/2 left-1/2">
+<div class={`modal p-12 pb-4 absolute top-1/2 left-1/2 ${isOpen ? 'block' : 'hidden'}`}>
 	<img alt="ads" src={image} />
-	<p class="my-4">{label}</p>
+	<p class="my-4 text-white text-xl text-center">{label}</p>
 	<div class="flex justify-center gap-12 items-center">
-		<button class="button py-2 px-4 text-xl text-white">Болих</button>
-		<button class="button delete py-2 px-4 text-xl text-white">Устгах</button>
+		<button class="button py-2 px-4 text-xl text-white" on:click={cancelFunction}>Болих</button>
+		<button class="button delete py-2 px-4 text-xl text-white" on:click={deleteFunction}
+			>Устгах</button
+		>
 	</div>
 </div>
 

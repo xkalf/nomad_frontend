@@ -8,13 +8,22 @@
 	export let order: number
 	export let solve: Solve
 
+	let deleteModalOpen = false
+
 	async function deleteSolve() {
 		const response = await fetch(`/api/solve/${solve.id}`, {
 			method: 'DELETE'
 		})
 		const data = await response.json()
 
-		if (data.success === true) deleteSolves(solve.id)
+		if (data.success === true) {
+			deleteSolves(solve.id)
+			hideModal()
+		}
+	}
+
+	function hideModal() {
+		deleteModalOpen = false
 	}
 
 	async function updateSolve(status: SolveStatus) {
@@ -40,6 +49,13 @@
 	}
 </script>
 
+<DeleteModal
+	label="Уг эвлүүлэлтийг устгах уу?"
+	deleteFunction={deleteSolve}
+	isOpen={deleteModalOpen}
+	cancelFunction={hideModal}
+/>
+
 <div class="flex justify-between text-white p-2">
 	{#if solve.status === 'ok'}
 		<span>{order}. {displayTime(solve.time)}</span>
@@ -51,6 +67,13 @@
 	<div class="flex gap-1">
 		<button class="text-red-500" on:click={() => updateSolve('+2')}>+2</button>
 		<button class="text-white" on:click={() => updateSolve('dnf')}>DNF</button>
-		<button class="text-red-500" on:click={deleteSolve}> X </button>
+		<button
+			class="text-red-500"
+			on:click={() => {
+				deleteModalOpen = true
+			}}
+		>
+			X
+		</button>
 	</div>
 </div>

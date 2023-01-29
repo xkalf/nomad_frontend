@@ -19,10 +19,11 @@
 	let time = 0
 	let state: 'stopped' | 'running' | 'ready' | 'stopping' = 'stopped'
 	let interval: NodeJS.Timer
-	let solvesDiv: HTMLDivElement
 	let lastScramble: string | null = null
 	let cubeType: CubeType = '333'
 	let sessions: Session[]
+	let deleteAllModalOpen = false
+	let deleteLastModalOpen = false
 
 	$: textColor = state === 'ready' ? 'text-green-500' : 'text-white'
 
@@ -55,27 +56,25 @@
 	}
 
 	async function removeSolves() {
-		if (!confirm('Уг эвлүүлэлтүүдийг устгахдаа итгэлтэй байна уу?')) {
-			return
-		}
-
 		const response = await fetch(`api/session/${session.id}/reset`, {
 			method: 'DELETE'
 		})
 		const data = await response.json()
 
-		if (data.success === true) resetSolves()
+		if (data.success === true) {
+			resetSolves()
+			deleteAllModalOpen = false
+		}
 	}
 
 	async function deleteLastSolve() {
-		if (!confirm('Уг эвлүүлэлтийг устгахдаа итгэлтэй байна уу?')) {
-			return
-		}
-
 		const lastId = $solves[$solves.length - 1].id
 
 		const response = await (await fetch(`/api/solve/${lastId}`, { method: 'DELETE' })).json()
-		if (response.success === true) deleteSolves(lastId)
+		if (response.success === true) {
+			deleteSolves(lastId)
+			deleteLastModalOpen = false
+		}
 	}
 
 	async function getSession() {
@@ -130,10 +129,10 @@
 		}
 
 		sessions = result.sessions
-
-		cubeType = session.cube as CubeType
 		session = currentSession.session
 		initialSolves(currentSession.session.solves)
+
+		await changeCubeType(currentSession.session.cube as CubeType)
 	}
 
 	async function changeCubeType(type: CubeType) {
@@ -153,7 +152,7 @@
 
 	onMount(async () => {
 		if (browser) {
-			changeCubeType((localStorage.getItem('cube') as CubeType) || '333')
+			await getSession()
 
 			window.addEventListener('keyup', e => {
 				if (e.key === ' ') {
@@ -178,10 +177,10 @@
 							await newScramble()
 							return
 						case 'KeyD':
-							await removeSolves()
+							deleteAllModalOpen = true
 							return
 						case 'KeyZ':
-							await deleteLastSolve()
+							deleteLastModalOpen = true
 							return
 					}
 
@@ -205,17 +204,26 @@
 	})
 </script>
 
+<DeleteModal
+	label="Сүүлийн эвлүүлэлтийг устгах уу?"
+	deleteFunction={deleteLastSolve}
+	cancelFunction={() => {
+		deleteLastModalOpen = false
+	}}
+	isOpen={deleteLastModalOpen}
+/>
+
+<DeleteModal
+	label="Энэ session-ийн эвлүүлэлтүүдийг устгах уу?"
+	deleteFunction={removeSolves}
+	isOpen={deleteAllModalOpen}
+	cancelFunction={() => {
+		deleteAllModalOpen = false
+	}}
+/>
+
 <div class="h-screen grid grid-cols-[minmax(350px,_1fr)_4fr]">
-	<!-- <DeleteModal label="abcd" /> -->
-	<Sidebar
-		{getSessionById}
-		{removeSession}
-		{session}
-		{cubeType}
-		{changeCubeType}
-		{sessions}
-		bind:solvesDiv
-	/>
+	<Sidebar {getSessionById} {removeSession} {session} {cubeType} {changeCubeType} {sessions} />
 	<div class="bg-[#363C41] p-4 flex flex-col overflow-hidden justify-between">
 		<!-- Scramble -->
 		<div class="mt-[3vh] flex justify-center items-center h-1/6 p-20 text-center">
