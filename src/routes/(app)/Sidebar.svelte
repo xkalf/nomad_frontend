@@ -21,6 +21,14 @@
 	let isSessionCreate = false
 	let isSessionDelete = false
 	let sessionName: string
+	let sortMode: 'asc' | 'desc' | 'none' = 'none'
+
+	$: formattedSolves =
+		sortMode === 'asc'
+			? $solves.slice().sort((a, b) => a.time - b.time)
+			: sortMode === 'desc'
+			? $solves.slice().sort((a, b) => b.time - a.time)
+			: $solves.slice().reverse()
 
 	function toggleCubeTypes() {
 		isCubeTypeOpen = !isCubeTypeOpen
@@ -86,6 +94,20 @@
 			isSessionOpen = false
 		}
 	}
+
+	function changeSortMode() {
+		switch (sortMode) {
+			case 'none':
+				sortMode = 'asc'
+				break
+			case 'asc':
+				sortMode = 'desc'
+				break
+			case 'desc':
+				sortMode = 'none'
+				break
+		}
+	}
 </script>
 
 <div class="bg-sidebarBg p-6 max-h-screen overflow-hidden flex flex-col">
@@ -132,10 +154,29 @@
 			/>
 		</div>
 	</div>
-	<div class="bg-sidebarElement flex-grow rounded-xl mx-4 p-4 overflow-y-auto scrollbar">
-		{#each $solves.slice().reverse() as solve, index}
-			<Solve order={$solves.length - index} {solve} />
-		{/each}
+	<div class="bg-sidebarElement flex-grow rounded-xl mx-4 overflow-y-auto scrollbar">
+		<!-- Sort -->
+		<div class="bg-[#3E4449] w-full flex items-center justify-around text-white text-lg py-2">
+			<button on:click={changeSortMode}>
+				{#if sortMode === 'none'}
+					1-9
+				{:else if sortMode === 'asc'}
+					9-1
+				{:else if sortMode === 'desc'}
+					0
+				{/if}
+			</button>
+			<Icon icon="ri:arrow-up-down-fill" width="22" />
+			<button class="text-[#565D63]">B-W</button>
+		</div>
+		<!-- Solves -->
+		<ul class="p-4">
+			{#each formattedSolves as solve, index}
+				<li>
+					<Solve order={sortMode === 'none' ? formattedSolves.length - index : index + 1} {solve} />
+				</li>
+			{/each}
+		</ul>
 	</div>
 	<div class="bg-sidebarElement m-4 rounded-xl py-2 px-4 text-white">
 		<div>
@@ -223,9 +264,11 @@
 	cancelFunction={() => (isSessionCreate = false)}
 	mode="create"
 >
+	<label for="sessionName" class="text-xl text-white">Session-ийн нэр</label>
 	<input
+		id="sessionName"
 		type="text"
-		class="bg-[#2B2F32] p-2 text-[#b8b8b8] w-full rounded-lg text-lg"
+		class="bg-[#2B2F32] p-2 text-[#b8b8b8] w-full rounded-lg text-lg mt-2"
 		bind:value={sessionName}
 	/>
 </Modal>
