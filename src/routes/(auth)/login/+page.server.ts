@@ -32,12 +32,14 @@ const defaults: Action = async ({ request, cookies }) => {
 		return fail(400, { message: 'Нууц үг буруу байна.' })
 	}
 
-	const authUser = await db.user.update({
-		where: { email },
-		data: { token: crypto.randomUUID() }
+	const userSession = await db.userSession.create({
+		data: {
+			userId: user.id,
+			token: crypto.randomUUID()
+		}
 	})
 
-	cookies.set('session', authUser.token, {
+	cookies.set('session', userSession.token, {
 		path: '/',
 		httpOnly: true,
 		sameSite: 'strict',

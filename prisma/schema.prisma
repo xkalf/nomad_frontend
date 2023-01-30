@@ -38,15 +38,22 @@ model Solve {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  email     String    @unique
-  firstname String
-  lastname  String
-  birthdate DateTime
-  password  String
-  token     String    @unique() @default(uuid())
-  role      String    @default("user")
-  sessions  Session[]
+  id          Int           @id @default(autoincrement())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  email       String        @unique
+  firstname   String
+  lastname    String
+  birthdate   DateTime
+  password    String
+  role        String        @default("user")
+  sessions    Session[]
+  UserSession UserSession[]
+}
+
+model UserSession {
+  id     Int    @id @default(autoincrement())
+  user   User   @relation(fields: [userId], references: [id])
+  token  String @unique @default(uuid())
+  userId Int
 }
