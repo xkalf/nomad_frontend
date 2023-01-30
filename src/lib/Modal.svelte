@@ -10,10 +10,10 @@
 
 	onMount(() => {
 		if (browser) {
-			window.addEventListener('keydown', e => {
+			window.addEventListener('keydown', async e => {
 				if (isOpen === true) {
 					if (e.code === 'Enter') {
-						okFunction()
+						await okFunction()
 					} else if (e.code === 'Escape') {
 						cancelFunction()
 					}

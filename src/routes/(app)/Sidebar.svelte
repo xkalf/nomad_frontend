@@ -19,9 +19,11 @@
 	let isCubeTypeOpen = false
 	let isSessionOpen = false
 	let isSessionCreate = false
-	let isSessionDelete = false
+	let isSessionDelete = sessions.map(i => ({ id: i.id, isOpen: false }))
 	let sessionName: string
 	let sortMode: 'asc' | 'desc' | 'none' = 'none'
+
+	$: isSessionDelete = sessions.map(i => ({ id: i.id, isOpen: false }))
 
 	$: formattedSolves =
 		sortMode === 'asc'
@@ -34,7 +36,8 @@
 		isCubeTypeOpen = !isCubeTypeOpen
 	}
 
-	function showSessionCreate() {
+	function showSessionCreate(e: MouseEvent & { currentTarget: HTMLButtonElement & EventTarget }) {
+		e.currentTarget.blur()
 		const date = new Date()
 		sessionName = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
 
@@ -63,7 +66,7 @@
 			if (session.id === id) {
 				getSessionById(sessions.filter(i => i.id !== id)[0].id)
 			}
-			isSessionDelete = false
+			updateIsSessionDelete(id, false)
 		}
 	}
 
@@ -81,7 +84,7 @@
 		}
 
 		if (data) {
-			await getSessionById(data.session.id)
+			getSessionById(data.session.id)
 			isSessionCreate = false
 		}
 	}
@@ -107,6 +110,11 @@
 				sortMode = 'none'
 				break
 		}
+	}
+
+	function updateIsSessionDelete(id: number, open: boolean) {
+		const index = isSessionDelete.findIndex(i => i.id === id)
+		isSessionDelete[index].isOpen = open
 	}
 </script>
 
@@ -194,14 +202,18 @@
 							{#if s.main === false}
 								<button
 									class="text-red-500 text-lg"
-									on:click={async () => {
-										isSessionDelete = true
+									on:click={() => {
+										updateIsSessionDelete(s.id, true)
 									}}>X</button
 								>
 								<Modal
-									isOpen={isSessionDelete}
-									okFunction={() => deleteSession(s.id)}
-									cancelFunction={() => (isSessionDelete = false)}
+									isOpen={isSessionDelete.find(i => i.id === s.id)?.isOpen}
+									okFunction={async () => {
+										await deleteSession(s.id)
+									}}
+									cancelFunction={() => {
+										updateIsSessionDelete(s.id, false)
+									}}
 								>
 									<p class="text-white text-lg">Уг session-ийг устгах уу?</p>
 								</Modal>
@@ -252,9 +264,8 @@
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<div
 				class="flex-grow flex justify-center items-center text-green-400 bg-[#424b53] py-1 rounded-xl text-xl z-10"
-				on:click={showSessionCreate}
 			>
-				<button>+ Session</button>
+				<button on:click={showSessionCreate}>+ Session</button>
 			</div>
 		</div>
 	</div>
