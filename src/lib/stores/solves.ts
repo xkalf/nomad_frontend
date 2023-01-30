@@ -9,7 +9,7 @@ export function addSolves(solve: Solve) {
 }
 
 export function initialSolves(s: Solve[]) {
-	solves.update(() => s)
+	solves.set(s)
 }
 
 export function deleteSolves(id: number) {

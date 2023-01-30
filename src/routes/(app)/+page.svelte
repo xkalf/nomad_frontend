@@ -12,7 +12,7 @@
 	import { browser } from '$app/environment'
 	import type { Session, Solve } from '@prisma/client'
 	import type { CubeType } from '$lib/utils/enum-adapter'
-	import DeleteModal from '$lib/DeleteModal.svelte'
+	import Modal from '$lib/Modal.svelte'
 
 	let scramble: string | null
 	let session: Session
@@ -99,7 +99,7 @@
 	}
 
 	async function getSessionByCube(type: CubeType) {
-		const result = (await (await fetch(`/api/session?cube=${type}`)).json()) as {
+		const result = (await (await fetch(`/api/session?cube=${type}&main=true`)).json()) as {
 			sessions: Session[]
 		}
 
@@ -122,17 +122,28 @@
 			session: Session & { solves: Solve[] }
 		}
 
+		if (!currentSession.session) {
+			await getSessionByCube(cubeType)
+			return
+		}
+
 		const result = (await (
 			await fetch(`/api/session?cube=${currentSession.session.cube}`)
 		).json()) as {
 			sessions: Session[]
 		}
 
+		if (browser) {
+			localStorage.setItem('sessionId', currentSession.session.id.toString())
+		}
+
 		sessions = result.sessions
 		session = currentSession.session
 		initialSolves(currentSession.session.solves)
 
-		await changeCubeType(currentSession.session.cube as CubeType)
+		scramble = null
+		cubeType = currentSession.session.cube as CubeType
+		await newScramble()
 	}
 
 	async function changeCubeType(type: CubeType) {
@@ -204,24 +215,6 @@
 	})
 </script>
 
-<DeleteModal
-	label="Сүүлийн эвлүүлэлтийг устгах уу?"
-	deleteFunction={deleteLastSolve}
-	cancelFunction={() => {
-		deleteLastModalOpen = false
-	}}
-	isOpen={deleteLastModalOpen}
-/>
-
-<DeleteModal
-	label="Энэ session-ийн эвлүүлэлтүүдийг устгах уу?"
-	deleteFunction={removeSolves}
-	isOpen={deleteAllModalOpen}
-	cancelFunction={() => {
-		deleteAllModalOpen = false
-	}}
-/>
-
 <div class="h-screen grid grid-cols-[minmax(350px,_1fr)_4fr]">
 	<Sidebar {getSessionById} {removeSession} {session} {cubeType} {changeCubeType} {sessions} />
 	<div class="bg-[#363C41] p-4 flex flex-col overflow-hidden justify-between">
@@ -266,6 +259,26 @@
 		</div>
 	</div>
 </div>
+
+<Modal
+	okFunction={deleteLastSolve}
+	cancelFunction={() => {
+		deleteLastModalOpen = false
+	}}
+	isOpen={deleteLastModalOpen}
+>
+	<p class="text-white text-lg">Сүүлийн эвлүүлэлтийг устгах уу?</p>
+</Modal>
+
+<Modal
+	okFunction={removeSolves}
+	isOpen={deleteAllModalOpen}
+	cancelFunction={() => {
+		deleteAllModalOpen = false
+	}}
+>
+	<p class="text-white text-lg">Энэ session-ийн эвлүүлэлтүүдийг устгах уу?</p>
+</Modal>
 
 <style>
 	scramble-display {

@@ -7,6 +7,7 @@
 	import { solves } from '../../lib/stores/solves'
 	import { cubeTypes, type CubeType } from '../../lib/utils/enum-adapter'
 	import { cubeTypeMapper, displayTime, getAvg, getBest } from '../../lib/utils/timer-utils'
+	import Modal from '$lib/Modal.svelte'
 
 	export let session: Session
 	export let cubeType: CubeType
@@ -17,9 +18,19 @@
 
 	let isCubeTypeOpen = false
 	let isSessionOpen = false
+	let isSessionCreate = false
+	let isSessionDelete = false
+	let sessionName: string
 
 	function toggleCubeTypes() {
 		isCubeTypeOpen = !isCubeTypeOpen
+	}
+
+	function showSessionCreate() {
+		const date = new Date()
+		sessionName = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
+
+		isSessionCreate = true
 	}
 
 	async function changeCurrentCubeType(type: CubeType) {
@@ -28,6 +39,10 @@
 	}
 
 	async function deleteSession(id: number) {
+		if (!isSessionDelete) {
+			return
+		}
+
 		const response = await fetch(`api/session/${id}`, {
 			method: 'DELETE'
 		})
@@ -35,7 +50,41 @@
 			success: boolean
 		}
 
-		if (data.success === true) removeSession(id)
+		if (data.success === true) {
+			removeSession(id)
+			if (session.id === id) {
+				getSessionById(sessions.filter(i => i.id !== id)[0].id)
+			}
+			isSessionDelete = false
+		}
+	}
+
+	async function createSession() {
+		const response = await fetch('api/session', {
+			method: 'POST',
+			body: JSON.stringify({
+				name: sessionName,
+				cube: cubeType
+			})
+		})
+
+		const data = (await response.json()) as {
+			session: Session
+		}
+
+		if (data) {
+			await getSessionById(data.session.id)
+			isSessionCreate = false
+		}
+	}
+
+	async function changeSession(id: number) {
+		if (id === session.id) {
+			isSessionOpen = false
+		} else {
+			await getSessionById(id)
+			isSessionOpen = false
+		}
 	}
 </script>
 
@@ -91,21 +140,28 @@
 	<div class="bg-sidebarElement m-4 rounded-xl py-2 px-4 text-white">
 		<div>
 			{#if isSessionOpen}
-				<ul class="w-full my-2 ml-2 max-h-12 overflow-y-auto">
+				<ul class="w-full my-2 ml-2 max-h-24 overflow-y-auto scrollbar">
 					{#each sessions as s}
 						<li class="flex justify-between pr-4">
 							<button
 								on:click={async () => {
-									getSessionById(s.id)
+									await changeSession(s.id)
 								}}>{s.name}</button
 							>
 							{#if s.main === false}
 								<button
 									class="text-red-500 text-lg"
 									on:click={async () => {
-										deleteSession(s.id)
+										isSessionDelete = true
 									}}>X</button
 								>
+								<Modal
+									isOpen={isSessionDelete}
+									okFunction={() => deleteSession(s.id)}
+									cancelFunction={() => (isSessionDelete = false)}
+								>
+									<p class="text-white text-lg">Уг session-ийг устгах уу?</p>
+								</Modal>
 							{/if}
 						</li>
 					{/each}
@@ -115,13 +171,21 @@
 			{/if}
 		</div>
 		<div class="flex items-center gap-1">
-			<Icon
-				icon="material-symbols:keyboard-arrow-up-rounded"
-				color="#b8b8b8"
-				width="25"
-				height="25"
-				inline={true}
-			/>
+			<button
+				on:click={() => {
+					isSessionOpen = !isSessionOpen
+				}}
+			>
+				<Icon
+					icon={!isSessionOpen
+						? 'material-symbols:keyboard-arrow-up-rounded'
+						: 'material-symbols:keyboard-arrow-down-rounded'}
+					color="#b8b8b8"
+					width="25"
+					height="25"
+					inline={true}
+				/>
+			</button>
 			<!-- CubeType -->
 			<div
 				class="bg-[#424B53] py-1 flex justify-center items-center text-xl rounded-xl flex-grow relative"
@@ -142,14 +206,29 @@
 				<button class="px-1 z-10" on:click={toggleCubeTypes}>{cubeTypeMapper[cubeType]}</button>
 			</div>
 			<!-- Session -->
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<div
 				class="flex-grow flex justify-center items-center text-green-400 bg-[#424b53] py-1 rounded-xl text-xl z-10"
+				on:click={showSessionCreate}
 			>
 				<button>+ Session</button>
 			</div>
 		</div>
 	</div>
 </div>
+
+<Modal
+	isOpen={isSessionCreate}
+	okFunction={createSession}
+	cancelFunction={() => (isSessionCreate = false)}
+	mode="create"
+>
+	<input
+		type="text"
+		class="bg-[#2B2F32] p-2 text-[#b8b8b8] w-full rounded-lg text-lg"
+		bind:value={sessionName}
+	/>
+</Modal>
 
 <style>
 	@media screen and (max-height: 800px) {

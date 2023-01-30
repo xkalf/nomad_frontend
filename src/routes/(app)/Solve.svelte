@@ -1,5 +1,5 @@
 <script lang="ts">
-	import DeleteModal from '$lib/DeleteModal.svelte'
+	import Modal from '$lib/Modal.svelte'
 	import type { Solve } from '@prisma/client'
 	import { changeSolveStats, deleteSolves } from '../../lib/stores/solves'
 	import type { SolveStatus } from '../../lib/utils/enum-adapter'
@@ -49,12 +49,9 @@
 	}
 </script>
 
-<DeleteModal
-	label="Уг эвлүүлэлтийг устгах уу?"
-	deleteFunction={deleteSolve}
-	isOpen={deleteModalOpen}
-	cancelFunction={hideModal}
-/>
+<Modal okFunction={deleteSolve} isOpen={deleteModalOpen} cancelFunction={hideModal}>
+	<p class="text-white text-lg">Уг эвлүүлэлтийг устгах уу?</p>
+</Modal>
 
 <div class="flex justify-between text-white p-2">
 	{#if solve.status === 'ok'}

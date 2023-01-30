@@ -10,7 +10,6 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 		where: {
 			userId: locals.user.id,
 			deleted: null,
-			main: true,
 			cube
 		}
 	})
@@ -20,8 +19,8 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 			data: {
 				userId: locals.user.id,
 				main: true,
-				cube,
-				name: cubeTypeMapper(cube)
+				name: cubeTypeMapper[cube],
+				cube
 			}
 		})
 
@@ -29,4 +28,23 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 	}
 
 	return new Response(JSON.stringify({ sessions }))
+}
+
+export const POST: RequestHandler = async ({ request, locals }) => {
+	const input = (await request.json()) as {
+		name: string
+		cube: CubeType
+	}
+
+	const session = await db.session.create({
+		data: {
+			...input,
+			userId: locals.user.id
+		},
+		include: {
+			solves: true
+		}
+	})
+
+	return new Response(JSON.stringify({ session }))
 }
