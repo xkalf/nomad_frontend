@@ -154,23 +154,25 @@
 			/>
 		</div>
 	</div>
-	<div class="bg-sidebarElement flex-grow rounded-xl mx-4 overflow-y-auto scrollbar">
+	<div class="bg-sidebarElement flex-grow mx-4 flex flex-col rounded-xl overflow-y-auto">
 		<!-- Sort -->
-		<div class="bg-[#3E4449] w-full flex items-center justify-around text-white text-lg py-2">
+		<div
+			class="bg-[#3E4449] w-full flex items-center justify-around text-white text-lg py-2 rounded-t-xl"
+		>
 			<button on:click={changeSortMode}>
 				{#if sortMode === 'none'}
 					1-9
 				{:else if sortMode === 'asc'}
 					9-1
 				{:else if sortMode === 'desc'}
-					0
+					Эцсийн
 				{/if}
 			</button>
 			<Icon icon="ri:arrow-up-down-fill" width="22" />
 			<button class="text-[#565D63]">B-W</button>
 		</div>
 		<!-- Solves -->
-		<ul class="p-4">
+		<ul class="p-4 flex-grow overflow-y-auto scrollbar">
 			{#each formattedSolves as solve, index}
 				<li>
 					<Solve order={sortMode === 'none' ? formattedSolves.length - index : index + 1} {solve} />
@@ -291,7 +293,7 @@
 
 	.scrollbar::-webkit-scrollbar-track {
 		background-color: none;
-		margin-block: 0.5em;
+		margin-block: 0.5rem;
 	}
 
 	@media (max-width: 1024px) {
