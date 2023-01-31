@@ -51,8 +51,8 @@
 	})
 </script>
 
-<div class="h-screen page flex flex-col">
-	<div bind:this={timerEl} class="flex-grow p-4">
+<div class="page h-screen flex flex-col select-none">
+	<div bind:this={timerEl} class="flex-grow p-4 flex flex-col">
 		<div>
 			<button class="bg-white text-xl w-full rounded-lg mt-4">{cubeTypeMapper[cubeType]}</button>
 			<div class="mt-8 text-2xl text-[#b8b8b8] text-center">
@@ -67,10 +67,10 @@
 				</p>
 			</div>
 		</div>
-		<div class="flex justify-center items-center h-2/3">
-			<p class={`text-6xl font-mono ${textColor}`}>{displayTime(time)}</p>
+		<div class="flex justify-center items-center h-[40vh]">
+			<p class={`text-7xl font-mono ${textColor}`}>{displayTime(time)}</p>
 		</div>
-		<div class="flex justify-between mt-4">
+		<div class="flex justify-between items-end flex-grow">
 			<div class="text-[#b8b8b8] space-y-2">
 				<p>Best time: {getBest($solves)}</p>
 				<p>

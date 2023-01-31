@@ -153,17 +153,9 @@
 		sessions = sessions.filter(i => i.id !== id)
 	}
 
-	let width: number
-
 	onMount(async () => {
 		if (browser) {
 			await getSession()
-
-			width = window.innerWidth
-
-			window.addEventListener('resize', e => {
-				width = window.innerWidth
-			})
 
 			window.addEventListener('keyup', e => {
 				if (e.key === ' ') {
@@ -233,9 +225,10 @@
 	}
 </script>
 
-{#if width < 1000}
+<div class="md:hidden">
 	<Mobile {...mobileFunctions} {time} {scramble} {cubeType} {state} />
-{:else}
+</div>
+<div class="hidden md:block">
 	<Desktop
 		{...desktopFunctions}
 		{session}
@@ -247,4 +240,4 @@
 		{deleteAllModalOpen}
 		{deleteLastModalOpen}
 	/>
-{/if}
+</div>

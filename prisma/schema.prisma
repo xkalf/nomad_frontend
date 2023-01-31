@@ -30,9 +30,9 @@ model Solve {
   time        Int
   status      String    @default("ok")
   description String?   @db.VarChar
-  sessionId   Int?
+  sessionId   Int
   deleted     DateTime?
-  Session     Session?  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  Session     Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
   @@index([sessionId])
 }

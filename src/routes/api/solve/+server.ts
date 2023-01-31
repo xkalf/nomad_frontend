@@ -18,9 +18,11 @@ export const GET: RequestHandler = async ({ url }) => {
 }
 
 export const POST: RequestHandler = async ({ request }) => {
+	const data = await request.json()
+
 	const solve = await db.solve.create({
 		data: {
-			...(await request.json())
+			...data
 		}
 	})
 

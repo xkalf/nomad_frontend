@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "vite dev --host",
 		"build": "pnpx prisma db push && pnpx prisma generate && vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -25,6 +25,7 @@
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte3": "^4.0.0",
 		"postcss": "^8.4.21",
+		"postcss-100vh-fix": "^1.0.2",
 		"prettier": "^2.8.3",
 		"prettier-plugin-svelte": "^2.8.1",
 		"svelte": "^3.54.0",
