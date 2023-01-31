@@ -1,31 +1,23 @@
 <script lang="ts">
-	import timerLogo from '$lib/assets/timer-logo.png'
-	import Sidebar from './Sidebar.svelte'
-	import { resetSolves, deleteSolves, solves, addSolves, initialSolves } from '$lib/stores/solves'
-	import {
-		displayTime,
-		formatMegaminxScramble,
-		generateScramble,
-		shortcutMapper
-	} from '$lib/utils/timer-utils'
-	import { onMount } from 'svelte'
 	import { browser } from '$app/environment'
-	import type { Session, Solve } from '@prisma/client'
+	import { addSolves, deleteSolves, initialSolves, resetSolves, solves } from '$lib/stores/solves'
 	import type { CubeType } from '$lib/utils/enum-adapter'
-	import Modal from '$lib/Modal.svelte'
+	import { generateScramble, shortcutMapper, type StateType } from '$lib/utils/timer-utils'
+	import type { Session, Solve } from '@prisma/client'
+	import { onMount } from 'svelte'
+	import Desktop from './Desktop.svelte'
+	import Mobile from './Mobile.svelte'
 
 	let scramble: string | null
 	let session: Session
 	let time = 0
-	let state: 'stopped' | 'running' | 'ready' | 'stopping' = 'stopped'
+	let state: StateType = 'stopped'
 	let interval: NodeJS.Timer
 	let lastScramble: string | null = null
 	let cubeType: CubeType = '333'
 	let sessions: Session[]
 	let deleteAllModalOpen = false
 	let deleteLastModalOpen = false
-
-	$: textColor = state === 'ready' ? 'text-green-500' : 'text-white'
 
 	function startTime() {
 		const startedTime = Date.now()
@@ -114,7 +106,7 @@
 		session = currentSession.session
 		initialSolves(currentSession.session.solves)
 
-		localStorage.setItem('sessionId', id?.toString() || '')
+		if (browser) localStorage.setItem('sessionId', id?.toString() || '')
 	}
 
 	async function getSessionById(id: number) {
@@ -161,9 +153,17 @@
 		sessions = sessions.filter(i => i.id !== id)
 	}
 
+	let width: number
+
 	onMount(async () => {
 		if (browser) {
 			await getSession()
+
+			width = window.innerWidth
+
+			window.addEventListener('resize', e => {
+				width = window.innerWidth
+			})
 
 			window.addEventListener('keyup', e => {
 				if (e.key === ' ') {
@@ -213,81 +213,38 @@
 			})
 		}
 	})
+
+	function updateState(input: StateType) {
+		state = input
+	}
+
+	const desktopFunctions = {
+		getSessionById,
+		removeSession,
+		changeCubeType,
+		deleteLastSolve,
+		removeSolves
+	}
+
+	const mobileFunctions = {
+		startTime,
+		stopTime,
+		updateState
+	}
 </script>
 
-<div class="h-screen grid grid-cols-[minmax(350px,_1fr)_4fr]">
-	<Sidebar {getSessionById} {removeSession} {session} {cubeType} {changeCubeType} {sessions} />
-	<div class="bg-[#363C41] p-4 flex flex-col overflow-hidden justify-between">
-		<!-- Scramble -->
-		<div class="mt-[3vh] flex justify-center items-center h-1/6 p-20 text-center">
-			<p
-				class={`text-5xl text-scramble ${
-					cubeType === 'minx' && 'text-justify text-3xl lg:text-4xl font-mono mt-10'
-				} ${cubeType === '777' || cubeType === '666' ? 'text-2xl lg:text-3xl' : ''}`}
-			>
-				{#if !scramble}
-					Холилт хийж байна
-				{:else if cubeType === 'minx'}
-					{@html formatMegaminxScramble(scramble)}
-				{:else}
-					{scramble}
-				{/if}
-			</p>
-		</div>
-		<!-- Time -->
-		<div class="flex justify-center items-center">
-			<p class={`${textColor} text-[200px] leading-6 font-mono`}>{displayTime(time)}</p>
-		</div>
-		<div class="grid grid-cols-[3fr,_minmax(70px,_1fr)]">
-			<div class="flex justify-center items-end mb-10 col-span-3">
-				<img src={timerLogo} alt="Nomad Team" />
-			</div>
-			<!-- Tools -->
-			<div class="bg-sidebarBg col-start-4 rounded-xl">
-				<scramble-display
-					{scramble}
-					event={cubeType}
-					visualization={cubeType === 'pyram' ? '2D' : '3D'}
-				/>
-				<div class="flex justify-around items-center p-3">
-					<span class="text-white text-xl py-2">Function</span>
-					<select class="bg-sidebarElement text-white py-2 px-4 text-xl rounded-xl">
-						<option>Draw Scramble</option>
-					</select>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<Modal
-	okFunction={deleteLastSolve}
-	cancelFunction={() => {
-		deleteLastModalOpen = false
-	}}
-	isOpen={deleteLastModalOpen}
->
-	<p class="text-white text-lg">Сүүлийн эвлүүлэлтийг устгах уу?</p>
-</Modal>
-
-<Modal
-	okFunction={removeSolves}
-	isOpen={deleteAllModalOpen}
-	cancelFunction={() => {
-		deleteAllModalOpen = false
-	}}
->
-	<p class="text-white text-lg">Энэ session-ийн эвлүүлэлтүүдийг устгах уу?</p>
-</Modal>
-
-<style>
-	scramble-display {
-		width: 100%;
-	}
-
-	@media screen and (max-width: 1024px) {
-		scramble-display {
-			width: 60%;
-		}
-	}
-</style>
+{#if width < 1000}
+	<Mobile {...mobileFunctions} {time} {scramble} {cubeType} {state} />
+{:else}
+	<Desktop
+		{...desktopFunctions}
+		{session}
+		{scramble}
+		{sessions}
+		{time}
+		{cubeType}
+		{state}
+		{deleteAllModalOpen}
+		{deleteLastModalOpen}
+	/>
+{/if}

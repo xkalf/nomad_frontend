@@ -97,3 +97,5 @@ export const shortcutMapper: { [key: string]: CubeType } = {
 	KeyB: '333bf',
 	KeyS: 'skewb'
 }
+
+export type StateType = 'stopped' | 'running' | 'ready' | 'stopping'
