@@ -181,6 +181,7 @@
 							return
 						case 'KeyD':
 							deleteAllModalOpen = true
+							e.preventDefault()
 							return
 						case 'KeyZ':
 							deleteLastModalOpen = true
