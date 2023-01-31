@@ -221,7 +221,8 @@
 	const mobileFunctions = {
 		startTime,
 		stopTime,
-		updateState
+		updateState,
+		changeCubeType
 	}
 </script>
 

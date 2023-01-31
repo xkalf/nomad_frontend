@@ -292,28 +292,4 @@
 			display: none;
 		}
 	}
-
-	.scrollbar::-webkit-scrollbar {
-		width: 10px;
-	}
-
-	.scrollbar::-webkit-scrollbar-thumb {
-		background-color: #c4c4c4;
-		border-radius: 10px;
-	}
-
-	.scrollbar::-webkit-scrollbar-track {
-		background-color: none;
-		margin-block: 0.5rem;
-	}
-
-	@media (max-width: 1024px) {
-		.scrollbar::-webkit-scrollbar {
-			width: 5px;
-		}
-		.scrollbar::-webkit-scrollbar-thumb {
-			background-color: #c4c4c4;
-			border-radius: 5px;
-		}
-	}
 </style>

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte'
 	import logo from '$lib/assets/scramble-logo.png'
-	import type { CubeType } from '$lib/utils/enum-adapter'
+	import { cubeTypes, type CubeType } from '$lib/utils/enum-adapter'
 	import {
 		cubeTypeMapper,
 		displayTime,
@@ -21,21 +21,42 @@
 	export let startTime: () => void
 	export let stopTime: () => Promise<void>
 	export let updateState: (input: StateType) => void
+	export let changeCubeType: (type: CubeType) => Promise<void>
 
 	let timerEl: HTMLDivElement
+	let isCubeTypeOpen = false
 
 	$: textColor = state === 'ready' ? 'text-green-500' : 'text-white'
+
+	const scrambleSizeMapper: Record<CubeType, string> = {
+		'222': 'text-2xl',
+		'333': 'text-2xl',
+		'444': 'text-base',
+		'555': 'text-sm',
+		'666': 'text-xs',
+		'777': 'text-xs',
+		'333bf': 'text-2xl',
+		'444bf': 'text-base',
+		'555bf': 'text-sm',
+		sq1: 'text-2xl',
+		pyram: 'text-2xl',
+		minx: 'text-sm',
+		clock: 'text-2xl',
+		skewb: 'text-2xl'
+	}
 
 	onMount(() => {
 		if (browser) {
 			timerEl.addEventListener('touchstart', e => {
 				if (state === 'stopped') {
-					updateState('ready')
+					setTimeout(() => {
+						updateState('ready')
+					}, 100)
 				}
 			})
 
 			timerEl.addEventListener('touchend', e => {
-				if (state === 'ready') {
+				if (state === 'ready' && isCubeTypeOpen === false) {
 					startTime()
 					updateState('running')
 				} else if (state === 'running') {
@@ -52,11 +73,18 @@
 </script>
 
 <div class="page h-screen flex flex-col select-none">
-	<div bind:this={timerEl} class="flex-grow p-4 flex flex-col">
+	<div class="flex-grow p-4 flex flex-col">
 		<div>
-			<button class="bg-white text-xl w-full rounded-lg mt-4">{cubeTypeMapper[cubeType]}</button>
-			<div class="mt-8 text-2xl text-[#b8b8b8] text-center">
-				<p>
+			<button
+				class="bg-white text-xl w-full rounded-lg mt-4"
+				on:click={() => {
+					isCubeTypeOpen = true
+				}}>{cubeTypeMapper[cubeType]}</button
+			>
+			<div
+				class={`${scrambleSizeMapper[cubeType]} mt-8 text-[#b8b8b8] text-center flex justify-center items-center`}
+			>
+				<p class={`${cubeType === 'minx' && 'text-justify'}`}>
 					{#if !scramble}
 						Холилт хийж байна
 					{:else if cubeType === 'minx'}
@@ -67,7 +95,7 @@
 				</p>
 			</div>
 		</div>
-		<div class="flex justify-center items-center h-[40vh]">
+		<div bind:this={timerEl} class="flex justify-center items-center h-[40vh]">
 			<p class={`text-7xl font-mono ${textColor}`}>{displayTime(time)}</p>
 		</div>
 		<div class="flex justify-between items-end flex-grow">
@@ -103,8 +131,39 @@
 	</div>
 </div>
 
+<div
+	class={`${
+		isCubeTypeOpen ? 'block' : 'hidden'
+	} absolute top-1/2 left-1/2 modal text-2xl text-white text-center w-64`}
+>
+	<ul class="bg-[#040404] max-h-64 overflow-y-auto scrollbar rounded-xl">
+		{#each cubeTypes as type}
+			<li class="py-3">
+				<button
+					class="w-full"
+					on:click={() => {
+						changeCubeType(type)
+						isCubeTypeOpen = false
+					}}>{cubeTypeMapper[type]}</button
+				>
+			</li>
+		{/each}
+	</ul>
+
+	<button
+		class="mt-2 bg-[#040404] rounded-xl w-full text-white py-3"
+		on:click={() => {
+			isCubeTypeOpen = false
+		}}>Cancel</button
+	>
+</div>
+
 <style>
 	.page {
 		background: linear-gradient(180deg, #363c41 29.35%, #1f252b 128.76%);
+	}
+
+	.modal {
+		transform: translate(-50%, -50%);
 	}
 </style>
