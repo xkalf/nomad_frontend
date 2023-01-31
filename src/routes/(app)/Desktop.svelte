@@ -23,14 +23,14 @@
 	$: textColor = state === 'ready' ? 'text-green-500' : 'text-white'
 </script>
 
-<div class="h-screen grid grid-cols-[minmax(350px,_1fr)_4fr]">
+<div class="grid h-screen grid-cols-[minmax(350px,_1fr)_4fr]">
 	<Sidebar {getSessionById} {removeSession} {session} {cubeType} {changeCubeType} {sessions} />
-	<div class="bg-[#363C41] p-4 flex flex-col overflow-hidden justify-between">
+	<div class="flex flex-col justify-between overflow-hidden bg-[#363C41] p-4">
 		<!-- Scramble -->
-		<div class="mt-[3vh] flex justify-center items-center h-1/6 p-20 text-center">
+		<div class="mt-[3vh] flex h-1/6 items-center justify-center p-20 text-center">
 			<p
 				class={`text-5xl text-scramble ${
-					cubeType === 'minx' && 'text-justify text-3xl lg:text-4xl font-mono mt-10'
+					cubeType === 'minx' && 'mt-10 text-justify font-mono text-3xl lg:text-4xl'
 				} ${cubeType === '777' || cubeType === '666' ? 'text-2xl lg:text-3xl' : ''}`}
 			>
 				{#if !scramble}
@@ -43,23 +43,23 @@
 			</p>
 		</div>
 		<!-- Time -->
-		<div class="flex justify-center items-center">
-			<p class={`${textColor} text-[200px] leading-6 font-mono`}>{displayTime(time)}</p>
+		<div class="flex items-center justify-center">
+			<p class={`${textColor} font-mono text-[200px] leading-6`}>{displayTime(time)}</p>
 		</div>
 		<div class="grid grid-cols-[3fr,_minmax(70px,_1fr)]">
-			<div class="flex justify-center items-end mb-10 col-span-3">
+			<div class="col-span-3 mb-10 flex items-end justify-center">
 				<img src={timerLogo} alt="Nomad Team" />
 			</div>
 			<!-- Tools -->
-			<div class="bg-sidebarBg col-start-4 rounded-xl">
+			<div class="col-start-4 rounded-xl bg-sidebarBg">
 				<scramble-display
 					{scramble}
 					event={cubeType}
 					visualization={cubeType === 'pyram' ? '2D' : '3D'}
 				/>
-				<div class="flex justify-around items-center p-3">
-					<span class="text-white text-xl py-2">Function</span>
-					<select class="bg-sidebarElement text-white py-2 px-4 text-xl rounded-xl">
+				<div class="flex items-center justify-around p-3">
+					<span class="py-2 text-xl text-white">Function</span>
+					<select class="rounded-xl bg-sidebarElement py-2 px-4 text-xl text-white">
 						<option>Draw Scramble</option>
 					</select>
 				</div>
@@ -75,7 +75,7 @@
 	}}
 	isOpen={deleteLastModalOpen}
 >
-	<p class="text-white text-lg">Сүүлийн эвлүүлэлтийг устгах уу?</p>
+	<p class="text-lg text-white">Сүүлийн эвлүүлэлтийг устгах уу?</p>
 </Modal>
 
 <Modal
@@ -85,7 +85,7 @@
 		deleteAllModalOpen = false
 	}}
 >
-	<p class="text-white text-lg">Энэ session-ийн эвлүүлэлтүүдийг устгах уу?</p>
+	<p class="text-lg text-white">Энэ session-ийн эвлүүлэлтүүдийг устгах уу?</p>
 </Modal>
 
 <style>

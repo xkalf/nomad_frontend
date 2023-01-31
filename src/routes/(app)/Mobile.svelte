@@ -72,17 +72,17 @@
 	})
 </script>
 
-<div class="page h-screen flex flex-col select-none">
-	<div class="flex-grow p-4 flex flex-col">
+<div class="page flex h-screen select-none flex-col">
+	<div class="flex flex-grow flex-col p-4">
 		<div>
 			<button
-				class="bg-white text-xl w-full rounded-lg mt-4"
+				class="mt-4 w-full rounded-lg bg-white text-xl"
 				on:click={() => {
 					isCubeTypeOpen = true
 				}}>{cubeTypeMapper[cubeType]}</button
 			>
 			<div
-				class={`${scrambleSizeMapper[cubeType]} mt-8 text-[#b8b8b8] text-center flex justify-center items-center`}
+				class={`${scrambleSizeMapper[cubeType]} mt-8 flex items-center justify-center text-center text-[#b8b8b8]`}
 			>
 				<p class={`${cubeType === 'minx' && 'text-justify'}`}>
 					{#if !scramble}
@@ -95,11 +95,11 @@
 				</p>
 			</div>
 		</div>
-		<div bind:this={timerEl} class="flex justify-center items-center h-[40vh]">
-			<p class={`text-7xl font-mono ${textColor}`}>{displayTime(time)}</p>
+		<div bind:this={timerEl} class="flex h-[40vh] items-center justify-center">
+			<p class={`font-mono text-7xl ${textColor}`}>{displayTime(time)}</p>
 		</div>
-		<div class="flex justify-between items-end flex-grow">
-			<div class="text-[#b8b8b8] space-y-2">
+		<div class="flex flex-grow items-end justify-between">
+			<div class="space-y-2 text-[#b8b8b8]">
 				<p>Best time: {getBest($solves)}</p>
 				<p>
 					Average of 5:
@@ -118,12 +118,12 @@
 					{/if}
 				</p>
 			</div>
-			<div class="flex justify-end items-end">
+			<div class="flex items-end justify-end">
 				<img class="w-12" src={logo} alt="scramble logo" />
 			</div>
 		</div>
 	</div>
-	<div class="bg-[#040404] flex items-center justify-around p-4">
+	<div class="flex items-center justify-around bg-[#040404] p-4">
 		<Icon icon="game-icons:house" width="30" color="#A3A7AB" />
 		<Icon icon="ri:pie-chart-2-fill" width="30" color="#A3A7AB" />
 		<Icon icon="material-symbols:person" width="30" color="#A3A7AB" />
@@ -134,9 +134,9 @@
 <div
 	class={`${
 		isCubeTypeOpen ? 'block' : 'hidden'
-	} absolute top-1/2 left-1/2 modal text-2xl text-white text-center w-64`}
+	} modal absolute top-1/2 left-1/2 w-64 text-center text-2xl text-white`}
 >
-	<ul class="bg-[#040404] max-h-64 overflow-y-auto scrollbar rounded-xl">
+	<ul class="scrollbar max-h-64 overflow-y-auto rounded-xl bg-[#040404]">
 		{#each cubeTypes as type}
 			<li class="py-3">
 				<button
@@ -151,7 +151,7 @@
 	</ul>
 
 	<button
-		class="mt-2 bg-[#040404] rounded-xl w-full text-white py-3"
+		class="mt-2 w-full rounded-xl bg-[#040404] py-3 text-white"
 		on:click={() => {
 			isCubeTypeOpen = false
 		}}>Cancel</button

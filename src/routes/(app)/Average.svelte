@@ -5,7 +5,7 @@
 </script>
 
 <div
-	class={`flex justify-between bg-sidebarElement py-4 px-3 2xl:px-4 text-white rounded-xl ${
+	class={`flex justify-between rounded-xl bg-sidebarElement py-4 px-3 text-white 2xl:px-4 ${
 		best ? 'w-full' : 'w-1/2'
 	}`}
 >

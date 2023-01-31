@@ -50,10 +50,10 @@
 </script>
 
 <Modal okFunction={deleteSolve} isOpen={deleteModalOpen} cancelFunction={hideModal}>
-	<p class="text-white text-lg">Уг эвлүүлэлтийг устгах уу?</p>
+	<p class="text-lg text-white">Уг эвлүүлэлтийг устгах уу?</p>
 </Modal>
 
-<div class="flex justify-between text-white p-2">
+<div class="flex justify-between p-2 text-white">
 	{#if solve.status === 'ok'}
 		<span>{order}. {displayTime(solve.time)}</span>
 	{:else if solve.status === 'dnf'}

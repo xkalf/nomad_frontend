@@ -118,28 +118,28 @@
 	}
 </script>
 
-<div class="bg-sidebarBg p-6 max-h-screen overflow-hidden flex flex-col">
-	<div class="py-4 text-white flex justify-between">
+<div class="flex max-h-screen flex-col overflow-hidden bg-sidebarBg p-6">
+	<div class="flex justify-between py-4 text-white">
 		<p class="lowercase">{$page.data.user.email}</p>
 		<form action="/logout" method="POST">
 			<button type="submit">Гарах</button>
 		</form>
 	</div>
 	<div class="flex justify-between">
-		<div class={`w-14 h-14 rounded-lg bg-[#5f6469] flex justify-center items-center`}>
+		<div class={`flex h-14 w-14 items-center justify-center rounded-lg bg-[#5f6469]`}>
 			<Icon icon="iconoir:rubik-cube" width="35" color="#A3A7AB" />
 		</div>
-		<div class="w-14 h-14 rounded-lg bg-[#5f6469] flex justify-center items-center">
+		<div class="flex h-14 w-14 items-center justify-center rounded-lg bg-[#5f6469]">
 			<Icon icon="ri:pie-chart-2-fill" width="35" color="#A3A7AB" />
 		</div>
-		<div class="w-14 h-14 rounded-lg bg-[#5f6469] flex justify-center items-center">
+		<div class="flex h-14 w-14 items-center justify-center rounded-lg bg-[#5f6469]">
 			<Icon icon="material-symbols:person" width="35" color="#A3A7AB" />
 		</div>
-		<div class="w-14 h-14 rounded-lg bg-[#5f6469] flex justify-center items-center">
+		<div class="flex h-14 w-14 items-center justify-center rounded-lg bg-[#5f6469]">
 			<Icon icon="uiw:setting" width="35" color="#A3A7AB" />
 		</div>
 	</div>
-	<div class="mt-4 border-t border-[#797878] p-4 flex flex-col justify-center gap-4">
+	<div class="mt-4 flex flex-col justify-center gap-4 border-t border-[#797878] p-4">
 		<Average label="Best" value={getBest($solves)} best={true} />
 		<div class="flex gap-2">
 			<Average
@@ -151,7 +151,7 @@
 				value={$solves.length >= 12 ? getAvg($solves.slice(-12)) : displayTime(0)}
 			/>
 		</div>
-		<div class="flex gap-2 average">
+		<div class="average flex gap-2">
 			<Average
 				label="Ao25"
 				value={$solves.length >= 25 ? getAvg($solves.slice(-25)) : displayTime(0)}
@@ -162,10 +162,10 @@
 			/>
 		</div>
 	</div>
-	<div class="bg-sidebarElement flex-grow mx-4 flex flex-col rounded-xl overflow-y-auto">
+	<div class="mx-4 flex flex-grow flex-col overflow-y-auto rounded-xl bg-sidebarElement">
 		<!-- Sort -->
 		<div
-			class="bg-[#3E4449] w-full flex items-center justify-around text-white text-lg py-2 rounded-t-xl"
+			class="flex w-full items-center justify-around rounded-t-xl bg-[#3E4449] py-2 text-lg text-white"
 		>
 			<button on:click={changeSortMode}>
 				{#if sortMode === 'none'}
@@ -180,7 +180,7 @@
 			<button class="text-[#565D63]">B-W</button>
 		</div>
 		<!-- Solves -->
-		<ul class="p-4 flex-grow overflow-y-auto scrollbar">
+		<ul class="scrollbar flex-grow overflow-y-auto p-4">
 			{#each formattedSolves as solve, index}
 				<li>
 					<Solve order={sortMode === 'none' ? formattedSolves.length - index : index + 1} {solve} />
@@ -188,10 +188,10 @@
 			{/each}
 		</ul>
 	</div>
-	<div class="bg-sidebarElement m-4 rounded-xl py-2 px-4 text-white">
+	<div class="m-4 rounded-xl bg-sidebarElement py-2 px-4 text-white">
 		<div>
 			{#if isSessionOpen}
-				<ul class="w-full my-2 ml-2 max-h-24 overflow-y-auto scrollbar">
+				<ul class="scrollbar my-2 ml-2 max-h-24 w-full overflow-y-auto">
 					{#each sessions as s}
 						<li class="flex justify-between pr-4">
 							<button
@@ -201,7 +201,7 @@
 							>
 							{#if s.main === false}
 								<button
-									class="text-red-500 text-lg"
+									class="text-lg text-red-500"
 									on:click={() => {
 										updateIsSessionDelete(s.id, true)
 									}}>X</button
@@ -215,14 +215,14 @@
 										updateIsSessionDelete(s.id, false)
 									}}
 								>
-									<p class="text-white text-lg">Уг session-ийг устгах уу?</p>
+									<p class="text-lg text-white">Уг session-ийг устгах уу?</p>
 								</Modal>
 							{/if}
 						</li>
 					{/each}
 				</ul>
 			{:else}
-				<p class="ml-2 my-2">{session?.name || ''}</p>
+				<p class="my-2 ml-2">{session?.name || ''}</p>
 			{/if}
 		</div>
 		<div class="flex items-center gap-1">
@@ -243,27 +243,27 @@
 			</button>
 			<!-- CubeType -->
 			<div
-				class="bg-[#424B53] py-1 flex justify-center items-center text-xl rounded-xl flex-grow relative"
+				class="relative flex flex-grow items-center justify-center rounded-xl bg-[#424B53] py-1 text-xl"
 			>
 				<ul
-					class={`flex flex-col absolute left-0 bottom-0 bg-[#424B53] pt-3 rounded-xl pb-10 z-0 w-full ${
+					class={`absolute left-0 bottom-0 z-0 flex w-full flex-col rounded-xl bg-[#424B53] pt-3 pb-10 ${
 						isCubeTypeOpen ? 'block' : 'hidden'
 					}`}
 				>
 					{#each cubeTypes.filter(i => i !== cubeType) as type}
-						<li class="hover:bg-[#606C76] w-full px-1 text-center">
+						<li class="w-full px-1 text-center hover:bg-[#606C76]">
 							<button class="w-full" on:click={async () => await changeCurrentCubeType(type)}
 								>{cubeTypeMapper[type]}</button
 							>
 						</li>
 					{/each}
 				</ul>
-				<button class="px-1 z-10" on:click={toggleCubeTypes}>{cubeTypeMapper[cubeType]}</button>
+				<button class="z-10 px-1" on:click={toggleCubeTypes}>{cubeTypeMapper[cubeType]}</button>
 			</div>
 			<!-- Session -->
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<div
-				class="flex-grow flex justify-center items-center text-green-400 bg-[#424b53] py-1 rounded-xl text-xl z-10"
+				class="z-10 flex flex-grow items-center justify-center rounded-xl bg-[#424b53] py-1 text-xl text-green-400"
 			>
 				<button on:click={showSessionCreate}>+ Session</button>
 			</div>
@@ -281,7 +281,7 @@
 	<input
 		id="sessionName"
 		type="text"
-		class="bg-[#2B2F32] p-2 text-[#b8b8b8] w-full rounded-lg text-lg mt-2"
+		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 text-lg text-[#b8b8b8]"
 		bind:value={sessionName}
 	/>
 </Modal>

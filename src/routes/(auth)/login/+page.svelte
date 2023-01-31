@@ -22,11 +22,11 @@
 	})
 </script>
 
-<div class="h-screen grid grid-cols-2">
+<div class="grid h-screen grid-cols-2">
 	<div class="bg-black" />
-	<div class="grid grid-rows-[minmax(50px, 70px),_3fr,_1fr] p-3">
+	<div class="grid-rows-[minmax(50px, 70px),_3fr,_1fr] grid p-3">
 		<div class="flex justify-end">
-			<button class="rounded-md bg-[#121315] p-2 text-white max-h-[50px]"> MN </button>
+			<button class="max-h-[50px] rounded-md bg-[#121315] p-2 text-white"> MN </button>
 		</div>
 		<div class="mx-auto flex w-4/5 flex-col">
 			<div class="flex flex-col items-center">
@@ -39,10 +39,10 @@
 				</p>
 			</div>
 			<!-- Form -->
-			<form class="flex mt-4 flex-col items-center gap-6" action="/login" method="POST">
+			<form class="mt-4 flex flex-col items-center gap-6" action="/login" method="POST">
 				<div class="relative w-4/5 text-black">
 					<input
-						class="drop-shadow-lg py-5 align-top content-center rounded-lg w-full px-10 focus:text-black"
+						class="w-full content-center rounded-lg py-5 px-10 align-top drop-shadow-lg focus:text-black"
 						type="email"
 						placeholder="и-мэйл"
 						name="email"
@@ -50,9 +50,9 @@
 						bind:this={emailEl}
 					/>
 				</div>
-				<div class="relative w-4/5 text-black flex items-center">
+				<div class="relative flex w-4/5 items-center text-black">
 					<input
-						class="drop-shadow-lg py-5 align-top content-center rounded-lg w-full px-10 focus:text-black"
+						class="w-full content-center rounded-lg py-5 px-10 align-top drop-shadow-lg focus:text-black"
 						type={showPassword ? 'text' : 'password'}
 						placeholder="нууц үг"
 						autocomplete="current-password"
@@ -67,7 +67,7 @@
 						{/if}
 					</span>
 				</div>
-				<div class="relative w-4/5 text-black flex justify-between">
+				<div class="relative flex w-4/5 justify-between text-black">
 					<div class="flex gap-2">
 						<input
 							type="checkbox"
@@ -78,7 +78,7 @@
 					</div>
 					<a href="/forgot-password" class="text-black underline"> Нууц үг мартсан? </a>
 				</div>
-				<p class="text-red-500 w-4/5">{form?.message || ''}</p>
+				<p class="w-4/5 text-red-500">{form?.message || ''}</p>
 				<div class="relative w-4/5 text-[#cecfd5]">
 					<input
 						type="submit"
