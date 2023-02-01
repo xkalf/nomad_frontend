@@ -9,17 +9,9 @@
 	export let form: ActionData
 	let showPassword = false
 
-	let emailEl: HTMLInputElement
-
 	function toggleShowPassword() {
 		showPassword = !showPassword
 	}
-
-	onMount(() => {
-		if (browser) {
-			emailEl.focus()
-		}
-	})
 </script>
 
 <div class="h-screen md:grid md:grid-cols-2">
@@ -51,8 +43,12 @@
 						placeholder="и-мэйл"
 						name="email"
 						autocomplete="email"
-						bind:this={emailEl}
+						value={form?.data?.email || ''}
+						autofocus
 					/>
+					{#if form?.errors?.find(i => i.field === 'email')}
+						<p class="text-red-500">{form?.errors.find(i => i.field === 'email')?.message}</p>
+					{/if}
 				</div>
 				<div class="relative flex w-full items-center px-4 text-black md:w-4/5">
 					<input
@@ -60,16 +56,20 @@
 						type={showPassword ? 'text' : 'password'}
 						placeholder="нууц үг"
 						autocomplete="current-password"
+						value={form?.data?.password || ''}
 						name="password"
 					/>
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
-					<span class="absolute right-6 cursor-pointer md:right-0" on:click={toggleShowPassword}>
+					<span class="absolute right-6 cursor-pointer md:right-4" on:click={toggleShowPassword}>
 						{#if showPassword}
 							<Icon icon="bx:show" width="30" color="#c4c4c4" />
 						{:else}
 							<Icon icon="bx:hide" width="30" color="#c4c4c4" />
 						{/if}
 					</span>
+					{#if form?.errors?.find(i => i.field === 'password')}
+						<p class="text-red-500">{form?.errors.find(i => i.field === 'password')?.message}</p>
+					{/if}
 				</div>
 				<div class="relative flex w-full justify-between px-4 text-black md:w-4/5">
 					<div class="flex gap-1 md:gap-2">
@@ -84,7 +84,9 @@
 						Нууц үг мартсан?
 					</a>
 				</div>
-				<p class="w-4/5 text-red-500">{form?.message || ''}</p>
+				{#if form?.message}
+					<p class="text-red-500">{form?.message}</p>
+				{/if}
 				<div class="relative w-full px-4 text-[#cecfd5] md:w-4/5">
 					<input
 						type="submit"

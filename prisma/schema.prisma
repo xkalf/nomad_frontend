@@ -53,7 +53,7 @@ model User {
 
 model UserSession {
   id     Int    @id @default(autoincrement())
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   token  String @unique @default(uuid())
   userId Int
   @@index([userId])

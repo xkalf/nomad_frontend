@@ -1,7 +1,17 @@
 import db from '$lib/db'
 import { fail, redirect } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
-import type { Action, Actions, PageServerLoad } from './$types'
+import { z } from 'zod'
+import type { Actions, PageServerLoad } from './$types'
+
+const loginSchema = z.object({
+	email: z
+		.string({ required_error: 'И-мэйл хаяг оруулна уу.' })
+		.email({ message: 'И-мэйл хаяг буруу байна.' })
+		.trim()
+		.transform(i => i.toLocaleLowerCase()),
+	password: z.string({ required_error: 'Нууц үг оруулна уу.' }).trim()
+})
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const ok = locals.user ? true : false
@@ -10,44 +20,54 @@ export const load: PageServerLoad = async ({ locals }) => {
 	}
 }
 
-const defaults: Action = async ({ request, cookies }) => {
-	const { email, password } = Object.fromEntries(await request.formData()) as {
-		email: string
-		password: string
-	}
+export const actions: Actions = {
+	default: async ({ request, cookies }) => {
+		const formData = Object.fromEntries(await request.formData())
 
-	const user = await db.user.findUnique({
-		where: {
-			email
+		const resullt = loginSchema.safeParse(formData)
+
+		if (!resullt.success) {
+			const errors = resullt.error.errors.map(i => ({
+				field: i.path[0],
+				message: i.message
+			}))
+
+			return fail(400, { errors, data: formData })
 		}
-	})
 
-	if (!user) {
-		return fail(401, { message: 'Хэрэглэгч олдсонгүй.' })
-	}
+		const { email, password } = resullt.data
 
-	const ok = await bcrypt.compare(password, user.password)
+		const user = await db.user.findUnique({
+			where: {
+				email: email.toLocaleLowerCase()
+			}
+		})
 
-	if (!ok) {
-		return fail(400, { message: 'Нууц үг буруу байна.' })
-	}
-
-	const userSession = await db.userSession.create({
-		data: {
-			userId: user.id,
-			token: crypto.randomUUID()
+		if (!user) {
+			return fail(401, { message: 'Хэрэглэгч олдсонгүй.', data: formData })
 		}
-	})
 
-	cookies.set('session', userSession.token, {
-		path: '/',
-		httpOnly: true,
-		sameSite: 'strict',
-		secure: process.env.NODE_ENV === 'production',
-		maxAge: 60 * 60 * 24 * 30
-	})
+		const ok = await bcrypt.compare(password, user.password)
 
-	throw redirect(302, '/')
+		if (!ok) {
+			return fail(400, { message: 'Нууц үг буруу байна.', data: formData })
+		}
+
+		const userSession = await db.userSession.create({
+			data: {
+				userId: user.id,
+				token: crypto.randomUUID()
+			}
+		})
+
+		cookies.set('session', userSession.token, {
+			path: '/',
+			httpOnly: true,
+			sameSite: 'strict',
+			secure: process.env.NODE_ENV === 'production',
+			maxAge: 60 * 60 * 24 * 30
+		})
+
+		throw redirect(302, '/')
+	}
 }
-
-export const actions: Actions = { default: defaults }
