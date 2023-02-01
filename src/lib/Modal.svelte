@@ -23,12 +23,12 @@
 	})
 </script>
 
-<div class={`modal p-12 pb-4 absolute top-1/2 left-1/2 ${isOpen ? 'block' : 'hidden'}`}>
-	<img alt="ads" src={image} class="lg:w-[500px] lg:h-[500px] w-[400px] h-[400px]" />
+<div class={`modal absolute top-1/2 left-1/2 p-12 pb-4 ${isOpen ? 'block' : 'hidden'}`}>
+	<img alt="ads" src={image} class="h-[300px] w-[300px] md:h-[500px] md:w-[500px]" />
 	<div class="my-4">
 		<slot />
 	</div>
-	<div class="flex justify-center gap-12 items-center">
+	<div class="flex items-center justify-center gap-12">
 		<button class="button py-2 px-4 text-xl text-white" on:click={cancelFunction}>Болих</button>
 		<button class="button py-2 px-4 text-xl text-white" on:click={okFunction}>
 			{#if mode === 'create'}

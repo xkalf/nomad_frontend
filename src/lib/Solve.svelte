@@ -1,9 +1,9 @@
 <script lang="ts">
 	import Modal from '$lib/Modal.svelte'
 	import type { Solve } from '@prisma/client'
-	import { changeSolveStats, deleteSolves } from '../../lib/stores/solves'
-	import type { SolveStatus } from '../../lib/utils/enum-adapter'
-	import { displayTime } from '../../lib/utils/timer-utils'
+	import { changeSolveStats, deleteSolves } from './stores/solves'
+	import type { SolveStatus } from './utils/enum-adapter'
+	import { displayTime } from './utils/timer-utils'
 
 	export let order: number
 	export let solve: Solve

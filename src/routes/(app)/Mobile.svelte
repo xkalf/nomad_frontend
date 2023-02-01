@@ -13,6 +13,7 @@
 	import { solves } from '$lib/stores/solves'
 	import { browser } from '$app/environment'
 	import { onMount } from 'svelte'
+	import MobileContainer from '$lib/MobileContainer.svelte'
 
 	export let time: number
 	export let cubeType: CubeType
@@ -72,7 +73,7 @@
 	})
 </script>
 
-<div class="page flex h-screen select-none flex-col">
+<MobileContainer>
 	<div class="flex flex-grow flex-col p-4">
 		<div>
 			<button
@@ -123,13 +124,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="flex items-center justify-around bg-[#040404] p-4">
-		<Icon icon="game-icons:house" width="30" color="#A3A7AB" />
-		<Icon icon="ri:pie-chart-2-fill" width="30" color="#A3A7AB" />
-		<Icon icon="material-symbols:person" width="30" color="#A3A7AB" />
-		<Icon icon="uiw:setting" width="30" color="#A3A7AB" />
-	</div>
-</div>
+</MobileContainer>
 
 <div
 	class={`${
@@ -159,10 +154,6 @@
 </div>
 
 <style>
-	.page {
-		background: linear-gradient(180deg, #363c41 29.35%, #1f252b 128.76%);
-	}
-
 	.modal {
 		transform: translate(-50%, -50%);
 	}

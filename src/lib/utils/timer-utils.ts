@@ -37,6 +37,16 @@ export const getBest = (arr: Solve[]) => {
 	return displayTime(best)
 }
 
+export const getWorst = (arr: Solve[]) => {
+	if (arr.length === 0) {
+		return displayTime(0)
+	}
+
+	const worst = Math.max(...arr.filter(i => i.status !== 'dnf').map(i => i.time))
+
+	return displayTime(worst)
+}
+
 export const getAvg = (arr: Solve[]) => {
 	if (arr.filter(i => i.status === 'dnf').length > 2) {
 		return 'DNF'
