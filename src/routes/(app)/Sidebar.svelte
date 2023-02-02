@@ -121,21 +121,21 @@
 		<div class="flex gap-2">
 			<Average
 				label="Ao5"
-				value={$solves.length >= 5 ? getAvg($solves.slice(-5)) : displayTime(0)}
+				value={getAvg($solves, 5)}
 			/>
 			<Average
 				label="Ao12"
-				value={$solves.length >= 12 ? getAvg($solves.slice(-12)) : displayTime(0)}
+				value={getAvg($solves, 12)}
 			/>
 		</div>
 		<div class="average flex gap-2">
 			<Average
-				label="Ao25"
-				value={$solves.length >= 25 ? getAvg($solves.slice(-25)) : displayTime(0)}
+				label="Ao50"
+				value={getAvg($solves, 50)}
 			/>
 			<Average
-				label="Ao50"
-				value={$solves.length >= 50 ? getAvg($solves.slice(-50)) : displayTime(0)}
+				label="Ao100"
+				value={getAvg($solves, 100)}
 			/>
 		</div>
 	</div>

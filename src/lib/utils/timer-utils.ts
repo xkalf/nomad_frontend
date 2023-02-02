@@ -1,6 +1,6 @@
 import type { Solve } from '@prisma/client'
 import { randomScrambleForEvent } from 'cubing/scramble'
-import type { CubeType } from './enum-adapter'
+import type { CubeType, SolveStatus } from './enum-adapter'
 
 export const displayTime = (time: number) => {
 	const hours = Math.floor(time / 3_600_000) // 1 Hour = 3600000 Milliseconds
@@ -47,16 +47,22 @@ export const getWorst = (arr: Solve[]) => {
 	return displayTime(worst)
 }
 
-export const getAvg = (arr: Solve[]) => {
+export const getAvg = (arr: Solve[], length: number) => {
+	if (arr.length < length) {
+		return displayTime(0)
+	}
+
 	if (arr.filter(i => i.status === 'dnf').length > 2) {
 		return 'DNF'
 	}
 
-	const sum = arr.filter(i => i.status !== 'dnf').reduce((a, b) => (a += b.time), 0)
-	const max = arr.find(i => i.status === 'dnf') ? 0 : Math.max(...arr.map(i => i.time))
-	const min = Math.min(...arr.map(i => i.time))
+	const array = arr.slice(-1 * length)
 
-	const avg = (sum - min - max) / (arr.length - 2)
+	const sum = array.filter(i => i.status !== 'dnf').reduce((a, b) => (a += b.time), 0)
+	const max = array.find(i => i.status === 'dnf') ? 0 : Math.max(...array.map(i => i.time))
+	const min = Math.min(...array.map(i => i.time))
+
+	const avg = (sum - min - max) / (array.length - 2)
 
 	return displayTime(avg)
 }
@@ -134,3 +140,19 @@ export const shortcutMapper: { [key: string]: CubeType } = {
 }
 
 export type StateType = 'stopped' | 'running' | 'ready' | 'stopping' | 'waiting'
+
+export function getMean(solves: Solve[]) {
+	const filtered = solves
+		.filter(i => (i.status as SolveStatus) !== 'dnf')
+		.map(i => {
+			if ((i.status as SolveStatus) === '+2') {
+				return (i.time += 2000)
+			} else {
+				return i.time
+			}
+		})
+
+	const sum = filtered.reduce((a, b) => a + b, 0)
+
+	return displayTime(sum / filtered.length)
+}

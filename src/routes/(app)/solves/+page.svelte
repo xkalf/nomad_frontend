@@ -3,7 +3,7 @@
 	import MobileContainer from '$lib/MobileContainer.svelte'
 	import Solves from '$lib/Solves.svelte'
 	import { solves } from '$lib/stores/solves'
-	import { displayTime, getAvg, getBest } from '$lib/utils/timer-utils'
+	import { displayTime, getAvg, getBest, getBestAverage, getMean } from '$lib/utils/timer-utils'
 
 	const averages: { label: string; value: string }[] = [
 		{
@@ -12,31 +12,31 @@
 		},
 		{
 			label: 'Mean',
-			value: getBest($solves)
+			value: getMean($solves)
 		},
 		{
 			label: 'Ao5 Best',
-			value: $solves.length >= 5 ? getAvg($solves.splice(-5)) : displayTime(0)
+			value: getBestAverage($solves, 5)
 		},
 		{
 			label: 'Ao5',
-			value: $solves.length >= 12 ? getAvg($solves.splice(-12)) : displayTime(0)
+			value: getAvg($solves, 5)
 		},
 		{
 			label: 'Ao12 Best',
-			value: $solves.length >= 25 ? getAvg($solves.splice(-25)) : displayTime(0)
+			value: getBestAverage($solves, 12)
 		},
 		{
 			label: 'Ao12',
-			value: $solves.length >= 50 ? getAvg($solves.splice(-50)) : displayTime(0)
+			value: getAvg($solves, 12)
 		},
 		{
 			label: 'Ao50',
-			value: $solves.length >= 100 ? getAvg($solves.splice(-100)) : displayTime(0)
+			value: getAvg($solves, 50)
 		},
 		{
 			label: 'Ao100',
-			value: $solves.length >= 200 ? getAvg($solves.splice(-200)) : displayTime(0)
+			value: getAvg($solves, 100)
 		}
 	]
 </script>

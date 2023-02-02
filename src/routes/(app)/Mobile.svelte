@@ -112,7 +112,7 @@
 					<p>
 						Average of 5:
 						{#if $solves.length >= 5}
-							{getAvg($solves.slice(-5))}
+							{getAvg($solves, 5)}
 						{:else}
 							{displayTime(0)}
 						{/if}
@@ -120,7 +120,7 @@
 					<p>
 						Average of 12:
 						{#if $solves.length >= 12}
-							{getAvg($solves.slice(-12))}
+							{getAvg($solves, 12)}
 						{:else}
 							{displayTime(0)}
 						{/if}
