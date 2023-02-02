@@ -7,7 +7,7 @@
 
 <div
 	class={`flex rounded-xl py-4 px-3 text-white 2xl:px-4 ${best ? 'w-full' : 'w-1/2'} ${
-		mobile ? 'justify-around bg-mobileAverage' : 'justify-between bg-sidebarElement'
+		mobile ? 'justify-evenly bg-mobileAverage' : 'justify-between bg-sidebarElement'
 	}`}
 >
 	<span>{label}</span>

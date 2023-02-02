@@ -3,27 +3,25 @@
 	import Icon from '@iconify/svelte'
 	import type { Session } from '@prisma/client'
 	import Average from '../../lib/Average.svelte'
-	import Solve from '../../lib/Solve.svelte'
 	import { solves } from '../../lib/stores/solves'
 	import { cubeTypes, type CubeType } from '../../lib/utils/enum-adapter'
 	import { cubeTypeMapper, displayTime, getAvg, getBest } from '../../lib/utils/timer-utils'
 	import Modal from '$lib/Modal.svelte'
 	import Solves from '$lib/Solves.svelte'
+	import { getSessionById } from '$lib/utils/api'
+	import { sessions } from '$lib/stores/sessions'
+	import { session } from '$lib/stores/session'
+	import { cubeType } from '$lib/stores/cubeType'
 
-	export let session: Session
-	export let cubeType: CubeType
-	export let sessions: Session[] = []
 	export let changeCubeType: (type: CubeType) => Promise<void>
-	export let removeSession: (id: number) => void
-	export let getSessionById: (id: number) => Promise<void>
 
 	let isCubeTypeOpen = false
 	let isSessionOpen = false
 	let isSessionCreate = false
-	let isSessionDelete = sessions.map(i => ({ id: i.id, isOpen: false }))
+	let isSessionDelete = $sessions.map(i => ({ id: i.id, isOpen: false }))
 	let sessionName: string
 
-	$: isSessionDelete = sessions.map(i => ({ id: i.id, isOpen: false }))
+	$: isSessionDelete = $sessions.map(i => ({ id: i.id, isOpen: false }))
 
 	function toggleCubeTypes() {
 		isCubeTypeOpen = !isCubeTypeOpen
@@ -55,9 +53,9 @@
 		}
 
 		if (data.success === true) {
-			removeSession(id)
-			if (session.id === id) {
-				getSessionById(sessions.filter(i => i.id !== id)[0].id)
+			deleteSession(id)
+			if ($session.id === id) {
+				getSessionById($sessions.filter(i => i.id !== id)[0].id)
 			}
 			updateIsSessionDelete(id, false)
 		}
@@ -68,7 +66,7 @@
 			method: 'POST',
 			body: JSON.stringify({
 				name: sessionName,
-				cube: cubeType
+				cube: $cubeType
 			})
 		})
 
@@ -83,7 +81,7 @@
 	}
 
 	async function changeSession(id: number) {
-		if (id === session.id) {
+		if (id === $session.id) {
 			isSessionOpen = false
 		} else {
 			await getSessionById(id)
@@ -147,7 +145,7 @@
 		<div>
 			{#if isSessionOpen}
 				<ul class="scrollbar my-2 ml-2 max-h-24 w-full overflow-y-auto">
-					{#each sessions as s}
+					{#each $sessions as s}
 						<li class="flex justify-between pr-4">
 							<button
 								on:click={async () => {
@@ -177,7 +175,7 @@
 					{/each}
 				</ul>
 			{:else}
-				<p class="my-2 ml-2">{session?.name || ''}</p>
+				<p class="my-2 ml-2">{$session?.name || ''}</p>
 			{/if}
 		</div>
 		<div class="flex items-center gap-1">
@@ -205,7 +203,7 @@
 						isCubeTypeOpen ? 'block' : 'hidden'
 					}`}
 				>
-					{#each cubeTypes.filter(i => i !== cubeType) as type}
+					{#each cubeTypes.filter(i => i !== $cubeType) as type}
 						<li class="w-full px-1 text-center hover:bg-[#606C76]">
 							<button class="w-full" on:click={async () => await changeCurrentCubeType(type)}
 								>{cubeTypeMapper[type]}</button
@@ -213,7 +211,7 @@
 						</li>
 					{/each}
 				</ul>
-				<button class="z-10 px-1" on:click={toggleCubeTypes}>{cubeTypeMapper[cubeType]}</button>
+				<button class="z-10 px-1" on:click={toggleCubeTypes}>{cubeTypeMapper[$cubeType]}</button>
 			</div>
 			<!-- Session -->
 			<!-- svelte-ignore a11y-click-events-have-key-events -->

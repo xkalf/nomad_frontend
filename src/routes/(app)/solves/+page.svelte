@@ -11,31 +11,31 @@
 			value: getBest($solves)
 		},
 		{
-			label: 'Worst',
+			label: 'Mean',
 			value: getBest($solves)
 		},
 		{
-			label: 'Ao5',
+			label: 'Ao5 Best',
 			value: $solves.length >= 5 ? getAvg($solves.splice(-5)) : displayTime(0)
 		},
 		{
-			label: 'Ao12',
+			label: 'Ao5',
 			value: $solves.length >= 12 ? getAvg($solves.splice(-12)) : displayTime(0)
 		},
 		{
-			label: 'Ao25',
+			label: 'Ao12 Best',
 			value: $solves.length >= 25 ? getAvg($solves.splice(-25)) : displayTime(0)
 		},
 		{
-			label: 'Ao50',
+			label: 'Ao12',
 			value: $solves.length >= 50 ? getAvg($solves.splice(-50)) : displayTime(0)
 		},
 		{
-			label: 'Ao100',
+			label: 'Ao50',
 			value: $solves.length >= 100 ? getAvg($solves.splice(-100)) : displayTime(0)
 		},
 		{
-			label: 'Ao200',
+			label: 'Ao100',
 			value: $solves.length >= 200 ? getAvg($solves.splice(-200)) : displayTime(0)
 		}
 	]

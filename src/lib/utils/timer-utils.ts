@@ -61,6 +61,31 @@ export const getAvg = (arr: Solve[]) => {
 	return displayTime(avg)
 }
 
+export const getBestAverage = (arr: Solve[], length: number) => {
+	if (arr.length < length) return displayTime(0)
+	let best: number | undefined
+
+	for (let i = 0; i < arr.length - length + 1; i++) {
+		const array = arr.slice(i, length + i)
+
+		if (array.filter(i => i.status === 'dnf').length > 2) continue
+
+		const sum = array.filter(i => i.status !== 'dnf').reduce((a, b) => (a += b.time), 0)
+		const max = array.find(i => i.status === 'dnf') ? 0 : Math.max(...array.map(i => i.time))
+		const min = Math.min(...arr.map(i => i.time))
+
+		const avg = (sum - min - max) / (array.length - 2)
+
+		if (!best) {
+			best = avg
+		} else if (avg < best) {
+			best = avg
+		}
+	}
+
+	return displayTime(best || 0)
+}
+
 export function formatMegaminxScramble(scramble: string) {
 	const formatted = scramble.replace(/\n/g, '<br />')
 	return formatted
@@ -108,4 +133,4 @@ export const shortcutMapper: { [key: string]: CubeType } = {
 	KeyS: 'skewb'
 }
 
-export type StateType = 'stopped' | 'running' | 'ready' | 'stopping'
+export type StateType = 'stopped' | 'running' | 'ready' | 'stopping' | 'waiting'

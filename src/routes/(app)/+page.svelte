@@ -1,21 +1,21 @@
 <script lang="ts">
 	import { browser } from '$app/environment'
-	import { addSolves, deleteSolves, initialSolves, resetSolves, solves } from '$lib/stores/solves'
+	import { cubeType, setCubeType } from '$lib/stores/cubeType'
+	import { session } from '$lib/stores/session'
+	import { addSolves, deleteSolves, resetSolves, solves } from '$lib/stores/solves'
+	import { getSessionByCube } from '$lib/utils/api'
 	import type { CubeType } from '$lib/utils/enum-adapter'
 	import { generateScramble, shortcutMapper, type StateType } from '$lib/utils/timer-utils'
-	import type { Session, Solve } from '@prisma/client'
+	import type { Solve } from '@prisma/client'
 	import { onMount } from 'svelte'
 	import Desktop from './Desktop.svelte'
 	import Mobile from './Mobile.svelte'
 
 	let scramble: string | null
-	let session: Session
 	let time = 0
 	let state: StateType = 'stopped'
 	let interval: NodeJS.Timer
 	let lastScramble: string | null = null
-	let cubeType: CubeType = '333'
-	let sessions: Session[]
 	let deleteAllModalOpen = false
 	let deleteLastModalOpen = false
 
@@ -38,7 +38,7 @@
 			body: JSON.stringify({
 				time,
 				scramble,
-				sessionId: session.id
+				sessionId: $session.id
 			})
 		})
 
@@ -48,7 +48,7 @@
 	}
 
 	async function removeSolves() {
-		const response = await fetch(`api/session/${session.id}/reset`, {
+		const response = await fetch(`api/session/${$session.id}/reset`, {
 			method: 'DELETE'
 		})
 		const data = await response.json()
@@ -69,94 +69,20 @@
 		}
 	}
 
-	async function getSession() {
-		if (browser) {
-			const sessionId = localStorage.getItem('sessionId')
-
-			if (!sessionId) {
-				await getSessionByCube(cubeType)
-				return
-			}
-
-			const id = parseFloat(sessionId)
-
-			if (isNaN(id)) {
-				await getSessionByCube(cubeType)
-				return
-			}
-
-			await getSessionById(id)
-			return
-		}
-	}
-
-	async function getSessionByCube(type: CubeType) {
-		const result = (await (await fetch(`/api/session?cube=${type}&main=true`)).json()) as {
-			sessions: Session[]
-		}
-
-		sessions = result.sessions
-
-		const id = result.sessions.find(i => i.main === true)?.id
-
-		const currentSession = (await (await fetch(`/api/session/${id}`)).json()) as {
-			session: Session & { solves: Solve[] }
-		}
-
-		session = currentSession.session
-		initialSolves(currentSession.session.solves)
-
-		if (browser) localStorage.setItem('sessionId', id?.toString() || '')
-	}
-
-	async function getSessionById(id: number) {
-		const currentSession = (await (await fetch(`/api/session/${id}`)).json()) as {
-			session: Session & { solves: Solve[] }
-		}
-
-		if (!currentSession.session) {
-			await getSessionByCube(cubeType)
-			return
-		}
-
-		const result = (await (
-			await fetch(`/api/session?cube=${currentSession.session.cube}`)
-		).json()) as {
-			sessions: Session[]
-		}
-
-		if (browser) {
-			localStorage.setItem('sessionId', currentSession.session.id.toString())
-		}
-
-		sessions = result.sessions
-		session = currentSession.session
-		initialSolves(currentSession.session.solves)
-
-		scramble = null
-		cubeType = currentSession.session.cube as CubeType
-		await newScramble()
-	}
-
 	async function changeCubeType(type: CubeType) {
 		scramble = null
-		cubeType = type
+		setCubeType(type)
 		await Promise.all([newScramble(), getSessionByCube(type)])
 	}
 
 	async function newScramble() {
 		lastScramble = scramble
-		scramble = await generateScramble(cubeType)
-	}
-
-	function removeSession(id: number) {
-		sessions = sessions.filter(i => i.id !== id)
+		scramble = await generateScramble($cubeType)
 	}
 
 	onMount(async () => {
 		if (browser) {
-			await getSession()
-
+			newScramble()
 			window.addEventListener('keyup', e => {
 				if (e.key === ' ') {
 					if (state === 'ready') {
@@ -212,8 +138,6 @@
 	}
 
 	const desktopFunctions = {
-		getSessionById,
-		removeSession,
 		changeCubeType,
 		deleteLastSolve,
 		removeSolves
@@ -228,16 +152,13 @@
 </script>
 
 <div class="md:hidden">
-	<Mobile {...mobileFunctions} {time} {scramble} {cubeType} {state} />
+	<Mobile {...mobileFunctions} {time} {scramble} {state} />
 </div>
 <div class="hidden md:block">
 	<Desktop
 		{...desktopFunctions}
-		{session}
 		{scramble}
-		{sessions}
 		{time}
-		{cubeType}
 		{state}
 		{deleteAllModalOpen}
 		{deleteLastModalOpen}

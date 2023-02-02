@@ -1,9 +1,6 @@
 <script lang="ts">
-	import RubikLogo from '$lib/assets/rubik-logo.png'
-	import NomadLogo from '$lib/assets/nomad-logo.png'
+	import horizontalLogo from '$lib/assets/horizontal-logo.png'
 	import type { ActionData } from './$types'
-	import { onMount } from 'svelte'
-	import { browser } from '$app/environment'
 	import Icon from '@iconify/svelte'
 
 	export let form: ActionData
@@ -16,14 +13,13 @@
 
 <div class="h-screen md:grid md:grid-cols-2">
 	<div class="hidden bg-black md:block" />
-	<div class="grid grid-rows-[.1fr,_3fr,_.5fr] p-1 md:grid-rows-[70px,_5fr,_1fr] md:p-3">
+	<div class="flex h-full flex-col p-2 md:p-3">
 		<div class="flex justify-end">
-			<button class="max-h-[50px] rounded-md bg-[#121315] p-2 text-white"> MN </button>
+			<button class="max-h-[50px] rounded-md bg-[#121315] p-2 text-white">MN</button>
 		</div>
-		<div class="mx-auto flex flex-col md:w-4/5">
+		<div class="mx-auto flex flex-grow flex-col justify-center md:w-4/5 md:-translate-y-24">
 			<div class="mx-auto flex w-4/5 flex-col justify-center md:w-full">
-				<img src={RubikLogo} alt="rubik logo" class="w-1/6 rounded-full p-4 shadow-lg" />
-				<img src={NomadLogo} alt="nomad logo" />
+				<img src={horizontalLogo} alt="rubik logo" class="w-full" />
 				<p class="text-center text-[8px] text-black md:text-xs">
 					Илүү олууллаа болцгооё. Тэмцээнд хэрхэн бүртгүүлэх талаар аль болох дэлгэрэнгүй заавар
 					бичлэг бэлтгэлээ. Анх оролцох гэж байгаа тамирчидад маш их хэрэг болон гэдэгт итгэлтэй
@@ -44,7 +40,6 @@
 						name="email"
 						autocomplete="email"
 						value={form?.data?.email || ''}
-						autofocus
 					/>
 					{#if form?.errors?.find(i => i.field === 'email')}
 						<p class="text-red-500">{form?.errors.find(i => i.field === 'email')?.message}</p>
@@ -72,37 +67,35 @@
 					{/if}
 				</div>
 				<div class="relative flex w-full justify-between px-4 text-black md:w-4/5">
-					<div class="flex gap-1 md:gap-2">
+					<p class="text-red-500">{form?.message || ''}</p>
+					<!-- <div class="flex gap-1 md:gap-2">
 						<input
 							type="checkbox"
 							class="mt-1 h-4 w-4 appearance-none rounded-full border border-[#d2d4da] checked:bg-[#d2d4da]"
 							id="remember"
 						/>
 						<label for="remember" class="cursor-pointer text-xs md:text-base">Намайг санах </label>
-					</div>
+					</div> -->
 					<a href="/forgot-password" class="text-xs text-black underline md:text-base">
 						Нууц үг мартсан?
 					</a>
 				</div>
-				{#if form?.message}
-					<p class="text-red-500">{form?.message}</p>
-				{/if}
 				<div class="relative w-full px-4 text-[#cecfd5] md:w-4/5">
 					<input
 						type="submit"
 						class="w-full rounded-lg bg-black p-2 text-white drop-shadow md:p-4"
 						value="Нэвтрэх"
 					/>
-					<button class="mt-4 w-full rounded-lg bg-white p-2 drop-shadow md:p-4">
+					<!-- <button class="mt-4 w-full rounded-lg bg-white p-2 drop-shadow md:p-4">
 						login with google
-					</button>
+					</button> -->
 				</div>
 			</form>
 		</div>
-		<div class="my-4 self-end">
-			<p class="text-center text-[#cecfd5]">
+		<div class="mt-auto mb-4">
+			<p class="text-center text-[#ccc]">
 				Бүртгэл хэрэгтэй байна ?
-				<a href="/register" class="text-black underline"> БҮРТГҮҮЛЭХ </a>
+				<a href="/register" class="text-black underline">БҮРТГҮҮЛЭХ </a>
 			</p>
 		</div>
 	</div>

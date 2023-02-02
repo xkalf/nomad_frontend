@@ -4,18 +4,13 @@
 	import { displayTime, formatMegaminxScramble, type StateType } from '$lib/utils/timer-utils'
 	import Modal from '$lib/Modal.svelte'
 	import type { CubeType } from '$lib/utils/enum-adapter'
-	import type { Session } from '@prisma/client'
+	import { cubeType } from '$lib/stores/cubeType'
 
 	export let time: number
 	export let state: StateType
-	export let cubeType: CubeType
 	export let scramble: string | null
-	export let session: Session
-	export let sessions: Session[]
 	export let deleteAllModalOpen: boolean
 	export let deleteLastModalOpen: boolean
-	export let getSessionById: (id: number) => Promise<void>
-	export let removeSession: (id: number) => void
 	export let changeCubeType: (type: CubeType) => Promise<void>
 	export let deleteLastSolve: () => Promise<void>
 	export let removeSolves: () => Promise<void>
@@ -24,18 +19,18 @@
 </script>
 
 <div class="grid h-screen grid-cols-[minmax(350px,_1fr)_4fr]">
-	<Sidebar {getSessionById} {removeSession} {session} {cubeType} {changeCubeType} {sessions} />
+	<Sidebar {changeCubeType} />
 	<div class="flex flex-col justify-between overflow-hidden bg-[#363C41] p-4">
 		<!-- Scramble -->
 		<div class="mt-[3vh] flex h-1/6 items-center justify-center p-20 text-center">
 			<p
 				class={`text-5xl text-scramble ${
-					cubeType === 'minx' && 'mt-10 text-justify font-mono text-3xl lg:text-4xl'
-				} ${cubeType === '777' || cubeType === '666' ? 'text-2xl lg:text-3xl' : ''}`}
+					$cubeType === 'minx' && 'mt-10 text-justify font-mono text-3xl lg:text-4xl'
+				} ${$cubeType === '777' || $cubeType === '666' ? 'text-2xl lg:text-3xl' : ''}`}
 			>
 				{#if !scramble}
 					Холилт хийж байна
-				{:else if cubeType === 'minx'}
+				{:else if $cubeType === 'minx'}
 					{@html formatMegaminxScramble(scramble)}
 				{:else}
 					{scramble}
@@ -55,7 +50,7 @@
 				<scramble-display
 					{scramble}
 					event={cubeType}
-					visualization={cubeType === 'pyram' ? '2D' : '3D'}
+					visualization={$cubeType === 'pyram' ? '2D' : '3D'}
 				/>
 				<div class="flex items-center justify-around p-3">
 					<span class="py-2 text-xl text-white">Function</span>

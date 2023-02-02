@@ -5,7 +5,7 @@
 <div class="mobile-page flex h-screen flex-col">
 	<slot />
 	<div class="mt-auto flex items-center justify-around bg-[#040404] p-4">
-		<a href="/">
+		<a data-sveltekit-preload-data href="/">
 			<Icon icon="game-icons:house" width="30" color="#A3A7AB" />
 		</a>
 		<a data-sveltekit-preload-data href="/solves">

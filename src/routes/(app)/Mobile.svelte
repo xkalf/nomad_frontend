@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Icon from '@iconify/svelte'
 	import logo from '$lib/assets/scramble-logo.png'
 	import { cubeTypes, type CubeType } from '$lib/utils/enum-adapter'
 	import {
@@ -14,9 +13,9 @@
 	import { browser } from '$app/environment'
 	import { onMount } from 'svelte'
 	import MobileContainer from '$lib/MobileContainer.svelte'
+	import { cubeType } from '$lib/stores/cubeType'
 
 	export let time: number
-	export let cubeType: CubeType
 	export let scramble: string | null
 	export let state: StateType
 	export let startTime: () => void
@@ -26,8 +25,10 @@
 
 	let timerEl: HTMLDivElement
 	let isCubeTypeOpen = false
+	let timeOutRef: NodeJS.Timeout
 
-	$: textColor = state === 'ready' ? 'text-green-500' : 'text-white'
+	$: textColor =
+		state === 'ready' ? 'text-green-500' : state === 'waiting' ? 'text-red-400' : 'text-white'
 
 	const scrambleSizeMapper: Record<CubeType, string> = {
 		'222': 'text-2xl',
@@ -50,13 +51,16 @@
 		if (browser) {
 			timerEl.addEventListener('touchstart', e => {
 				if (state === 'stopped') {
-					setTimeout(() => {
+					updateState('waiting')
+					timeOutRef = setTimeout(() => {
 						updateState('ready')
-					}, 100)
+					}, 300)
 				}
 			})
 
-			timerEl.addEventListener('touchend', e => {
+			timerEl.addEventListener('touchend', async e => {
+				clearTimeout(timeOutRef)
+
 				if (state === 'ready' && isCubeTypeOpen === false) {
 					startTime()
 					updateState('running')
@@ -67,6 +71,8 @@
 					setTimeout(() => {
 						updateState('stopped')
 					}, 300)
+				} else {
+					updateState('stopped')
 				}
 			})
 		}
@@ -80,15 +86,15 @@
 				class="mt-4 w-full rounded-lg bg-white text-xl"
 				on:click={() => {
 					isCubeTypeOpen = true
-				}}>{cubeTypeMapper[cubeType]}</button
+				}}>{cubeTypeMapper[$cubeType]}</button
 			>
 			<div
-				class={`${scrambleSizeMapper[cubeType]} mt-8 flex items-center justify-center text-center text-[#b8b8b8]`}
+				class={`${scrambleSizeMapper[$cubeType]} mt-8 flex items-center justify-center text-center text-[#b8b8b8]`}
 			>
-				<p class={`${cubeType === 'minx' && 'text-justify'}`}>
+				<p class={`${$cubeType === 'minx' && 'text-justify'}`}>
 					{#if !scramble}
 						Холилт хийж байна
-					{:else if cubeType === 'minx'}
+					{:else if $cubeType === 'minx'}
 						{@html formatMegaminxScramble(scramble)}
 					{:else}
 						{scramble}
@@ -96,31 +102,33 @@
 				</p>
 			</div>
 		</div>
-		<div bind:this={timerEl} class="flex h-[40vh] items-center justify-center">
-			<p class={`font-mono text-7xl ${textColor}`}>{displayTime(time)}</p>
-		</div>
-		<div class="flex flex-grow items-end justify-between">
-			<div class="space-y-2 text-[#b8b8b8]">
-				<p>Best time: {getBest($solves)}</p>
-				<p>
-					Average of 5:
-					{#if $solves.length >= 5}
-						{getAvg($solves.slice(-5))}
-					{:else}
-						{displayTime(0)}
-					{/if}
-				</p>
-				<p>
-					Average of 12:
-					{#if $solves.length >= 12}
-						{getAvg($solves.slice(-12))}
-					{:else}
-						{displayTime(0)}
-					{/if}
-				</p>
+		<div bind:this={timerEl} class="flex flex-grow select-none flex-col">
+			<div class="flex h-[40vh] items-center justify-center">
+				<p class={`font-mono text-7xl ${textColor}`}>{displayTime(time)}</p>
 			</div>
-			<div class="flex items-end justify-end">
-				<img class="w-12" src={logo} alt="scramble logo" />
+			<div class="flex flex-grow items-end justify-between">
+				<div class="space-y-2 text-[#b8b8b8]">
+					<p>Best time: {getBest($solves)}</p>
+					<p>
+						Average of 5:
+						{#if $solves.length >= 5}
+							{getAvg($solves.slice(-5))}
+						{:else}
+							{displayTime(0)}
+						{/if}
+					</p>
+					<p>
+						Average of 12:
+						{#if $solves.length >= 12}
+							{getAvg($solves.slice(-12))}
+						{:else}
+							{displayTime(0)}
+						{/if}
+					</p>
+				</div>
+				<div class="flex items-end justify-end">
+					<img class="w-12" src={logo} alt="scramble logo" />
+				</div>
 			</div>
 		</div>
 	</div>
