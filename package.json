@@ -43,6 +43,7 @@
 		"@prisma/client": "^4.9.0",
 		"bcrypt": "^5.1.0",
 		"cubing": "^0.35.6",
+		"scramble-display": "^0.5.4",
 		"zod": "^3.20.2"
 	}
 }

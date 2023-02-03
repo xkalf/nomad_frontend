@@ -2,7 +2,7 @@
 	import Icon from '@iconify/svelte'
 </script>
 
-<div class="mobile-page flex h-screen flex-col">
+<div class="mobile-page relative flex h-screen flex-col">
 	<slot />
 	<div class="mt-auto flex items-center justify-around bg-[#040404] p-4">
 		<a data-sveltekit-preload-data href="/">

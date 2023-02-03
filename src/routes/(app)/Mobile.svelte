@@ -14,6 +14,7 @@
 	import { onMount } from 'svelte'
 	import MobileContainer from '$lib/components/MobileContainer.svelte'
 	import { cubeType } from '$lib/stores/cubeType'
+	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
 
 	export let time: number
 	export let scramble: string | null
@@ -25,6 +26,7 @@
 
 	let timerEl: HTMLDivElement
 	let isCubeTypeOpen = false
+	let isScrambleDisplayOpen = false
 	let timeOutRef: NodeJS.Timeout
 
 	$: textColor =
@@ -126,11 +128,26 @@
 						{/if}
 					</p>
 				</div>
-				<div class="flex items-end justify-end">
+				<button
+					on:click={() => {
+						isScrambleDisplayOpen = true
+					}}
+					class="flex items-end justify-end"
+				>
 					<img class="w-12" src={logo} alt="scramble logo" />
-				</div>
+				</button>
 			</div>
 		</div>
+	</div>
+	<div
+		class={`${
+			isScrambleDisplayOpen ? 'block' : 'hidden'
+		} absolute bottom-20 right-1/2 w-4/5 translate-x-[60%] bg-[#3A3E42]`}
+	>
+		<div class="flex w-full items-center justify-end text-2xl text-white">
+			<button class="p-4" on:click={() => (isScrambleDisplayOpen = false)}>X</button>
+		</div>
+		<ScrambleDisplay {scramble} />
 	</div>
 </MobileContainer>
 

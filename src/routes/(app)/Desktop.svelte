@@ -5,6 +5,7 @@
 	import Modal from '$lib/components/Modal.svelte'
 	import type { CubeType } from '$lib/utils/enum-adapter'
 	import { cubeType } from '$lib/stores/cubeType'
+	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
 
 	export let time: number
 	export let state: StateType
@@ -47,11 +48,7 @@
 			</div>
 			<!-- Tools -->
 			<div class="col-start-4 rounded-xl bg-sidebarBg">
-				<scramble-display
-					{scramble}
-					event={$cubeType}
-					visualization={$cubeType === 'pyram' ? '2D' : '3D'}
-				/>
+				<ScrambleDisplay {scramble} />
 				<div class="flex items-center justify-around p-3">
 					<span class="py-2 text-xl text-white">Function</span>
 					<select class="rounded-xl bg-sidebarElement py-2 px-4 text-xl text-white">
@@ -82,15 +79,3 @@
 >
 	<p class="text-lg text-white">Энэ session-ийн эвлүүлэлтүүдийг устгах уу?</p>
 </Modal>
-
-<style>
-	scramble-display {
-		width: 100%;
-	}
-
-	@media screen and (max-width: 1024px) {
-		scramble-display {
-			width: 60%;
-		}
-	}
-</style>

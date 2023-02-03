@@ -22,6 +22,7 @@ specifiers:
   prettier: ^2.8.3
   prettier-plugin-svelte: ^2.8.1
   prettier-plugin-tailwindcss: ^0.2.2
+  scramble-display: ^0.5.4
   svelte: ^3.54.0
   svelte-check: ^3.0.1
   tailwindcss: ^3.2.4
@@ -35,6 +36,7 @@ dependencies:
   '@prisma/client': 4.9.0
   bcrypt: 5.1.0
   cubing: 0.35.6
+  scramble-display: 0.5.4
   zod: 3.20.2
 
 devDependencies:
@@ -611,10 +613,20 @@ packages:
     resolution: {integrity: sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==}
     dev: true
 
+  /@types/three/0.144.0:
+    resolution: {integrity: sha512-psvEs6q5rLN50jUYZ3D4pZMfxTbdt3A243blt0my7/NcL6chaCZpHe2csbCtx0SOD9fI/XnF3wnVUAYZGqCSYg==}
+    dependencies:
+      '@types/webxr': 0.5.0
+    dev: false
+
   /@types/three/0.146.0:
     resolution: {integrity: sha512-75AgysUrIvTCB054eQa2pDVFurfeFW8CrMQjpzjt3yHBfuuknoSvvsESd/3EhQxPrz9si3+P0wiDUVsWUlljfA==}
     dependencies:
       '@types/webxr': 0.5.0
+    dev: false
+
+  /@types/web-bluetooth/0.0.15:
+    resolution: {integrity: sha512-w7hEHXnPMEZ+4nGKl/KDRVpxkwYxYExuHOYXyzIzCDzEZ9ZCGMAewulr9IqJu2LR4N37fcnb1XVeuZ09qgOxhA==}
     dev: false
 
   /@types/web-bluetooth/0.0.16:
@@ -1040,6 +1052,17 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
     dev: true
+
+  /cubing/0.34.6:
+    resolution: {integrity: sha512-PGdKfwWLegU2GXZpYuHmnUFjDldOzVEd9OcI6vZIeLh6GskhKrjySWfOladjUM5BjF1uiKZIweUeKNlsapQeDQ==}
+    engines: {node: '>=19'}
+    dependencies:
+      '@types/three': 0.144.0
+      '@types/web-bluetooth': 0.0.15
+      comlink: 4.3.1
+      random-uint-below: 2.0.0
+      three: 0.144.0
+    dev: false
 
   /cubing/0.35.6:
     resolution: {integrity: sha512-ULXEfAh5QQgfQjTjIH0969bt3E8f8dBOFgR3YjzTaLZuxmwmpHZt5DBcUIDSMlLJp6ufndyKhXGAPodaplku+Q==}
@@ -2196,6 +2219,12 @@ packages:
       rimraf: 2.7.1
     dev: true
 
+  /scramble-display/0.5.4:
+    resolution: {integrity: sha512-kifMPQKYYvviEB0KnDr7l0JQepQu/1wB/IghCKkZAofxjyX6fmpQwcXAXOyLIdhwCQWRTcBAZ3RAN6xlI7Pb2A==}
+    dependencies:
+      cubing: 0.34.6
+    dev: false
+
   /semver/6.3.0:
     resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}
     hasBin: true
@@ -2455,6 +2484,10 @@ packages:
   /text-table/0.2.0:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
     dev: true
+
+  /three/0.144.0:
+    resolution: {integrity: sha512-R8AXPuqfjfRJKkYoTQcTK7A6i3AdO9++2n8ubya/GTU+fEHhYKu1ZooRSCPkx69jbnzT7dD/xEo6eROQTt2lJw==}
+    dev: false
 
   /three/0.147.0:
     resolution: {integrity: sha512-LPTOslYQXFkmvceQjFTNnVVli2LaVF6C99Pv34fJypp8NbQLbTlu3KinZ0zURghS5zEehK+VQyvWuPZ/Sm8fzw==}
