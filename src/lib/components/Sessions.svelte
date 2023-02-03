@@ -69,7 +69,9 @@
 	}
 </script>
 
-<div class="m-4 rounded-xl bg-sidebarElement py-2 px-4 text-white">
+<div
+	class={`m-4 ${mobile ? 'mx-auto w-full' : ''} rounded-xl bg-sidebarElement py-2 px-4 text-white`}
+>
 	<div>
 		{#if isSessionOpen}
 			<ul class="scrollbar my-2 ml-2 max-h-24 w-full overflow-y-auto">

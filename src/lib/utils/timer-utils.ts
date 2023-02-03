@@ -93,6 +93,10 @@ export const getBestAverage = (arr: Solve[], length: number) => {
 }
 
 export function getMean(solves: Solve[]) {
+	if (solves.length === 0) {
+		return displayTime(0)
+	}
+
 	const filtered = solves
 		.filter(i => (i.status as SolveStatus) !== 'dnf')
 		.map(i => {
@@ -102,6 +106,10 @@ export function getMean(solves: Solve[]) {
 				return i.time
 			}
 		})
+
+	if (filtered.length === 0) {
+		return 'DNF'
+	}
 
 	const sum = filtered.reduce((a, b) => a + b, 0)
 
