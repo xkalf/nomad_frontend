@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { cubeType } from '$lib/stores/cubeType'
-	import 'scramble-display'
 
 	export let scramble: string | null
 </script>
