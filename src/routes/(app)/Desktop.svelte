@@ -1,9 +1,9 @@
 <script lang="ts">
 	import timerLogo from '$lib/assets/timer-logo.png'
 	import Sidebar from './Sidebar.svelte'
-	import { displayTime, formatMegaminxScramble, type StateType } from '$lib/utils/timer-utils'
+	import { displayTime, formatMegaminxScramble } from '$lib/utils/timer-utils'
 	import Modal from '$lib/components/Modal.svelte'
-	import type { CubeType } from '$lib/utils/enum-adapter'
+	import type { CubeType, StateType } from '$lib/utils/types'
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
 

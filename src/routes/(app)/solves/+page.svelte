@@ -4,7 +4,7 @@
 	import Sessions from '$lib/components/Sessions.svelte'
 	import Solves from '$lib/components/Solves.svelte'
 	import { solves } from '$lib/stores/solves'
-	import type { CubeType } from '$lib/utils/enum-adapter'
+	import type { CubeType } from '$lib/utils/types'
 	import { getAvg, getBest, getBestAverage, getMean } from '$lib/utils/timer-utils'
 
 	const averages: { label: string; value: string }[] = [
@@ -46,7 +46,7 @@
 </script>
 
 <MobileContainer>
-	<div class="flex flex-grow flex-col gap-2 overflow-y-auto p-4">
+	<div class="flex min-h-full flex-col gap-2 overflow-y-auto p-4">
 		<h2 class="text-2xl text-white">Stats</h2>
 		<div class="grid grid-cols-2 gap-4">
 			{#each averages as average}

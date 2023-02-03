@@ -31,7 +31,7 @@
 
 <div
 	class={`${
-		mobile ? 'max-h-96 bg-mobileAverage' : 'mx-4 flex-grow bg-sidebarElement'
+		mobile ? 'max-h-96 min-h-[200px] bg-mobileAverage' : 'mx-4 flex-grow bg-sidebarElement'
 	} flex flex-col overflow-y-auto rounded-xl`}
 >
 	<div

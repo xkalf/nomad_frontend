@@ -1,7 +1,6 @@
 import type { RequestHandler } from './$types'
 import db from '$lib/db'
-import type { CubeType } from '$lib/utils/enum-adapter'
-import { cubeTypeMapper } from '$lib/utils/timer-utils'
+import { cubeTypeMapper, type CubeType } from '$lib/utils/types'
 
 export const GET: RequestHandler = async ({ locals, url }) => {
 	const cube = url.searchParams.get('cube') as CubeType

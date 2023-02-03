@@ -1,4 +1,4 @@
-import type { SolveStatus } from '$lib/utils/enum-adapter'
+import type { SolveStatus } from '$lib/utils/types'
 import type { Solve } from '@prisma/client'
 import { writable } from 'svelte/store'
 

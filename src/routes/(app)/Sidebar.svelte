@@ -3,7 +3,7 @@
 	import Icon from '@iconify/svelte'
 	import Average from '../../lib/components/Average.svelte'
 	import { solves } from '../../lib/stores/solves'
-	import type { CubeType } from '../../lib/utils/enum-adapter'
+	import type { CubeType } from '../../lib/utils/types'
 	import { getAvg, getBest } from '../../lib/utils/timer-utils'
 	import Solves from '$lib/components/Solves.svelte'
 	import Sessions from '$lib/components/Sessions.svelte'

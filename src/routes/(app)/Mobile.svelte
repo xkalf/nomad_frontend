@@ -1,14 +1,7 @@
 <script lang="ts">
 	import logo from '$lib/assets/scramble-logo.png'
-	import { cubeTypes, type CubeType } from '$lib/utils/enum-adapter'
-	import {
-		cubeTypeMapper,
-		displayTime,
-		formatMegaminxScramble,
-		getAvg,
-		getBest,
-		type StateType
-	} from '$lib/utils/timer-utils'
+	import { cubeTypeMapper, cubeTypes, type CubeType, type StateType } from '$lib/utils/types'
+	import { displayTime, formatMegaminxScramble, getAvg, getBest } from '$lib/utils/timer-utils'
 	import { solves } from '$lib/stores/solves'
 	import { browser } from '$app/environment'
 	import { onMount } from 'svelte'

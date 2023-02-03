@@ -1,4 +1,4 @@
-import type { CubeType } from '$lib/utils/enum-adapter'
+import type { CubeType } from '$lib/utils/types'
 import { writable } from 'svelte/store'
 
 export const cubeType = writable<CubeType>('333')

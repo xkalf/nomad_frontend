@@ -4,8 +4,8 @@
 	import { session } from '$lib/stores/session'
 	import { addSolves, deleteSolves, resetSolves, solves } from '$lib/stores/solves'
 	import { getSessionByCube } from '$lib/utils/api'
-	import type { CubeType } from '$lib/utils/enum-adapter'
-	import { generateScramble, shortcutMapper, type StateType } from '$lib/utils/timer-utils'
+	import { shortcutMapper, type CubeType, type StateType } from '$lib/utils/types'
+	import { generateScramble } from '$lib/utils/timer-utils'
 	import type { Solve } from '@prisma/client'
 	import { onMount } from 'svelte'
 	import Desktop from './Desktop.svelte'
@@ -20,6 +20,10 @@
 	let deleteLastModalOpen = false
 
 	function startTime() {
+		if (!$session) {
+			return
+		}
+
 		const startedTime = Date.now()
 		interval = setInterval(() => {
 			const current = Date.now()

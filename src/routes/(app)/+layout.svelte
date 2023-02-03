@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment'
 	import { cubeType } from '$lib/stores/cubeType'
+	import { session } from '$lib/stores/session'
 	import { getSessionByCube, getSessionById } from '$lib/utils/api'
 	import { onMount } from 'svelte'
 
@@ -26,6 +27,9 @@
 
 	onMount(async () => {
 		await getSession()
+		if (!$session) {
+			await getSessionByCube('333')
+		}
 	})
 </script>
 
