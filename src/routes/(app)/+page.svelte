@@ -80,6 +80,8 @@
 		scramble = await generateScramble($cubeType)
 	}
 
+	cubeType.subscribe(newScramble)
+
 	onMount(async () => {
 		if (browser) {
 			newScramble()

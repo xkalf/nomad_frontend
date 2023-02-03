@@ -1,98 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/stores'
 	import Icon from '@iconify/svelte'
-	import type { Session } from '@prisma/client'
-	import Average from '../../lib/Average.svelte'
+	import Average from '../../lib/components/Average.svelte'
 	import { solves } from '../../lib/stores/solves'
-	import { cubeTypes, type CubeType } from '../../lib/utils/enum-adapter'
-	import { cubeTypeMapper, displayTime, getAvg, getBest } from '../../lib/utils/timer-utils'
-	import Modal from '$lib/Modal.svelte'
-	import Solves from '$lib/Solves.svelte'
-	import { getSessionById } from '$lib/utils/api'
-	import { sessions } from '$lib/stores/sessions'
-	import { session } from '$lib/stores/session'
-	import { cubeType } from '$lib/stores/cubeType'
+	import type { CubeType } from '../../lib/utils/enum-adapter'
+	import { getAvg, getBest } from '../../lib/utils/timer-utils'
+	import Solves from '$lib/components/Solves.svelte'
+	import Sessions from '$lib/components/Sessions.svelte'
 
 	export let changeCubeType: (type: CubeType) => Promise<void>
-
-	let isCubeTypeOpen = false
-	let isSessionOpen = false
-	let isSessionCreate = false
-	let isSessionDelete = $sessions.map(i => ({ id: i.id, isOpen: false }))
-	let sessionName: string
-
-	$: isSessionDelete = $sessions.map(i => ({ id: i.id, isOpen: false }))
-
-	function toggleCubeTypes() {
-		isCubeTypeOpen = !isCubeTypeOpen
-	}
-
-	function showSessionCreate(e: MouseEvent & { currentTarget: HTMLButtonElement & EventTarget }) {
-		e.currentTarget.blur()
-		const date = new Date()
-		sessionName = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
-
-		isSessionCreate = true
-	}
-
-	async function changeCurrentCubeType(type: CubeType) {
-		isCubeTypeOpen = false
-		await changeCubeType(type)
-	}
-
-	async function deleteSession(id: number) {
-		if (!isSessionDelete) {
-			return
-		}
-
-		const response = await fetch(`api/session/${id}`, {
-			method: 'DELETE'
-		})
-		const data = (await response.json()) as {
-			success: boolean
-		}
-
-		if (data.success === true) {
-			deleteSession(id)
-			if ($session.id === id) {
-				getSessionById($sessions.filter(i => i.id !== id)[0].id)
-			}
-			updateIsSessionDelete(id, false)
-		}
-	}
-
-	async function createSession() {
-		const response = await fetch('api/session', {
-			method: 'POST',
-			body: JSON.stringify({
-				name: sessionName,
-				cube: $cubeType
-			})
-		})
-
-		const data = (await response.json()) as {
-			session: Session
-		}
-
-		if (data) {
-			getSessionById(data.session.id)
-			isSessionCreate = false
-		}
-	}
-
-	async function changeSession(id: number) {
-		if (id === $session.id) {
-			isSessionOpen = false
-		} else {
-			await getSessionById(id)
-			isSessionOpen = false
-		}
-	}
-
-	function updateIsSessionDelete(id: number, open: boolean) {
-		const index = isSessionDelete.findIndex(i => i.id === id)
-		isSessionDelete[index].isOpen = open
-	}
 </script>
 
 <div class="flex max-h-screen flex-col overflow-hidden bg-sidebarBg p-6">
@@ -119,125 +35,17 @@
 	<div class="mt-4 flex flex-col justify-center gap-4 border-t border-[#797878] p-4">
 		<Average label="Best" value={getBest($solves)} best={true} />
 		<div class="flex gap-2">
-			<Average
-				label="Ao5"
-				value={getAvg($solves, 5)}
-			/>
-			<Average
-				label="Ao12"
-				value={getAvg($solves, 12)}
-			/>
+			<Average label="Ao5" value={getAvg($solves, 5)} />
+			<Average label="Ao12" value={getAvg($solves, 12)} />
 		</div>
 		<div class="average flex gap-2">
-			<Average
-				label="Ao50"
-				value={getAvg($solves, 50)}
-			/>
-			<Average
-				label="Ao100"
-				value={getAvg($solves, 100)}
-			/>
+			<Average label="Ao50" value={getAvg($solves, 50)} />
+			<Average label="Ao100" value={getAvg($solves, 100)} />
 		</div>
 	</div>
-	<!-- Solves -->
 	<Solves />
-	<div class="m-4 rounded-xl bg-sidebarElement py-2 px-4 text-white">
-		<div>
-			{#if isSessionOpen}
-				<ul class="scrollbar my-2 ml-2 max-h-24 w-full overflow-y-auto">
-					{#each $sessions as s}
-						<li class="flex justify-between pr-4">
-							<button
-								on:click={async () => {
-									await changeSession(s.id)
-								}}>{s.name}</button
-							>
-							{#if s.main === false}
-								<button
-									class="text-lg text-red-500"
-									on:click={() => {
-										updateIsSessionDelete(s.id, true)
-									}}>X</button
-								>
-								<Modal
-									isOpen={isSessionDelete.find(i => i.id === s.id)?.isOpen}
-									okFunction={async () => {
-										await deleteSession(s.id)
-									}}
-									cancelFunction={() => {
-										updateIsSessionDelete(s.id, false)
-									}}
-								>
-									<p class="text-lg text-white">Уг session-ийг устгах уу?</p>
-								</Modal>
-							{/if}
-						</li>
-					{/each}
-				</ul>
-			{:else}
-				<p class="my-2 ml-2">{$session?.name || ''}</p>
-			{/if}
-		</div>
-		<div class="flex items-center gap-1">
-			<button
-				on:click={() => {
-					isSessionOpen = !isSessionOpen
-				}}
-			>
-				<Icon
-					icon={!isSessionOpen
-						? 'material-symbols:keyboard-arrow-up-rounded'
-						: 'material-symbols:keyboard-arrow-down-rounded'}
-					color="#b8b8b8"
-					width="25"
-					height="25"
-					inline={true}
-				/>
-			</button>
-			<!-- CubeType -->
-			<div
-				class="relative flex flex-grow items-center justify-center rounded-xl bg-[#424B53] py-1 text-xl"
-			>
-				<ul
-					class={`absolute left-0 bottom-0 z-0 flex w-full flex-col rounded-xl bg-[#424B53] pt-3 pb-10 ${
-						isCubeTypeOpen ? 'block' : 'hidden'
-					}`}
-				>
-					{#each cubeTypes.filter(i => i !== $cubeType) as type}
-						<li class="w-full px-1 text-center hover:bg-[#606C76]">
-							<button class="w-full" on:click={async () => await changeCurrentCubeType(type)}
-								>{cubeTypeMapper[type]}</button
-							>
-						</li>
-					{/each}
-				</ul>
-				<button class="z-10 px-1" on:click={toggleCubeTypes}>{cubeTypeMapper[$cubeType]}</button>
-			</div>
-			<!-- Session -->
-			<!-- svelte-ignore a11y-click-events-have-key-events -->
-			<div
-				class="z-10 flex flex-grow items-center justify-center rounded-xl bg-[#424b53] py-1 text-xl text-green-400"
-			>
-				<button on:click={showSessionCreate}>+ Session</button>
-			</div>
-		</div>
-	</div>
+	<Sessions {changeCubeType} />
 </div>
-
-<Modal
-	isOpen={isSessionCreate}
-	okFunction={createSession}
-	cancelFunction={() => (isSessionCreate = false)}
-	mode="create"
->
-	<label for="sessionName" class="text-xl text-white">Session-ийн нэр</label>
-	<input
-		id="sessionName"
-		type="text"
-		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 text-lg text-[#b8b8b8]"
-		bind:value={sessionName}
-	/>
-</Modal>
 
 <style>
 	@media screen and (max-height: 800px) {

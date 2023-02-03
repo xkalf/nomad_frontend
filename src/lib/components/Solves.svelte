@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte'
 	import Solve from './Solve.svelte'
-	import { solves } from './stores/solves'
+	import { solves } from '../stores/solves'
 
 	export let mobile: boolean = false
 

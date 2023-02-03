@@ -2,7 +2,7 @@
 	import timerLogo from '$lib/assets/timer-logo.png'
 	import Sidebar from './Sidebar.svelte'
 	import { displayTime, formatMegaminxScramble, type StateType } from '$lib/utils/timer-utils'
-	import Modal from '$lib/Modal.svelte'
+	import Modal from '$lib/components/Modal.svelte'
 	import type { CubeType } from '$lib/utils/enum-adapter'
 	import { cubeType } from '$lib/stores/cubeType'
 
@@ -25,7 +25,7 @@
 		<div class="mt-[3vh] flex h-1/6 items-center justify-center p-20 text-center">
 			<p
 				class={`text-5xl text-scramble ${
-					$cubeType === 'minx' && 'mt-10 text-justify font-mono text-3xl lg:text-4xl'
+					$cubeType === 'minx' && 'mt-10 text-justify font-mono text-2xl md:text-3xl'
 				} ${$cubeType === '777' || $cubeType === '666' ? 'text-2xl lg:text-3xl' : ''}`}
 			>
 				{#if !scramble}

@@ -12,7 +12,7 @@
 	import { solves } from '$lib/stores/solves'
 	import { browser } from '$app/environment'
 	import { onMount } from 'svelte'
-	import MobileContainer from '$lib/MobileContainer.svelte'
+	import MobileContainer from '$lib/components/MobileContainer.svelte'
 	import { cubeType } from '$lib/stores/cubeType'
 
 	export let time: number

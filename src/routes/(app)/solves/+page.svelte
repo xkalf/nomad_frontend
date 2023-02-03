@@ -1,9 +1,11 @@
 <script lang="ts">
-	import Average from '$lib/Average.svelte'
-	import MobileContainer from '$lib/MobileContainer.svelte'
-	import Solves from '$lib/Solves.svelte'
+	import Average from '$lib/components/Average.svelte'
+	import MobileContainer from '$lib/components/MobileContainer.svelte'
+	import Sessions from '$lib/components/Sessions.svelte'
+	import Solves from '$lib/components/Solves.svelte'
 	import { solves } from '$lib/stores/solves'
-	import { displayTime, getAvg, getBest, getBestAverage, getMean } from '$lib/utils/timer-utils'
+	import type { CubeType } from '$lib/utils/enum-adapter'
+	import { getAvg, getBest, getBestAverage, getMean } from '$lib/utils/timer-utils'
 
 	const averages: { label: string; value: string }[] = [
 		{
@@ -39,6 +41,8 @@
 			value: getAvg($solves, 100)
 		}
 	]
+
+	async function changeCubeType(type: CubeType): Promise<void> {}
 </script>
 
 <MobileContainer>
@@ -51,5 +55,6 @@
 		</div>
 		<h2 class="mt-2 text-2xl text-white">Solves</h2>
 		<Solves mobile />
+		<Sessions mobile {changeCubeType} />
 	</div>
 </MobileContainer>
