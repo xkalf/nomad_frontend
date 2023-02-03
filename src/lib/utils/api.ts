@@ -34,8 +34,8 @@ export async function getSessionById(id: number): Promise<void> {
 	}
 
 	setSession(currentSession.session)
-	setCubeType(currentSession.session.cube as CubeType)
 	initialSolves(currentSession.session.solves)
+	setCubeType(currentSession.session.cube as CubeType)
 
 	const result = (await (
 		await fetch(`/api/session?cube=${currentSession.session.cube}`)

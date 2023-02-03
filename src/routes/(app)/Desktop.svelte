@@ -49,7 +49,7 @@
 			<div class="col-start-4 rounded-xl bg-sidebarBg">
 				<scramble-display
 					{scramble}
-					event={cubeType}
+					event={$cubeType}
 					visualization={$cubeType === 'pyram' ? '2D' : '3D'}
 				/>
 				<div class="flex items-center justify-around p-3">

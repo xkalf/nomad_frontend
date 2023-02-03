@@ -80,11 +80,14 @@
 		scramble = await generateScramble($cubeType)
 	}
 
-	cubeType.subscribe(newScramble)
+	session.subscribe(async value => {
+		if (value?.cube) {
+			scramble = await generateScramble(value.cube as CubeType)
+		}
+	})
 
 	onMount(async () => {
 		if (browser) {
-			newScramble()
 			window.addEventListener('keyup', e => {
 				if (e.key === ' ') {
 					if (state === 'ready') {
