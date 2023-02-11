@@ -62,8 +62,20 @@
 		<span>{order}. +{displayTime(solve.time + 2000)}</span>
 	{/if}
 	<div class="flex gap-1">
-		<button class="text-red-500" on:click={() => updateSolve('+2')}>+2</button>
-		<button class="text-white" on:click={() => updateSolve('dnf')}>DNF</button>
+		<button
+			class="text-red-500"
+			on:click={e => {
+				updateSolve('+2')
+				e.currentTarget.blur()
+			}}>+2</button
+		>
+		<button
+			class="text-white"
+			on:click={e => {
+				updateSolve('dnf')
+				e.currentTarget.blur()
+			}}>DNF</button
+		>
 		<button
 			class="text-red-500"
 			on:click={() => {

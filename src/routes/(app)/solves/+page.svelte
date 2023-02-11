@@ -7,40 +7,43 @@
 	import type { CubeType } from '$lib/utils/types'
 	import { getAvg, getBest, getBestAverage, getMean } from '$lib/utils/timer-utils'
 
-	const averages: { label: string; value: string }[] = [
-		{
-			label: 'Best',
-			value: getBest($solves)
-		},
-		{
-			label: 'Mean',
-			value: getMean($solves)
-		},
-		{
-			label: 'Ao5 Best',
-			value: getBestAverage($solves, 5)
-		},
-		{
-			label: 'Ao5',
-			value: getAvg($solves, 5)
-		},
-		{
-			label: 'Ao12 Best',
-			value: getBestAverage($solves, 12)
-		},
-		{
-			label: 'Ao12',
-			value: getAvg($solves, 12)
-		},
-		{
-			label: 'Ao50',
-			value: getAvg($solves, 50)
-		},
-		{
-			label: 'Ao100',
-			value: getAvg($solves, 100)
-		}
-	]
+	let averages: { label: string; value: string }[]
+
+	$: $solves,
+		(averages = [
+			{
+				label: 'Best',
+				value: getBest($solves)
+			},
+			{
+				label: 'Mean',
+				value: getMean($solves)
+			},
+			{
+				label: 'Ao5 Best',
+				value: getBestAverage($solves, 5)
+			},
+			{
+				label: 'Ao5',
+				value: getAvg($solves, 5)
+			},
+			{
+				label: 'Ao12 Best',
+				value: getBestAverage($solves, 12)
+			},
+			{
+				label: 'Ao12',
+				value: getAvg($solves, 12)
+			},
+			{
+				label: 'Ao50',
+				value: getAvg($solves, 50)
+			},
+			{
+				label: 'Ao100',
+				value: getAvg($solves, 100)
+			}
+		])
 
 	async function changeCubeType(type: CubeType): Promise<void> {}
 </script>

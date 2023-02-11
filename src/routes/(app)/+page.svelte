@@ -2,9 +2,15 @@
 	import { browser } from '$app/environment'
 	import { cubeType, setCubeType } from '$lib/stores/cubeType'
 	import { session } from '$lib/stores/session'
-	import { addSolves, deleteSolves, resetSolves, solves } from '$lib/stores/solves'
+	import {
+		addSolves,
+		changeSolveStats,
+		deleteSolves,
+		resetSolves,
+		solves
+	} from '$lib/stores/solves'
 	import { getSessionByCube } from '$lib/utils/api'
-	import { shortcutMapper, type CubeType, type StateType } from '$lib/utils/types'
+	import { shortcutMapper, type CubeType, type SolveStatus, type StateType } from '$lib/utils/types'
 	import { generateScramble } from '$lib/utils/timer-utils'
 	import type { Solve } from '@prisma/client'
 	import { onMount } from 'svelte'
@@ -84,6 +90,21 @@
 		scramble = await generateScramble($cubeType)
 	}
 
+	async function updateLastSolve(status: SolveStatus) {
+		const last = $solves[$solves.length - 1]
+		if (last.status === status) {
+			return
+		}
+
+		const response = await fetch(`/api/solve/${last.id}`, {
+			method: 'PUT',
+			body: JSON.stringify({ status })
+		})
+		const data = await response.json()
+
+		if (data.success === true) changeSolveStats(last.id, status)
+	}
+
 	session.subscribe(async value => {
 		if (value?.cube) {
 			scramble = await generateScramble(value.cube as CubeType)
@@ -109,22 +130,41 @@
 				} else if (e.altKey) {
 					switch (e.code) {
 						case 'ArrowLeft':
-							scramble = lastScramble
+							e.preventDefault()
+							if (lastScramble) scramble = lastScramble
 							return
 						case 'ArrowRight':
+							e.preventDefault()
 							await newScramble()
 							return
 						case 'KeyD':
-							deleteAllModalOpen = true
 							e.preventDefault()
+							deleteAllModalOpen = true
 							return
 						case 'KeyZ':
+							e.preventDefault()
 							deleteLastModalOpen = true
 							return
 					}
 
 					if (Object.keys(shortcutMapper).includes(e.code)) {
+						e.preventDefault()
 						await changeCubeType(shortcutMapper[e.code])
+					}
+				} else if (e.ctrlKey) {
+					switch (e.code) {
+						case 'Digit1':
+							e.preventDefault()
+							await updateLastSolve('ok')
+							return
+						case 'Digit2':
+							e.preventDefault()
+							await updateLastSolve('+2')
+							return
+						case 'Digit3':
+							e.preventDefault()
+							await updateLastSolve('dnf')
+							return
 					}
 				}
 
