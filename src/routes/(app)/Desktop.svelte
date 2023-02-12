@@ -23,10 +23,10 @@
 	<Sidebar {changeCubeType} />
 	<div class="flex flex-col justify-between overflow-hidden bg-[#363C41] p-4">
 		<!-- Scramble -->
-		<div class="mt-[3vh] flex h-1/6 items-center justify-center p-20 text-center">
+		<div class="h-1/6 mt-[3vh] flex items-center justify-center p-20 text-center">
 			<p
 				class={`text-5xl text-scramble ${
-					$cubeType === 'minx' && 'mt-10 text-justify font-mono text-2xl md:text-3xl'
+					$cubeType === 'minx' && 'text-justify font-mono text-2xl md:text-3xl'
 				} ${$cubeType === '777' || $cubeType === '666' ? 'text-2xl lg:text-3xl' : ''}`}
 			>
 				{#if !scramble}

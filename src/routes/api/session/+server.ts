@@ -10,6 +10,9 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 			userId: locals.user.id,
 			deleted: null,
 			cube
+		},
+		orderBy: {
+			name: 'asc'
 		}
 	})
 
