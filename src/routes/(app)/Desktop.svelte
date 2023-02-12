@@ -23,7 +23,7 @@
 	<Sidebar {changeCubeType} />
 	<div class="flex flex-col justify-between overflow-hidden bg-[#363C41] p-4">
 		<!-- Scramble -->
-		<div class="h-1/6 mt-[3vh] flex items-center justify-center p-20 text-center">
+		<div class="h-1/6 mt-[3vh] flex items-center justify-center p-20 pt-5 text-center">
 			<p
 				class={`text-5xl text-scramble ${
 					$cubeType === 'minx' && 'text-justify font-mono text-2xl md:text-3xl'
