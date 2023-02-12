@@ -52,7 +52,7 @@ export const getAvg = (arr: Solve[], length: number) => {
 		return displayTime(0)
 	}
 
-	if (arr.filter(i => i.status === 'dnf').length > 2) {
+	if (arr.filter(i => i.status === 'dnf').length >= 2) {
 		return 'DNF'
 	}
 
