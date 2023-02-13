@@ -35,7 +35,10 @@
 	function showSessionCreate(e: MouseEvent & { currentTarget: HTMLButtonElement & EventTarget }) {
 		e.currentTarget.blur()
 		const date = new Date()
-		sessionName = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
+		sessionName = `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date
+			.getDate()
+			.toString()
+			.padStart(2, '0')}`
 
 		isSessionCreate = true
 	}
