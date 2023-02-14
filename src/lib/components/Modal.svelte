@@ -24,7 +24,7 @@
 </script>
 
 <div class={`modal absolute top-1/2 left-1/2 z-50 p-12 pb-4 ${isOpen ? 'block' : 'hidden'}`}>
-	<img alt="ads" src={image} class="h-[300px] w-[300px] md:h-[500px] md:w-[500px]" />
+	<img alt="ads" src={image} class="h-[250px] w-[250px] md:h-[500px] md:w-[500px]" />
 	<div class="my-4">
 		<slot />
 	</div>

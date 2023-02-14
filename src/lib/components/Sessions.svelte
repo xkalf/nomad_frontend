@@ -15,7 +15,7 @@
 	let isCubeTypeOpen = false
 	let isSessionOpen = false
 	let isSessionCreate = false
-	let isSessionDelete = $sessions.map(i => ({ id: i.id, isOpen: false }))
+	$: isSessionDelete = $sessions.map(i => ({ id: i.id, isOpen: false }))
 	let sessionName: string
 
 	async function changeSession(id: number) {
@@ -70,6 +70,18 @@
 			isSessionCreate = false
 		}
 	}
+
+	async function removeSession(id: number) {
+		const response = await fetch(`api/session/${id}`, {
+			method: 'DELETE'
+		})
+
+		const data = await response.json()
+
+		if (data.success) {
+			deleteSession(id)
+		}
+	}
 </script>
 
 <div
@@ -95,7 +107,7 @@
 							<Modal
 								isOpen={isSessionDelete.find(i => i.id === s.id)?.isOpen}
 								okFunction={async () => {
-									await deleteSession(s.id)
+									await removeSession(s.id)
 								}}
 								cancelFunction={() => {
 									updateIsSessionDelete(s.id, false)
@@ -168,7 +180,7 @@
 	<input
 		id="sessionName"
 		type="text"
-		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 text-lg text-[#b8b8b8]"
+		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 pl-3 text-lg text-[#b8b8b8]"
 		bind:value={sessionName}
 	/>
 </Modal>
