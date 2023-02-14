@@ -43,6 +43,7 @@
 		gtag('js', new Date())
 		gtag('config', 'G-5BDWRZD9W5')
 	</script>
+	<meta name="keywords" content="rubik, cube, timer, nomad, team, 3x3" />
 	<meta name="og:image" content={logo} />
 	<meta name="og:title" content="Нүүдэлчин рубик шооны клуб" />
 	<meta name="og:type" content="website" />

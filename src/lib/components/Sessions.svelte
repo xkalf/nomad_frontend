@@ -15,8 +15,8 @@
 	let isCubeTypeOpen = false
 	let isSessionOpen = false
 	let isSessionCreate = false
-	$: isSessionDelete = $sessions.map(i => ({ id: i.id, isOpen: false }))
 	let sessionName: string
+	$: isSessionDelete = $sessions.map(i => ({ id: i.id, isOpen: false }))
 
 	async function changeSession(id: number) {
 		if (id === $session.id) {

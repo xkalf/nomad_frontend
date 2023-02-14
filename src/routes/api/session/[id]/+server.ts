@@ -35,12 +35,22 @@ export const DELETE: RequestHandler = async ({ params: { id } }) => {
 		)
 	}
 
-	await db.session.update({
-		where: { id: +id },
-		data: {
-			deleted: new Date()
-		}
-	})
+	await db.$transaction([
+		db.session.update({
+			where: { id: +id },
+			data: {
+				deleted: new Date()
+			}
+		}),
+		db.solve.updateMany({
+			where: {
+				sessionId: +id
+			},
+			data: {
+				deleted: new Date()
+			}
+		})
+	])
 
 	return new Response(JSON.stringify({ success: true }))
 }

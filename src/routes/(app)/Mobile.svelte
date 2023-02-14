@@ -44,7 +44,7 @@
 
 	onMount(() => {
 		if (browser) {
-			timerEl.addEventListener('touchstart', e => {
+			timerEl.addEventListener('touchstart', () => {
 				if (state === 'stopped') {
 					updateState('waiting')
 					timeOutRef = setTimeout(() => {
@@ -53,7 +53,7 @@
 				}
 			})
 
-			timerEl.addEventListener('touchend', async e => {
+			timerEl.addEventListener('touchend', async () => {
 				clearTimeout(timeOutRef)
 
 				if (state === 'ready' && isCubeTypeOpen === false) {

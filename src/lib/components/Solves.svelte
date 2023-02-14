@@ -3,7 +3,7 @@
 	import Solve from './Solve.svelte'
 	import { solves } from '../stores/solves'
 
-	export let mobile: boolean = false
+	export let mobile = false
 
 	let sortMode: 'asc' | 'desc' | 'none' = 'none'
 

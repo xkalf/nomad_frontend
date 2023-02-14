@@ -1,8 +1,8 @@
 <script lang="ts">
 	export let label: string
 	export let value: string
-	export let best: boolean = false
-	export let mobile: boolean = false
+	export let best = false
+	export let mobile = false
 </script>
 
 <div
