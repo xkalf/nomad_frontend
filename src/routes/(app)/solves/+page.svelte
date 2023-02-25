@@ -48,6 +48,10 @@
 	async function changeCubeType(type: CubeType): Promise<void> {}
 </script>
 
+<svelte:head>
+	<title>Эвлүүлэлтүүд</title>
+</svelte:head>
+
 <MobileContainer>
 	<div class="flex flex-col gap-2 overflow-y-auto p-4">
 		<h2 class="text-2xl text-white">Stats</h2>

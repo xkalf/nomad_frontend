@@ -8,19 +8,28 @@
 	import MobileContainer from '$lib/components/MobileContainer.svelte'
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
+	import Modal from '$lib/components/Modal.svelte'
+	import Hammer from 'hammerjs'
 
 	export let time: number
 	export let scramble: string | null
 	export let state: StateType
+	export let deleteAllModalOpen: boolean
+	export let deleteLastModalOpen: boolean
+	export let deleteCount: number
 	export let startTime: () => void
 	export let stopTime: () => Promise<void>
 	export let updateState: (input: StateType) => void
 	export let changeCubeType: (type: CubeType) => Promise<void>
+	export let deleteLastSolve: (count: number) => Promise<void>
+	export let removeSolves: () => Promise<void>
 
 	let timerEl: HTMLDivElement
 	let isCubeTypeOpen = false
 	let isScrambleDisplayOpen = false
 	let timeOutRef: NodeJS.Timeout
+	let isStateOpen = false
+	let latestTap: number
 
 	$: textColor =
 		state === 'ready' ? 'text-green-500' : state === 'waiting' ? 'text-red-400' : 'text-white'
@@ -42,10 +51,38 @@
 		skewb: 'text-2xl'
 	}
 
+	function doubleTap() {
+		const now = new Date().getTime()
+		const timeSince = now - latestTap
+		if (timeSince < 600 && timeSince > 0) {
+			console.log('double clicked')
+		}
+	}
+
 	onMount(() => {
 		if (browser) {
-			timerEl.addEventListener('touchstart', () => {
+			const hammer = new Hammer.Manager(timerEl)
+
+			hammer.add(new Hammer.Tap({ event: 'doubleTap', taps: 2 }))
+			hammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
+			hammer.add(new Hammer.Tap({ event: 'doubleMultiTap', pointers: 2 }))
+
+			hammer.on('doubleTap', () => {
+				isStateOpen = true
+			})
+
+			hammer.on('doubleMultiTap', () => {
+				deleteAllModalOpen = true
+			})
+
+			hammer.on('swipeLeft', () => {
+				deleteLastModalOpen = true
+			})
+
+			timerEl.addEventListener('touchstart', e => {
+				e.preventDefault()
 				if (state === 'stopped') {
+					doubleTap()
 					updateState('waiting')
 					timeOutRef = setTimeout(() => {
 						updateState('ready')
@@ -144,11 +181,7 @@
 	</div>
 </MobileContainer>
 
-<div
-	class={`${
-		isCubeTypeOpen ? 'block' : 'hidden'
-	} modal absolute top-1/2 left-1/2 w-64 text-center text-2xl text-white`}
->
+<div class={`${isCubeTypeOpen ? 'block' : 'hidden'} modal w-64 text-center text-2xl text-white`}>
 	<ul class="scrollbar max-h-64 overflow-y-auto rounded-xl bg-[#040404]">
 		{#each cubeTypes as type}
 			<li class="py-3">
@@ -171,8 +204,82 @@
 	>
 </div>
 
+<div class={`${isStateOpen ? 'block' : 'hidden'} modal w-64 text-center text-2xl text-white`}>
+	<ul class="scrollbar max-h-64 overflow-y-auto rounded-xl bg-[#040404]">
+		<li class="py-3">
+			<button
+				class="w-full"
+				on:click={() => {
+					isStateOpen = false
+				}}>+2</button
+			>
+		</li>
+		<li class="py-3">
+			<button
+				class="w-full"
+				on:click={() => {
+					isStateOpen = false
+				}}>DNF</button
+			>
+		</li>
+		<li class="py-3">
+			<button
+				class="w-full"
+				on:click={() => {
+					isStateOpen = false
+					deleteLastModalOpen = true
+				}}>Delete Last</button
+			>
+		</li>
+		<li class="py-3">
+			<button
+				class="w-full"
+				on:click={() => {
+					deleteAllModalOpen = true
+					isStateOpen = false
+				}}>Reset Session</button
+			>
+		</li>
+	</ul>
+
+	<button
+		class="mt-2 w-full rounded-xl bg-[#040404] py-3 text-white"
+		on:click={() => {
+			isStateOpen = false
+		}}>Cancel</button
+	>
+</div>
+
+<Modal
+	okFunction={() => deleteLastSolve(deleteCount)}
+	cancelFunction={() => {
+		deleteLastModalOpen = false
+	}}
+	isOpen={deleteLastModalOpen}
+>
+	<p class="text-lg text-white">Сүүлийн хэдэн эвлүүлэлтийг устгах уу?</p>
+	<input
+		bind:value={deleteCount}
+		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 pl-3 text-lg text-[#b8b8b8]"
+		type="text"
+	/>
+</Modal>
+
+<Modal
+	okFunction={removeSolves}
+	isOpen={deleteAllModalOpen}
+	cancelFunction={() => {
+		deleteAllModalOpen = false
+	}}
+>
+	<p class="text-lg text-white">Энэ session-ийн эвлүүлэлтүүдийг устгах уу?</p>
+</Modal>
+
 <style>
 	.modal {
+		top: 50%;
+		left: 50%;
+		position: absolute;
 		transform: translate(-50%, -50%);
 	}
 </style>

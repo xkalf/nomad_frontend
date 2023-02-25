@@ -11,6 +11,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Нэвтрэх</title>
+</svelte:head>
+
 <div class="h-screen md:grid md:grid-cols-2">
 	<div class="hidden bg-black md:block" />
 	<div class="flex h-full flex-col p-2 md:p-3">

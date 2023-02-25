@@ -5,7 +5,7 @@
 	import {
 		addSolves,
 		changeSolveStats,
-		deleteSolves,
+		deleteSolvesMany,
 		resetSolves,
 		solves
 	} from '$lib/stores/solves'
@@ -24,6 +24,7 @@
 	let lastScramble: string | null = null
 	let deleteAllModalOpen = false
 	let deleteLastModalOpen = false
+	let deleteCount = 1
 
 	function startTime() {
 		if (!$session) {
@@ -69,12 +70,15 @@
 		}
 	}
 
-	async function deleteLastSolve() {
-		const lastId = $solves[$solves.length - 1].id
+	async function deleteLastSolve(count: number = 1) {
+		const ids = $solves.slice(-1 * count).map(i => i.id)
 
-		const response = await (await fetch(`/api/solve/${lastId}`, { method: 'DELETE' })).json()
+		const response = await (
+			await fetch(`/api/solve`, { method: 'DELETE', body: JSON.stringify({ ids }) })
+		).json()
+
 		if (response.success === true) {
-			deleteSolves(lastId)
+			deleteSolvesMany(ids)
 			deleteLastModalOpen = false
 		}
 	}
@@ -82,7 +86,7 @@
 	async function changeCubeType(type: CubeType) {
 		scramble = null
 		setCubeType(type)
-		await Promise.all([newScramble(), getSessionByCube(type)])
+		await getSessionByCube(type)
 	}
 
 	async function newScramble() {
@@ -124,7 +128,7 @@
 
 			window.addEventListener('keydown', async e => {
 				if (e.key === ' ') {
-					if (state === 'stopped') {
+					if (state === 'stopped' && scramble) {
 						state = 'ready'
 					}
 				} else if (e.altKey) {
@@ -144,6 +148,7 @@
 						case 'KeyZ':
 							e.preventDefault()
 							deleteLastModalOpen = true
+							deleteCount = 1
 							return
 					}
 
@@ -196,12 +201,26 @@
 		startTime,
 		stopTime,
 		updateState,
-		changeCubeType
+		changeCubeType,
+		deleteLastSolve,
+		removeSolves
 	}
 </script>
 
+<svelte:head>
+	<title>Хугацаа хэмжигч</title>
+</svelte:head>
+
 <div class="md:hidden">
-	<Mobile {...mobileFunctions} {time} {scramble} {state} />
+	<Mobile
+		{...mobileFunctions}
+		{time}
+		{scramble}
+		{state}
+		{deleteLastModalOpen}
+		{deleteAllModalOpen}
+		{deleteCount}
+	/>
 </div>
 <div class="hidden md:block">
 	<Desktop
@@ -211,5 +230,6 @@
 		{state}
 		{deleteAllModalOpen}
 		{deleteLastModalOpen}
+		{deleteCount}
 	/>
 </div>

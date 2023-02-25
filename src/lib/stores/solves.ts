@@ -16,6 +16,10 @@ export function deleteSolves(id: number) {
 	solves.update(state => state.filter(i => i.id !== id))
 }
 
+export function deleteSolvesMany(ids: number[]) {
+	solves.update(state => state.filter(i => !ids.includes(i.id)))
+}
+
 export function changeSolveStats(id: number, status: SolveStatus) {
 	solves.update(state => {
 		const index = state.findIndex(i => i.id === id)

@@ -32,3 +32,20 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	return new Response(JSON.stringify(solve))
 }
+
+export const DELETE: RequestHandler = async ({ request }) => {
+	const data = (await request.json()) as { ids: number[] }
+
+	await db.solve.updateMany({
+		where: {
+			id: {
+				in: data.ids
+			}
+		},
+		data: {
+			deleted: new Date()
+		}
+	})
+
+	return new Response(JSON.stringify({ success: true }))
+}

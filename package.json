@@ -19,6 +19,7 @@
 		"@sveltejs/kit": "^1.0.0",
 		"@types/bcrypt": "^5.0.0",
 		"@types/gtag.js": "^0.0.12",
+		"@types/hammerjs": "^2.0.41",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.45.0",
 		"autoprefixer": "^10.4.13",
@@ -43,6 +44,7 @@
 		"@prisma/client": "^4.9.0",
 		"bcrypt": "^5.1.0",
 		"cubing": "^0.35.6",
+		"hammerjs": "^2.0.8",
 		"scramble-display": "^0.5.4",
 		"zod": "^3.20.2"
 	}

@@ -5,7 +5,9 @@
 
 	export let mobile = false
 
-	let sortMode: 'asc' | 'desc' | 'none' = 'none'
+	type sortModeType = 'asc' | 'desc' | 'none'
+
+	let sortMode: sortModeType = 'none'
 
 	$: formattedSolves =
 		sortMode === 'asc'
@@ -14,18 +16,14 @@
 			? $solves.slice().sort((a, b) => b.time - a.time)
 			: $solves.slice().reverse()
 
+	const sortModeMapper: Record<sortModeType, sortModeType> = {
+		none: 'asc',
+		asc: 'desc',
+		desc: 'none'
+	}
+
 	function changeSortMode() {
-		switch (sortMode) {
-			case 'none':
-				sortMode = 'asc'
-				break
-			case 'asc':
-				sortMode = 'desc'
-				break
-			case 'desc':
-				sortMode = 'none'
-				break
-		}
+		sortMode = sortModeMapper[sortMode]
 	}
 </script>
 
@@ -35,19 +33,17 @@
 	} flex flex-col overflow-y-auto rounded-xl`}
 >
 	<div
-		class="flex w-full items-center justify-around rounded-t-xl bg-[#3E4449] py-2 text-lg text-white"
+		class="flex w-full items-center justify-center rounded-t-xl bg-[#3E4449] py-2 text-lg text-white"
 	>
-		<button on:click={changeSortMode}>
+		<button class="h-5" on:click={changeSortMode}>
 			{#if sortMode === 'none'}
-				1-9
+				<Icon icon="ri:arrow-up-down-fill" width="22" />
 			{:else if sortMode === 'asc'}
-				9-1
+				<Icon icon="ri:arrow-up-fill" width="22" />
 			{:else if sortMode === 'desc'}
-				Эцсийн
+				<Icon icon="ri:arrow-down-fill" width="22" />
 			{/if}
 		</button>
-		<Icon icon="ri:arrow-up-down-fill" width="22" />
-		<button class="text-[#565D63]">B-W</button>
 	</div>
 	<!-- Solves -->
 	<ul class="scrollbar flex-grow overflow-y-auto p-4">

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import timerLogo from '$lib/assets/timer-logo.png'
+	import timerLogo from '$lib/assets/timer-logo.webp'
 	import Sidebar from './Sidebar.svelte'
 	import { displayTime, formatMegaminxScramble } from '$lib/utils/timer-utils'
 	import Modal from '$lib/components/Modal.svelte'
@@ -13,15 +13,16 @@
 	export let deleteAllModalOpen: boolean
 	export let deleteLastModalOpen: boolean
 	export let changeCubeType: (type: CubeType) => Promise<void>
-	export let deleteLastSolve: () => Promise<void>
+	export let deleteLastSolve: (count: number) => Promise<void>
 	export let removeSolves: () => Promise<void>
+	export let deleteCount: number
 
 	$: textColor = state === 'ready' ? 'text-green-500' : 'text-white'
 </script>
 
 <div class="grid h-screen grid-cols-[minmax(350px,_1fr)_4fr]">
 	<Sidebar {changeCubeType} />
-	<div class="flex flex-col justify-between overflow-hidden bg-[#363C41] p-4">
+	<div class="flex flex-col justify-between overflow-hidden bg-mainBg p-4">
 		<!-- Scramble -->
 		<div class="h-1/6 mt-[3vh] flex items-center justify-center p-20 pt-5 text-center">
 			<p
@@ -61,13 +62,18 @@
 </div>
 
 <Modal
-	okFunction={deleteLastSolve}
+	okFunction={() => deleteLastSolve(deleteCount)}
 	cancelFunction={() => {
 		deleteLastModalOpen = false
 	}}
 	isOpen={deleteLastModalOpen}
 >
-	<p class="text-lg text-white">Сүүлийн эвлүүлэлтийг устгах уу?</p>
+	<p class="text-lg text-white">Сүүлийн хэдэн эвлүүлэлтийг устгах уу?</p>
+	<input
+		bind:value={deleteCount}
+		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 pl-3 text-lg text-[#b8b8b8]"
+		type="text"
+	/>
 </Modal>
 
 <Modal

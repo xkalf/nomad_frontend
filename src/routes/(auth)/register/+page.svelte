@@ -2,7 +2,13 @@
 	import type { ActionData } from './$types'
 
 	export let form: ActionData
+
+	const a = 1
 </script>
+
+<svelte:head>
+	<title>Бүртгүүлэх</title>
+</svelte:head>
 
 <form method="POST" class="bg-[#111826] p-4">
 	<div class="mb-6">

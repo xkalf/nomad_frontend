@@ -1,3 +1,5 @@
+import type { DisplaySettings, ScrambleSettings, Settings, TimerSettings } from '@prisma/client'
+
 export const cubeTypes = [
 	'222',
 	'333',
@@ -75,3 +77,9 @@ export const shortcutMapper: { [key: string]: CubeType } = {
 }
 
 export type StateType = 'stopped' | 'running' | 'ready' | 'stopping' | 'waiting'
+
+export type MySettings = Settings & {
+	displaySettings: DisplaySettings | null
+	timerSettings: TimerSettings | null
+	scrambleSettings: ScrambleSettings | null
+}

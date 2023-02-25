@@ -6,7 +6,7 @@ module.exports = {
 			auto: 'auto',
 			...theme('spacing'),
 			full: '100%',
-			screen: 'calc(var(--vh) * 100)'
+			screen: '100dvh'
 		}),
 		minHeight: theme => ({
 			0: '0',
@@ -20,7 +20,8 @@ module.exports = {
 				sidebarBg: '#454f57',
 				sidebarElement: '#33393E',
 				scramble: '#B8B8B8',
-				mobileAverage: '#121315'
+				mobileAverage: '#121315',
+				mainBg: '#363C41'
 			},
 			fontFamily: {
 				inter: 'Inter, sans-serif'

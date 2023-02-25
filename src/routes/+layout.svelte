@@ -47,7 +47,6 @@
 	<meta name="og:image" content={logo} />
 	<meta name="og:title" content="Нүүдэлчин рубик шооны клуб" />
 	<meta name="og:type" content="website" />
-	<title>Нүүдэлчин клуб</title>
 </svelte:head>
 
 <slot />

@@ -32,7 +32,7 @@ model Solve {
   description String?   @db.VarChar
   sessionId   Int
   deleted     DateTime?
-  Session     Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  Session     Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
   @@index([sessionId])
 }
@@ -48,7 +48,9 @@ model User {
   password    String
   role        String        @default("user")
   sessions    Session[]
-  UserSession UserSession[]
+  userSession UserSession[]
+  settings    Settings?
+  settingsId  Int?
 }
 
 model UserSession {
@@ -56,5 +58,105 @@ model UserSession {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   token  String @unique @default(uuid())
   userId Int
+
   @@index([userId])
+}
+
+model Settings {
+  id                Int               @id @default(autoincrement())
+  displaySettings   DisplaySettings?
+  timerSettings     TimerSettings?
+  scrambleSettings   ScrambleSettings?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  userId            Int               @unique
+  user              User              @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model DisplaySettings {
+  id                     Int      @id @default(autoincrement())
+  zoom                   Int      @default(100)
+  font                   Font     @default(Mono)
+  backgroundImageOpacity Int      @default(25)
+  timerSize              Int      @default(25)
+  backgroundImage        String?
+  settings               Settings @relation(fields: [settingsId], references: [id])
+  settingsId             Int      @unique
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+enum Font {
+  Mono
+}
+
+model TimerSettings {
+  id                      Int                     @id @default(autoincrement())
+  useMouseTimer           Boolean                 @default(false)
+  useWcaInspection        UseWcaInspection        @default(Never)
+  voiceAlert              VoiceAlert              @default(None)
+  voiceVolume             Int                     @default(100)
+  enteringTimes           EnteringTimes           @default(Timer)
+  unitWhenEnteringInteger UnitWhenEnteringInteger @default(Full)
+  multiPhase              Int                     @default(1)
+  timerUpdate             TimerUpdate             @default(Point)
+  spaceDown               SpaceDown               @default(Three)
+  settings                Settings                @relation(fields: [settingsId], references: [id])
+  settingsId              Int                     @unique
+  createdAt               DateTime                @default(now())
+  updatedAt               DateTime                @updatedAt
+}
+
+enum UnitWhenEnteringInteger {
+  Full
+}
+
+enum UseWcaInspection {
+  Always
+  ExceptBLD
+  Never
+}
+
+enum VoiceAlert {
+  None
+}
+
+enum EnteringTimes {
+  Timer
+  Typing
+}
+
+enum TimerUpdate {
+  Update
+  Inspection
+  Seconds
+  Point // 0.1s
+  None
+}
+
+enum SpaceDown {
+  Zero // 0
+  Three // 0.3
+  Five // 0.55
+  One // 1
+}
+
+model ScrambleSettings {
+  id           Int       @id @default(autoincrement())
+  limitHeight  Boolean   @default(false)
+  scrambleSize Int       @default(25)
+  monospaced   Boolean   @default(false)
+  alignArea    AlignArea @default(Center)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  settings     Settings  @relation(fields: [settingsId], references: [id])
+  settingsId   Int @unique
+}
+
+enum AlignArea {
+  Center
+  Left
+  Right
 }
