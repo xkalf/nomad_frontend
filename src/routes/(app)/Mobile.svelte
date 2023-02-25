@@ -9,7 +9,6 @@
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
 	import Modal from '$lib/components/Modal.svelte'
-	import Hammer from 'hammerjs'
 
 	export let time: number
 	export let scramble: string | null
@@ -59,27 +58,27 @@
 		}
 	}
 
-	onMount(() => {
+	onMount(async () => {
 		if (browser) {
-			if (typeof window !== 'undefined') {
-				const hammer = new Hammer.Manager(timerEl)
+			const Hammer = await import('hammerjs')
+			const hammer = new Hammer.Manager(timerEl)
 
-				hammer.add(new Hammer.Tap({ event: 'doubleTap', taps: 2 }))
-				hammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
-				hammer.add(new Hammer.Tap({ event: 'doubleMultiTap', pointers: 2 }))
+			hammer.add(new Hammer.Tap({ event: 'doubleTap', taps: 2 }))
+			hammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
+			hammer.add(new Hammer.Tap({ event: 'doubleMultiTap', pointers: 2 }))
 
-				hammer.on('doubleTap', () => {
-					isStateOpen = true
-				})
+			hammer.on('doubleTap', () => {
+				isStateOpen = true
+			})
 
-				hammer.on('doubleMultiTap', () => {
-					deleteAllModalOpen = true
-				})
+			hammer.on('doubleMultiTap', () => {
+				deleteAllModalOpen = true
+			})
 
-				hammer.on('swipeLeft', () => {
-					deleteLastModalOpen = true
-				})
-			}
+			hammer.on('swipeLeft', () => {
+				deleteLastModalOpen = true
+			})
+
 			timerEl.addEventListener('touchstart', e => {
 				e.preventDefault()
 				if (state === 'stopped') {
