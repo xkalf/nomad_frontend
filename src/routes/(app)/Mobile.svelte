@@ -61,24 +61,25 @@
 
 	onMount(() => {
 		if (browser) {
-			const hammer = new Hammer.Manager(timerEl)
+			if (typeof window !== 'undefined') {
+				const hammer = new Hammer.Manager(timerEl)
 
-			hammer.add(new Hammer.Tap({ event: 'doubleTap', taps: 2 }))
-			hammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
-			hammer.add(new Hammer.Tap({ event: 'doubleMultiTap', pointers: 2 }))
+				hammer.add(new Hammer.Tap({ event: 'doubleTap', taps: 2 }))
+				hammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
+				hammer.add(new Hammer.Tap({ event: 'doubleMultiTap', pointers: 2 }))
 
-			hammer.on('doubleTap', () => {
-				isStateOpen = true
-			})
+				hammer.on('doubleTap', () => {
+					isStateOpen = true
+				})
 
-			hammer.on('doubleMultiTap', () => {
-				deleteAllModalOpen = true
-			})
+				hammer.on('doubleMultiTap', () => {
+					deleteAllModalOpen = true
+				})
 
-			hammer.on('swipeLeft', () => {
-				deleteLastModalOpen = true
-			})
-
+				hammer.on('swipeLeft', () => {
+					deleteLastModalOpen = true
+				})
+			}
 			timerEl.addEventListener('touchstart', e => {
 				e.preventDefault()
 				if (state === 'stopped') {
