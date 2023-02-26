@@ -2,7 +2,8 @@
 	import { cubeType } from '$lib/stores/cubeType'
 	import { session } from '$lib/stores/session'
 	import { deleteSession, sessions } from '$lib/stores/sessions'
-	import { getSessionById } from '$lib/utils/api'
+	import { solves } from '$lib/stores/solves'
+	import { getSessionByCube, getSessionById } from '$lib/utils/api'
 	import { cubeTypeMapper, cubeTypes, type CubeType } from '$lib/utils/types'
 	import Icon from '@iconify/svelte'
 	import type { Session } from '@prisma/client'
@@ -17,6 +18,12 @@
 	let isSessionCreate = false
 	let sessionName: string
 	$: isSessionDelete = $sessions.map(i => ({ id: i.id, isOpen: false }))
+	$: formattedSessions = $sessions.map(i => {
+		if (i.id === $session?.id) {
+			return { ...i, _count: { solves: $solves.length } }
+		}
+		return i
+	})
 
 	async function changeSession(id: number) {
 		if (id === $session.id) {
@@ -80,6 +87,7 @@
 
 		if (data.success) {
 			deleteSession(id)
+			await getSessionByCube($cubeType)
 		}
 	}
 </script>
@@ -90,12 +98,12 @@
 	<div>
 		{#if isSessionOpen}
 			<ul class="scrollbar my-2 ml-2 max-h-24 w-full overflow-y-auto">
-				{#each $sessions as s}
+				{#each formattedSessions as s}
 					<li class="flex justify-between pr-4">
 						<button
 							on:click={async () => {
 								await changeSession(s.id)
-							}}>{s.name}</button
+							}}>{s.name} ({s._count.solves})</button
 						>
 						{#if s.main === false}
 							<button
@@ -120,7 +128,9 @@
 				{/each}
 			</ul>
 		{:else}
-			<p class="my-2 ml-2">{$session?.name || ''}</p>
+			<p class="my-2 ml-2">
+				{$session?.name || ''} ({$solves.length})
+			</p>
 		{/if}
 	</div>
 	<div class="flex items-center gap-1">

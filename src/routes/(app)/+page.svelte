@@ -9,7 +9,7 @@
 		resetSolves,
 		solves
 	} from '$lib/stores/solves'
-	import { getSessionByCube } from '$lib/utils/api'
+	import { getSessionByCube, getSessionById } from '$lib/utils/api'
 	import { shortcutMapper, type CubeType, type SolveStatus, type StateType } from '$lib/utils/types'
 	import { generateScramble } from '$lib/utils/timer-utils'
 	import type { Solve } from '@prisma/client'
@@ -88,7 +88,15 @@
 	async function changeCubeType(type: CubeType) {
 		scramble = null
 		setCubeType(type)
-		await getSessionByCube(type)
+
+		if (browser) {
+			const id = localStorage.getItem(type)
+			if (id) {
+				await getSessionById(parseInt(id))
+			} else {
+				await getSessionByCube(type)
+			}
+		}
 	}
 
 	async function newScramble() {

@@ -1,4 +1,10 @@
-import type { DisplaySettings, ScrambleSettings, Settings, TimerSettings } from '@prisma/client'
+import type {
+	DisplaySettings,
+	ScrambleSettings,
+	Session,
+	Settings,
+	TimerSettings
+} from '@prisma/client'
 
 export const cubeTypes = [
 	'222',
@@ -82,4 +88,10 @@ export type MySettings = Settings & {
 	displaySettings: DisplaySettings | null
 	timerSettings: TimerSettings | null
 	scrambleSettings: ScrambleSettings | null
+}
+
+export type SessionWithSolvesCount = Session & {
+	_count: {
+		solves: number
+	}
 }

@@ -4,11 +4,11 @@ import { setSession } from '$lib/stores/session'
 import { initialSessions } from '$lib/stores/sessions'
 import { initialSolves } from '$lib/stores/solves'
 import type { Session, Solve } from '@prisma/client'
-import type { CubeType } from './types'
+import type { CubeType, SessionWithSolvesCount } from './types'
 
 export async function getSessionByCube(type: CubeType): Promise<void> {
 	const result = (await (await fetch(`/api/session?cube=${type}&main=true`)).json()) as {
-		sessions: Session[]
+		sessions: SessionWithSolvesCount[]
 	}
 
 	initialSessions(result.sessions)
@@ -21,7 +21,10 @@ export async function getSessionByCube(type: CubeType): Promise<void> {
 
 	setSession(currentSession.session)
 	initialSolves(currentSession.session.solves)
-	if (browser) localStorage.setItem('sessionId', id?.toString() || '')
+	if (browser) {
+		localStorage.setItem(type, id?.toString() || '')
+		localStorage.setItem('sessionId', currentSession.session.id.toString())
+	}
 }
 
 export async function getSessionById(id: number): Promise<void> {
@@ -30,7 +33,7 @@ export async function getSessionById(id: number): Promise<void> {
 	}
 
 	if (!currentSession.session) {
-		return
+		return getSessionByCube('333')
 	}
 
 	setSession(currentSession.session)
@@ -40,11 +43,12 @@ export async function getSessionById(id: number): Promise<void> {
 	const result = (await (
 		await fetch(`/api/session?cube=${currentSession.session.cube}`)
 	).json()) as {
-		sessions: Session[]
+		sessions: SessionWithSolvesCount[]
 	}
 
 	if (browser) {
 		localStorage.setItem('sessionId', currentSession.session.id.toString())
+		localStorage.setItem(currentSession.session.cube, currentSession.session.id.toString())
 	}
 
 	initialSessions(result.sessions)

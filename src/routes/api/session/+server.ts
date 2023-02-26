@@ -13,6 +13,17 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 		},
 		orderBy: {
 			name: 'asc'
+		},
+		include: {
+			_count: {
+				select: {
+					solves: {
+						where: {
+							deleted: null
+						}
+					}
+				}
+			}
 		}
 	})
 
@@ -23,6 +34,13 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 				main: true,
 				name: cubeTypeMapper[cube],
 				cube
+			},
+			include: {
+				_count: {
+					select: {
+						solves: true
+					}
+				}
 			}
 		})
 

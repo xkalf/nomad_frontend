@@ -31,6 +31,7 @@
 		const settings = (await (await fetch('/api/settings')).json()) as { settings: MySettings }
 		setSettings(settings.settings)
 		await getSession()
+
 		if (!$session) {
 			await getSessionByCube('333')
 		}
