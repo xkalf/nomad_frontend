@@ -10,12 +10,7 @@
 	export let time: number
 	export let state: StateType
 	export let scramble: string | null
-	export let deleteAllModalOpen: boolean
-	export let deleteLastModalOpen: boolean
 	export let changeCubeType: (type: CubeType) => Promise<void>
-	export let deleteLastSolve: (count: number) => Promise<void>
-	export let removeSolves: () => Promise<void>
-	export let deleteCount: number
 
 	$: textColor = state === 'ready' ? 'text-green-500' : 'text-white'
 </script>
@@ -60,28 +55,3 @@
 		</div>
 	</div>
 </div>
-
-<Modal
-	okFunction={() => deleteLastSolve(deleteCount)}
-	cancelFunction={() => {
-		deleteLastModalOpen = false
-	}}
-	isOpen={deleteLastModalOpen}
->
-	<p class="text-lg text-white">Сүүлийн хэдэн эвлүүлэлтийг устгах уу?</p>
-	<input
-		bind:value={deleteCount}
-		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 pl-3 text-lg text-[#b8b8b8]"
-		type="text"
-	/>
-</Modal>
-
-<Modal
-	okFunction={removeSolves}
-	isOpen={deleteAllModalOpen}
-	cancelFunction={() => {
-		deleteAllModalOpen = false
-	}}
->
-	<p class="text-lg text-white">Энэ session-ийн эвлүүлэлтүүдийг устгах уу?</p>
-</Modal>

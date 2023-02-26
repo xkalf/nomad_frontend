@@ -16,12 +16,14 @@
 	import { onMount } from 'svelte'
 	import Desktop from './Desktop.svelte'
 	import Mobile from './Mobile.svelte'
+	import Modal from '$lib/components/Modal.svelte'
 
 	let scramble: string | null
+	let currentScramble: string | null = null
+	let lastScramble: string | null = null
 	let time = 0
 	let state: StateType = 'stopped'
 	let interval: NodeJS.Timer
-	let lastScramble: string | null = null
 	let deleteAllModalOpen = false
 	let deleteLastModalOpen = false
 	let deleteCount = 1
@@ -91,7 +93,19 @@
 
 	async function newScramble() {
 		lastScramble = scramble
-		scramble = await generateScramble($cubeType)
+		if (currentScramble) {
+			scramble = currentScramble
+		} else {
+			scramble = await generateScramble($cubeType)
+		}
+		currentScramble = null
+	}
+
+	async function getLastScramble() {
+		if (!lastScramble) return
+
+		currentScramble = scramble
+		scramble = lastScramble
 	}
 
 	async function updateLastSolve(status: SolveStatus) {
@@ -135,7 +149,7 @@
 					switch (e.code) {
 						case 'ArrowLeft':
 							e.preventDefault()
-							if (lastScramble) scramble = lastScramble
+							await getLastScramble()
 							return
 						case 'ArrowRight':
 							e.preventDefault()
@@ -191,10 +205,16 @@
 		state = input
 	}
 
+	function openDeleteLastModal() {
+		deleteLastModalOpen = true
+	}
+
+	function openDeleteAllModal() {
+		deleteAllModalOpen = true
+	}
+
 	const desktopFunctions = {
-		changeCubeType,
-		deleteLastSolve,
-		removeSolves
+		changeCubeType
 	}
 
 	const mobileFunctions = {
@@ -202,8 +222,11 @@
 		stopTime,
 		updateState,
 		changeCubeType,
-		deleteLastSolve,
-		removeSolves
+		newScramble,
+		getLastScramble,
+		openDeleteLastModal,
+		openDeleteAllModal,
+		updateLastSolve
 	}
 </script>
 
@@ -212,24 +235,33 @@
 </svelte:head>
 
 <div class="md:hidden">
-	<Mobile
-		{...mobileFunctions}
-		{time}
-		{scramble}
-		{state}
-		{deleteLastModalOpen}
-		{deleteAllModalOpen}
-		{deleteCount}
-	/>
+	<Mobile {...mobileFunctions} {time} {scramble} {state} />
 </div>
 <div class="hidden md:block">
-	<Desktop
-		{...desktopFunctions}
-		{scramble}
-		{time}
-		{state}
-		{deleteAllModalOpen}
-		{deleteLastModalOpen}
-		{deleteCount}
-	/>
+	<Desktop {...desktopFunctions} {time} {scramble} {state} />
 </div>
+
+<Modal
+	okFunction={() => deleteLastSolve(deleteCount)}
+	cancelFunction={() => {
+		deleteLastModalOpen = false
+	}}
+	isOpen={deleteLastModalOpen}
+>
+	<p class="text-lg text-white">Сүүлийн хэдэн эвлүүлэлтийг устгах уу?</p>
+	<input
+		bind:value={deleteCount}
+		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 pl-3 text-lg text-[#b8b8b8]"
+		type="text"
+	/>
+</Modal>
+
+<Modal
+	okFunction={removeSolves}
+	isOpen={deleteAllModalOpen}
+	cancelFunction={() => {
+		deleteAllModalOpen = false
+	}}
+>
+	<p class="text-lg text-white">Энэ session-ийн эвлүүлэлтүүдийг устгах уу?</p>
+</Modal>

@@ -1,6 +1,12 @@
 <script lang="ts">
 	import logo from '$lib/assets/scramble-logo.png'
-	import { cubeTypeMapper, cubeTypes, type CubeType, type StateType } from '$lib/utils/types'
+	import {
+		cubeTypeMapper,
+		cubeTypes,
+		type CubeType,
+		type SolveStatus,
+		type StateType
+	} from '$lib/utils/types'
 	import { displayTime, formatMegaminxScramble, getAvg, getBest } from '$lib/utils/timer-utils'
 	import { solves } from '$lib/stores/solves'
 	import { browser } from '$app/environment'
@@ -8,27 +14,26 @@
 	import MobileContainer from '$lib/components/MobileContainer.svelte'
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
-	import Modal from '$lib/components/Modal.svelte'
 
 	export let time: number
 	export let scramble: string | null
 	export let state: StateType
-	export let deleteAllModalOpen: boolean
-	export let deleteLastModalOpen: boolean
-	export let deleteCount: number
 	export let startTime: () => void
 	export let stopTime: () => Promise<void>
 	export let updateState: (input: StateType) => void
 	export let changeCubeType: (type: CubeType) => Promise<void>
-	export let deleteLastSolve: (count: number) => Promise<void>
-	export let removeSolves: () => Promise<void>
+	export let newScramble: () => Promise<void>
+	export let getLastScramble: () => Promise<void>
+	export let updateLastSolve: (status: SolveStatus) => Promise<void>
+	export let openDeleteLastModal: () => void
+	export let openDeleteAllModal: () => void
 
 	let timerEl: HTMLDivElement
+	let scrambleEl: HTMLDivElement
 	let isCubeTypeOpen = false
 	let isScrambleDisplayOpen = false
-	let timeOutRef: NodeJS.Timeout
 	let isStateOpen = false
-	let latestTap: number
+	let timeOutRef: NodeJS.Timeout
 
 	$: textColor =
 		state === 'ready' ? 'text-green-500' : state === 'waiting' ? 'text-red-400' : 'text-white'
@@ -50,39 +55,52 @@
 		skewb: 'text-2xl'
 	}
 
-	function doubleTap() {
-		const now = new Date().getTime()
-		const timeSince = now - latestTap
-		if (timeSince < 600 && timeSince > 0) {
-			console.log('double clicked')
-		}
-	}
-
 	onMount(async () => {
 		if (browser) {
 			const Hammer = await import('hammerjs')
 			const hammer = new Hammer.Manager(timerEl)
+			const sHammer = new Hammer.Manager(scrambleEl)
 
 			hammer.add(new Hammer.Tap({ event: 'doubleTap', taps: 2 }))
+			hammer.add(new Hammer.Tap({ event: 'doubleMultiTap', pointers: 2, taps: 2 }))
+			hammer.add(new Hammer.Swipe({ event: 'swipeRight', direction: Hammer.DIRECTION_RIGHT }))
 			hammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
-			hammer.add(new Hammer.Tap({ event: 'doubleMultiTap', pointers: 2 }))
+			hammer.add(
+				new Hammer.Swipe({ event: 'multiSwipeUp', direction: Hammer.DIRECTION_UP, pointers: 2 })
+			)
+			sHammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
+			sHammer.add(new Hammer.Swipe({ event: 'swipeRight', direction: Hammer.DIRECTION_RIGHT }))
 
 			hammer.on('doubleTap', () => {
 				isStateOpen = true
 			})
 
 			hammer.on('doubleMultiTap', () => {
-				deleteAllModalOpen = true
+				openDeleteAllModal()
+			})
+
+			hammer.on('swipeRight', async () => {
+				await newScramble()
 			})
 
 			hammer.on('swipeLeft', () => {
-				deleteLastModalOpen = true
+				openDeleteLastModal()
+			})
+
+			hammer.on('multiSwipeUp', () => {
+				isCubeTypeOpen = true
+			})
+
+			sHammer.on('swipeRight', async () => {
+				await newScramble()
+			})
+
+			sHammer.on('swipeLeft', async () => {
+				await getLastScramble()
 			})
 
 			timerEl.addEventListener('touchstart', e => {
-				e.preventDefault()
 				if (state === 'stopped') {
-					doubleTap()
 					updateState('waiting')
 					timeOutRef = setTimeout(() => {
 						updateState('ready')
@@ -114,13 +132,8 @@
 <MobileContainer>
 	<div class="flex flex-grow flex-col p-4">
 		<div>
-			<button
-				class="mt-4 w-full rounded-lg bg-white text-xl"
-				on:click={() => {
-					isCubeTypeOpen = true
-				}}>{cubeTypeMapper[$cubeType]}</button
-			>
 			<div
+				bind:this={scrambleEl}
 				class={`${scrambleSizeMapper[$cubeType]} mt-8 flex items-center justify-center text-center text-[#b8b8b8]`}
 			>
 				<p class={`${$cubeType === 'minx' && 'text-justify'}`}>
@@ -209,7 +222,8 @@
 		<li class="py-3">
 			<button
 				class="w-full"
-				on:click={() => {
+				on:click={async () => {
+					await updateLastSolve('+2')
 					isStateOpen = false
 				}}>+2</button
 			>
@@ -217,7 +231,8 @@
 		<li class="py-3">
 			<button
 				class="w-full"
-				on:click={() => {
+				on:click={async () => {
+					await updateLastSolve('dnf')
 					isStateOpen = false
 				}}>DNF</button
 			>
@@ -225,19 +240,10 @@
 		<li class="py-3">
 			<button
 				class="w-full"
-				on:click={() => {
+				on:click={async () => {
+					await updateLastSolve('ok')
 					isStateOpen = false
-					deleteLastModalOpen = true
-				}}>Delete Last</button
-			>
-		</li>
-		<li class="py-3">
-			<button
-				class="w-full"
-				on:click={() => {
-					deleteAllModalOpen = true
-					isStateOpen = false
-				}}>Reset Session</button
+				}}>OK</button
 			>
 		</li>
 	</ul>
@@ -249,31 +255,6 @@
 		}}>Cancel</button
 	>
 </div>
-
-<Modal
-	okFunction={() => deleteLastSolve(deleteCount)}
-	cancelFunction={() => {
-		deleteLastModalOpen = false
-	}}
-	isOpen={deleteLastModalOpen}
->
-	<p class="text-lg text-white">Сүүлийн хэдэн эвлүүлэлтийг устгах уу?</p>
-	<input
-		bind:value={deleteCount}
-		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 pl-3 text-lg text-[#b8b8b8]"
-		type="text"
-	/>
-</Modal>
-
-<Modal
-	okFunction={removeSolves}
-	isOpen={deleteAllModalOpen}
-	cancelFunction={() => {
-		deleteAllModalOpen = false
-	}}
->
-	<p class="text-lg text-white">Энэ session-ийн эвлүүлэлтүүдийг устгах уу?</p>
-</Modal>
 
 <style>
 	.modal {
