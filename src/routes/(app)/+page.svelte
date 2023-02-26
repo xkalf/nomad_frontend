@@ -226,7 +226,8 @@
 		getLastScramble,
 		openDeleteLastModal,
 		openDeleteAllModal,
-		updateLastSolve
+		updateLastSolve,
+		createSolve
 	}
 </script>
 

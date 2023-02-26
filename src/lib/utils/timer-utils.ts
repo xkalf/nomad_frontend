@@ -130,3 +130,11 @@ export function formatMegaminxScramble(scramble: string) {
 	const formatted = scramble.replace(/\n/g, '<br />')
 	return formatted
 }
+
+export function formatTimeInput(time: number) {
+	const hours = Math.floor(time / 1000000)
+	const minutes = Math.floor((time % 1000000) / 10000)
+	const seconds = Math.floor((time % 10000) / 100)
+	const milliSeconds = (time % 100) * 10
+	return hours * 3_600_000 + minutes * 60_000 + seconds * 1000 + milliSeconds
+}

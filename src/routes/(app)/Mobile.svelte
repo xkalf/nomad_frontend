@@ -7,13 +7,20 @@
 		type SolveStatus,
 		type StateType
 	} from '$lib/utils/types'
-	import { displayTime, formatMegaminxScramble, getAvg, getBest } from '$lib/utils/timer-utils'
+	import {
+		displayTime,
+		formatMegaminxScramble,
+		formatTimeInput,
+		getAvg,
+		getBest
+	} from '$lib/utils/timer-utils'
 	import { solves } from '$lib/stores/solves'
 	import { browser } from '$app/environment'
 	import { onMount } from 'svelte'
 	import MobileContainer from '$lib/components/MobileContainer.svelte'
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
+	import Modal from '$lib/components/Modal.svelte'
 
 	export let time: number
 	export let scramble: string | null
@@ -27,6 +34,7 @@
 	export let updateLastSolve: (status: SolveStatus) => Promise<void>
 	export let openDeleteLastModal: () => void
 	export let openDeleteAllModal: () => void
+	export let createSolve: (time: number) => Promise<void>
 
 	let timerEl: HTMLDivElement
 	let scrambleEl: HTMLDivElement
@@ -34,6 +42,13 @@
 	let isScrambleDisplayOpen = false
 	let isStateOpen = false
 	let timeOutRef: NodeJS.Timeout
+	let customTime: number
+	let isCustomTimeModalOpen = false
+
+	async function createCustomSolve() {
+		await createSolve(formatTimeInput(customTime))
+		isCustomTimeModalOpen = false
+	}
 
 	$: textColor =
 		state === 'ready' ? 'text-green-500' : state === 'waiting' ? 'text-red-400' : 'text-white'
@@ -68,6 +83,8 @@
 			hammer.add(
 				new Hammer.Swipe({ event: 'multiSwipeUp', direction: Hammer.DIRECTION_UP, pointers: 2 })
 			)
+			hammer.add(new Hammer.Swipe({ event: 'swipeDown', direction: Hammer.DIRECTION_DOWN }))
+
 			sHammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
 			sHammer.add(new Hammer.Swipe({ event: 'swipeRight', direction: Hammer.DIRECTION_RIGHT }))
 
@@ -89,6 +106,10 @@
 
 			hammer.on('multiSwipeUp', () => {
 				isCubeTypeOpen = true
+			})
+
+			hammer.on('swipeDown', () => {
+				isCustomTimeModalOpen = true
 			})
 
 			sHammer.on('swipeRight', async () => {
@@ -193,6 +214,20 @@
 		<ScrambleDisplay {scramble} mobile />
 	</div>
 </MobileContainer>
+
+<Modal
+	okFunction={createCustomSolve}
+	isOpen={isCustomTimeModalOpen}
+	cancelFunction={() => (isCustomTimeModalOpen = false)}
+	mode="create"
+>
+	<p class="text-lg text-white">Эвлүүлэлтийн хугацаа</p>
+	<input
+		bind:value={customTime}
+		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 pl-3 text-lg text-[#b8b8b8]"
+		type="number"
+	/>
+</Modal>
 
 <div class={`${isCubeTypeOpen ? 'block' : 'hidden'} modal w-64 text-center text-2xl text-white`}>
 	<ul class="scrollbar max-h-64 overflow-y-auto rounded-xl bg-[#040404]">
