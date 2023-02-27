@@ -76,8 +76,8 @@
 			const hammer = new Hammer.Manager(timerEl)
 			const sHammer = new Hammer.Manager(scrambleEl)
 
-			hammer.add(new Hammer.Tap({ event: 'doubleTap', taps: 2 }))
-			hammer.add(new Hammer.Tap({ event: 'doubleMultiTap', pointers: 2, taps: 2 }))
+			hammer.add(new Hammer.Tap({ event: 'doubleTap', taps: 2, interval: 700 }))
+			hammer.add(new Hammer.Tap({ event: 'doubleMultiTap', pointers: 2, taps: 2, interval: 700 }))
 			hammer.add(new Hammer.Swipe({ event: 'swipeRight', direction: Hammer.DIRECTION_RIGHT }))
 			hammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
 			hammer.add(
@@ -88,36 +88,38 @@
 			sHammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
 			sHammer.add(new Hammer.Swipe({ event: 'swipeRight', direction: Hammer.DIRECTION_RIGHT }))
 
+			const isReady = state === 'waiting' || state === 'stopped'
+
 			hammer.on('doubleTap', () => {
-				if (state === 'stopped') isStateOpen = true
+				if (isReady) isStateOpen = true
 			})
 
 			hammer.on('doubleMultiTap', () => {
-				if (state === 'stopped') openDeleteAllModal()
+				if (isReady) openDeleteAllModal()
 			})
 
 			hammer.on('swipeRight', async () => {
-				if (state === 'stopped') await newScramble()
+				if (isReady) await newScramble()
 			})
 
 			hammer.on('swipeLeft', () => {
-				if (state === 'stopped') openDeleteLastModal()
+				if (isReady) openDeleteLastModal()
 			})
 
 			hammer.on('multiSwipeUp', () => {
-				if (state === 'stopped') isCubeTypeOpen = true
+				if (isReady) isCubeTypeOpen = true
 			})
 
 			hammer.on('swipeDown', () => {
-				if (state === 'stopped') isCustomTimeModalOpen = true
+				if (isReady) isCustomTimeModalOpen = true
 			})
 
 			sHammer.on('swipeRight', async () => {
-				if (state === 'stopped') await newScramble()
+				if (isReady) await newScramble()
 			})
 
 			sHammer.on('swipeLeft', async () => {
-				if (state === 'stopped') await getLastScramble()
+				if (isReady) await getLastScramble()
 			})
 
 			timerEl.addEventListener('touchstart', e => {
