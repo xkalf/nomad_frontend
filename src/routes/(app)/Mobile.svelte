@@ -213,7 +213,7 @@
 		<div class="flex w-full items-center justify-end text-2xl text-white">
 			<button class="p-4" on:click={() => (isScrambleDisplayOpen = false)}>X</button>
 		</div>
-		<ScrambleDisplay {scramble} mobile />
+		<ScrambleDisplay {scramble} />
 	</div>
 </MobileContainer>
 
