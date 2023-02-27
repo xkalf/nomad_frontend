@@ -89,35 +89,35 @@
 			sHammer.add(new Hammer.Swipe({ event: 'swipeRight', direction: Hammer.DIRECTION_RIGHT }))
 
 			hammer.on('doubleTap', () => {
-				isStateOpen = true
+				if (state === 'stopped') isStateOpen = true
 			})
 
 			hammer.on('doubleMultiTap', () => {
-				openDeleteAllModal()
+				if (state === 'stopped') openDeleteAllModal()
 			})
 
 			hammer.on('swipeRight', async () => {
-				await newScramble()
+				if (state === 'stopped') await newScramble()
 			})
 
 			hammer.on('swipeLeft', () => {
-				openDeleteLastModal()
+				if (state === 'stopped') openDeleteLastModal()
 			})
 
 			hammer.on('multiSwipeUp', () => {
-				isCubeTypeOpen = true
+				if (state === 'stopped') isCubeTypeOpen = true
 			})
 
 			hammer.on('swipeDown', () => {
-				isCustomTimeModalOpen = true
+				if (state === 'stopped') isCustomTimeModalOpen = true
 			})
 
 			sHammer.on('swipeRight', async () => {
-				await newScramble()
+				if (state === 'stopped') await newScramble()
 			})
 
 			sHammer.on('swipeLeft', async () => {
-				await getLastScramble()
+				if (state === 'stopped') await getLastScramble()
 			})
 
 			timerEl.addEventListener('touchstart', e => {

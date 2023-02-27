@@ -3,6 +3,7 @@ import type {
 	ScrambleSettings,
 	Session,
 	Settings,
+	Solve,
 	TimerSettings
 } from '@prisma/client'
 
@@ -88,6 +89,10 @@ export type MySettings = Settings & {
 	displaySettings: DisplaySettings | null
 	timerSettings: TimerSettings | null
 	scrambleSettings: ScrambleSettings | null
+}
+
+export type SessionWithSolves = Session & {
+	solves: Solve[]
 }
 
 export type SessionWithSolvesCount = Session & {

@@ -2,29 +2,16 @@
 	import Icon from '@iconify/svelte'
 	import Solve from './Solve.svelte'
 	import { solves } from '../stores/solves'
+	import { changeSortMode, sortMode } from '$lib/stores/sortModa'
 
 	export let mobile = false
 
-	type sortModeType = 'asc' | 'desc' | 'none'
-
-	let sortMode: sortModeType = 'none'
-
 	$: formattedSolves =
-		sortMode === 'asc'
+		$sortMode === 'asc'
 			? $solves.slice().sort((a, b) => a.time - b.time)
-			: sortMode === 'desc'
+			: $sortMode === 'desc'
 			? $solves.slice().sort((a, b) => b.time - a.time)
 			: $solves.slice().reverse()
-
-	const sortModeMapper: Record<sortModeType, sortModeType> = {
-		none: 'asc',
-		asc: 'desc',
-		desc: 'none'
-	}
-
-	function changeSortMode() {
-		sortMode = sortModeMapper[sortMode]
-	}
 </script>
 
 <div
@@ -36,11 +23,11 @@
 		class="flex w-full items-center justify-center rounded-t-xl bg-[#3E4449] py-2 text-lg text-white"
 	>
 		<button class="h-5" on:click={changeSortMode}>
-			{#if sortMode === 'none'}
+			{#if $sortMode === 'none'}
 				<Icon icon="ri:arrow-up-down-fill" width="22" />
-			{:else if sortMode === 'asc'}
+			{:else if $sortMode === 'asc'}
 				<Icon icon="ri:arrow-up-fill" width="22" />
-			{:else if sortMode === 'desc'}
+			{:else if $sortMode === 'desc'}
 				<Icon icon="ri:arrow-down-fill" width="22" />
 			{/if}
 		</button>
@@ -49,7 +36,7 @@
 	<ul class="scrollbar flex-grow overflow-y-auto p-4">
 		{#each formattedSolves as solve, index}
 			<li>
-				<Solve order={sortMode === 'none' ? formattedSolves.length - index : index + 1} {solve} />
+				<Solve order={$sortMode === 'none' ? formattedSolves.length - index : index + 1} {solve} />
 			</li>
 		{/each}
 	</ul>

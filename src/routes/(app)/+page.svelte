@@ -17,6 +17,7 @@
 	import Desktop from './Desktop.svelte'
 	import Mobile from './Mobile.svelte'
 	import Modal from '$lib/components/Modal.svelte'
+	import { sortMode } from '$lib/stores/sortModa'
 
 	let scramble: string | null
 	let currentScramble: string | null = null
@@ -73,7 +74,27 @@
 	}
 
 	async function deleteLastSolve(count: number = 1) {
-		const ids = $solves.slice(-1 * count).map(i => i.id)
+		let sortedSolves: Solve[] = []
+
+		switch ($sortMode) {
+			case 'none':
+				sortedSolves = $solves.slice(-1 * count)
+				break
+			case 'asc':
+				sortedSolves = $solves
+					.slice()
+					.sort((a, b) => a.time - b.time)
+					.slice(0, count)
+				break
+			case 'desc':
+				sortedSolves = $solves
+					.slice()
+					.sort((a, b) => b.time - a.time)
+					.slice(0, count)
+				break
+		}
+
+		const ids = sortedSolves.map(i => i.id)
 
 		const response = await (
 			await fetch(`/api/solve`, { method: 'DELETE', body: JSON.stringify({ ids }) })

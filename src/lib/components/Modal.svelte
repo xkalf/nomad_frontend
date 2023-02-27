@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment'
-	import image from '$lib/assets/ads.png'
+	import image from '$lib/assets/ads.webp'
 	import { onMount } from 'svelte'
 
 	export let okFunction: () => Promise<void>

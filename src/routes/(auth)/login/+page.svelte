@@ -1,5 +1,5 @@
 <script lang="ts">
-	import horizontalLogo from '$lib/assets/horizontal-logo.png'
+	import horizontalLogo from '$lib/assets/horizontal-logo.webp'
 	import type { ActionData } from './$types'
 	import Icon from '@iconify/svelte'
 
