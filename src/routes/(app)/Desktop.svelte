@@ -2,7 +2,6 @@
 	import timerLogo from '$lib/assets/timer-logo.webp'
 	import Sidebar from './Sidebar.svelte'
 	import { displayTime, formatMegaminxScramble } from '$lib/utils/timer-utils'
-	import Modal from '$lib/components/Modal.svelte'
 	import type { CubeType, StateType } from '$lib/utils/types'
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'

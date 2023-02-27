@@ -12,7 +12,7 @@ module.exports = {
 			0: '0',
 			...theme('spacing'),
 			full: '100%',
-			screen: 'calc(var(--vh) * 100)'
+			screen: '100svh'
 		}),
 		extend: {
 			colors: {

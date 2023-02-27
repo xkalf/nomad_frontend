@@ -2,8 +2,6 @@
 	import '../app.css'
 	import logo from '$lib/assets/vertical-logo.png'
 	import { page } from '$app/stores'
-	import { onMount } from 'svelte'
-	import { browser } from '$app/environment'
 
 	$: {
 		if (typeof gtag !== 'undefined') {
@@ -13,21 +11,6 @@
 			})
 		}
 	}
-
-	function setViewHeight() {
-		if (browser) {
-			let vh = window.innerHeight * 0.01
-			document.documentElement.style.setProperty('--vh', `${vh}px`)
-		}
-	}
-
-	onMount(() => {
-		setViewHeight()
-
-		window.addEventListener('resize', () => {
-			setViewHeight()
-		})
-	})
 </script>
 
 <svelte:head>
