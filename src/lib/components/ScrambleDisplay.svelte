@@ -3,7 +3,6 @@
 	import { onMount } from 'svelte'
 
 	export let scramble: string | null
-	export let mobile = false
 
 	let container: HTMLDivElement
 	let el: any
@@ -12,7 +11,7 @@
 		const { ScrambleDisplay } = await import('scramble-display')
 		el = new ScrambleDisplay()
 		el.event = $cubeType
-		el.visualization = mobile ? '2D' : $cubeType === 'pyram' ? '2D' : '3D'
+		el.visualization = $cubeType === 'pyram' ? '2D' : '3D'
 		el.style.width = '100%'
 		el.scramble = scramble
 
@@ -21,6 +20,10 @@
 
 	$: if (el) {
 		el.scramble = scramble
+	}
+
+	$: if (el) {
+		el.event = $cubeType
 	}
 </script>
 
