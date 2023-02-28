@@ -208,7 +208,7 @@
 	<div
 		class={`${
 			isScrambleDisplayOpen ? 'block' : 'hidden'
-		} absolute bottom-20 right-1/2 w-4/5 translate-x-[60%] bg-[#3A3E42]`}
+		} absolute bottom-20 right-1/2 w-4/5 translate-x-[60%] bg-[#3A3E42] pb-4`}
 	>
 		<div class="flex w-full items-center justify-end text-2xl text-white">
 			<button class="p-4" on:click={() => (isScrambleDisplayOpen = false)}>X</button>

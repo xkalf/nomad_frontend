@@ -2,7 +2,7 @@ import type { RequestHandler } from './$types'
 import db from '$lib/db'
 import { cubeTypeMapper, type CubeType } from '$lib/utils/types'
 
-export const GET: RequestHandler = async ({ locals, url }) => {
+export const GET: RequestHandler = async ({ locals, url, cookies }) => {
 	const cube = url.searchParams.get('cube') as CubeType
 
 	const sessions = await db.session.findMany({
@@ -43,7 +43,10 @@ export const GET: RequestHandler = async ({ locals, url }) => {
 				}
 			}
 		})
-
+		cookies.set('sessionId', newSession.id.toString(), {
+			path: '/',
+			secure: process.env.NODE_ENV === 'production'
+		})
 		return new Response(JSON.stringify({ sessions: [newSession] }))
 	}
 

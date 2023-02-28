@@ -159,6 +159,7 @@
 	})
 
 	onMount(async () => {
+		await newScramble()
 		if (browser) {
 			window.addEventListener('keyup', e => {
 				if (e.key === ' ') {

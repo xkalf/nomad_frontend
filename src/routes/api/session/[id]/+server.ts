@@ -1,7 +1,7 @@
 import db from '$lib/db'
 import type { RequestHandler } from './$types'
 
-export const GET: RequestHandler = async ({ params: { id } }) => {
+export const GET: RequestHandler = async ({ params: { id }, cookies }) => {
 	const session = await db.session.findFirst({
 		where: {
 			id: +id,
@@ -19,6 +19,10 @@ export const GET: RequestHandler = async ({ params: { id } }) => {
 		}
 	})
 
+	cookies.set('sessionId', id, {
+		path: '/',
+		secure: process.env.NODE_ENV === 'production'
+	})
 	return new Response(JSON.stringify({ session }))
 }
 

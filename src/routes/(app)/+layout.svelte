@@ -1,41 +1,21 @@
 <script lang="ts">
-	import { browser } from '$app/environment'
-	import { cubeType } from '$lib/stores/cubeType'
-	import { session } from '$lib/stores/session'
+	import { setCubeType } from '$lib/stores/cubeType'
+	import { setSession } from '$lib/stores/session'
+	import { initialSessions } from '$lib/stores/sessions'
 	import { setSettings } from '$lib/stores/settings'
-	import { getSessionByCube, getSessionById } from '$lib/utils/api'
-	import type { MySettings } from '$lib/utils/types'
-	import { onMount } from 'svelte'
+	import { initialSolves } from '$lib/stores/solves'
+	import type { CubeType } from '$lib/utils/types'
+	import type { LayoutServerData } from './$types'
 
-	async function getSession() {
-		if (browser) {
-			const sessionId = localStorage.getItem('sessionId')
+	export let data: LayoutServerData
 
-			if (!sessionId) {
-				await getSessionByCube($cubeType)
-				return
-			}
-
-			const id = parseFloat(sessionId || '')
-
-			if (isNaN(id)) {
-				await getSessionByCube($cubeType)
-				return
-			}
-
-			await getSessionById(id)
-		}
+	setSettings(data.settings)
+	if (data.getSessions) {
+		setSession(data.getSessions.session)
+		initialSessions(data.getSessions.sessions)
+		initialSolves(data.getSessions.session.solves)
+		setCubeType(data.getSessions.session.cube as CubeType)
 	}
-
-	onMount(async () => {
-		const settings = (await (await fetch('/api/settings')).json()) as { settings: MySettings }
-		setSettings(settings.settings)
-		await getSession()
-
-		if (!$session) {
-			await getSessionByCube('333')
-		}
-	})
 </script>
 
 <slot />
