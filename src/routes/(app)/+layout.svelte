@@ -5,6 +5,8 @@
 	import { setSettings } from '$lib/stores/settings'
 	import { initialSolves } from '$lib/stores/solves'
 	import type { CubeType } from '$lib/utils/types'
+	import type { Solve } from '@prisma/client'
+	import { onMount } from 'svelte'
 	import type { LayoutServerData } from './$types'
 
 	export let data: LayoutServerData
@@ -13,9 +15,20 @@
 	if (data.getSessions) {
 		setSession(data.getSessions.session)
 		initialSessions(data.getSessions.sessions)
-		initialSolves(data.getSessions.session.solves)
 		setCubeType(data.getSessions.session.cube as CubeType)
 	}
+
+	onMount(async () => {
+		if (data.getSessions?.session) {
+			const solves = (await (
+				await fetch(`/api/solve?sessionId=${data.getSessions.session.id}`)
+			).json()) as { success: boolean; solves?: Solve[] }
+
+			if (solves.solves) {
+				initialSolves(solves.solves)
+			}
+		}
+	})
 </script>
 
 <slot />

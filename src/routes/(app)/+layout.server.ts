@@ -1,10 +1,6 @@
 import db from '$lib/db'
-import {
-	cubeTypeMapper,
-	type MySettings,
-	type SessionWithSolves,
-	type SessionWithSolvesCount
-} from '$lib/utils/types'
+import { cubeTypeMapper, type MySettings, type SessionWithSolvesCount } from '$lib/utils/types'
+import type { Session } from '@prisma/client'
 import { redirect } from '@sveltejs/kit'
 import type { LayoutServerLoad } from './$types'
 
@@ -17,7 +13,7 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 	}
 
 	const getSessions = async () => {
-		let session: SessionWithSolves | null = null
+		let session: Session | null = null
 		let sessions: SessionWithSolvesCount[]
 
 		if (sessionId) {
@@ -25,11 +21,6 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 				where: {
 					id: +sessionId,
 					deleted: null
-				},
-				include: {
-					solves: {
-						where: { deleted: null }
-					}
 				}
 			})
 		}
@@ -40,11 +31,6 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 					deleted: null,
 					cube: '333',
 					main: true
-				},
-				include: {
-					solves: {
-						where: { deleted: null }
-					}
 				}
 			})
 		}
@@ -55,9 +41,6 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 					cube: '333',
 					name: cubeTypeMapper['333'],
 					main: true
-				},
-				include: {
-					solves: true
 				}
 			})
 		}

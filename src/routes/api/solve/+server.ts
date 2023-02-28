@@ -10,7 +10,8 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	const solves = await db.solve.findMany({
 		where: {
-			sessionId: Number(sessionId)
+			sessionId: Number(sessionId),
+			deleted: null
 		}
 	})
 
