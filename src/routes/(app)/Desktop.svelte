@@ -16,7 +16,7 @@
 
 <div class="grid h-screen grid-cols-[minmax(350px,_1fr)_4fr]">
 	<Sidebar {changeCubeType} />
-	<div class="flex flex-col justify-between overflow-hidden bg-mainBg p-4">
+	<div class="relative flex flex-col justify-between overflow-hidden bg-mainBg p-4">
 		<!-- Scramble -->
 		<div class="h-1/6 mt-[3vh] flex items-center justify-center p-20 pt-5 text-center">
 			<p
@@ -34,7 +34,7 @@
 			</p>
 		</div>
 		<!-- Time -->
-		<div class="flex items-center justify-center">
+		<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
 			<p class={`${textColor} font-mono text-[200px] leading-6`}>{displayTime(time)}</p>
 		</div>
 		<div class="grid grid-cols-[3fr,_minmax(70px,_1fr)]">
