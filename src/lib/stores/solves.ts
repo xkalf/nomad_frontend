@@ -8,6 +8,14 @@ export function addSolves(solve: Solve) {
 	solves.update(state => [...state, solve])
 }
 
+export function addManySolves(s: Solve[]) {
+	solves.update(state => [...state, ...s])
+}
+
+export function sortSolvesByCreatedAt() {
+	solves.update(state => state.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()))
+}
+
 export function initialSolves(s: Solve[]) {
 	solves.set(s)
 }

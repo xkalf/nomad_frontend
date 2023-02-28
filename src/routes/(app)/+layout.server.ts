@@ -20,7 +20,8 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 			session = await db.session.findFirst({
 				where: {
 					id: +sessionId,
-					deleted: null
+					deleted: null,
+					userId: locals.user.id
 				}
 			})
 		}
@@ -30,7 +31,8 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 				where: {
 					deleted: null,
 					cube: '333',
-					main: true
+					main: true,
+					userId: locals.user.id
 				}
 			})
 		}
@@ -40,7 +42,8 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 				data: {
 					cube: '333',
 					name: cubeTypeMapper['333'],
-					main: true
+					main: true,
+					userId: locals.user.id
 				}
 			})
 		}
@@ -54,7 +57,8 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 			sessions = await db.session.findMany({
 				where: {
 					cube: session?.cube,
-					deleted: null
+					deleted: null,
+					userId: locals.user.id
 				},
 				include: {
 					_count: {

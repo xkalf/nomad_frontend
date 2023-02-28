@@ -10,11 +10,13 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	const solves = await db.solve.findMany({
 		where: {
-			sessionId: Number(sessionId),
+			sessionId: +sessionId,
 			deleted: null
+		},
+		orderBy: {
+			createdAt: 'asc'
 		}
 	})
-
 	return new Response(JSON.stringify({ success: true, solves }))
 }
 

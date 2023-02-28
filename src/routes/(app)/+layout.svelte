@@ -3,7 +3,7 @@
 	import { setSession } from '$lib/stores/session'
 	import { initialSessions } from '$lib/stores/sessions'
 	import { setSettings } from '$lib/stores/settings'
-	import { initialSolves } from '$lib/stores/solves'
+	import { addManySolves, initialSolves, sortSolvesByCreatedAt } from '$lib/stores/solves'
 	import type { CubeType } from '$lib/utils/types'
 	import type { Solve } from '@prisma/client'
 	import { onMount } from 'svelte'
@@ -18,15 +18,19 @@
 		setCubeType(data.getSessions.session.cube as CubeType)
 	}
 
-	onMount(async () => {
-		if (data.getSessions?.session) {
-			const solves = (await (
-				await fetch(`/api/solve?sessionId=${data.getSessions.session.id}`)
-			).json()) as { success: boolean; solves?: Solve[] }
+	async function getSolves(sessionId: number) {
+		const solves = (await (await fetch(`/api/solve?sessionId=${sessionId}`)).json()) as {
+			success: boolean
+			solves?: Solve[]
+		}
+		if (solves.solves) {
+			initialSolves(solves.solves)
+		}
+	}
 
-			if (solves.solves) {
-				initialSolves(solves.solves)
-			}
+	onMount(() => {
+		if (data.getSessions?.session) {
+			getSolves(data.getSessions.session.id)
 		}
 	})
 </script>
