@@ -19,6 +19,7 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 	const getSessions = async () => {
 		let session: SessionWithSolves | null = null
 		let sessions: SessionWithSolvesCount[]
+
 		if (sessionId) {
 			session = await db.session.findFirst({
 				where: {
@@ -31,34 +32,34 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 					}
 				}
 			})
+		}
 
-			if (!session) {
-				session = await db.session.findFirst({
-					where: {
-						deleted: null,
-						cube: '333',
-						main: true
-					},
-					include: {
-						solves: {
-							where: { deleted: null }
-						}
+		if (!session) {
+			session = await db.session.findFirst({
+				where: {
+					deleted: null,
+					cube: '333',
+					main: true
+				},
+				include: {
+					solves: {
+						where: { deleted: null }
 					}
-				})
-			}
+				}
+			})
+		}
 
-			if (!session) {
-				session = await db.session.create({
-					data: {
-						cube: '333',
-						name: cubeTypeMapper['333'],
-						main: true
-					},
-					include: {
-						solves: true
-					}
-				})
-			}
+		if (!session) {
+			session = await db.session.create({
+				data: {
+					cube: '333',
+					name: cubeTypeMapper['333'],
+					main: true
+				},
+				include: {
+					solves: true
+				}
+			})
 		}
 
 		if (session) {
