@@ -153,14 +153,14 @@
 	}
 
 	session.subscribe(async value => {
-		if (value?.cube) {
+		if (value?.cube && browser) {
 			scramble = await generateScramble(value.cube as CubeType)
 		}
 	})
 
 	onMount(async () => {
-		await newScramble()
 		if (browser) {
+			await newScramble()
 			window.addEventListener('keyup', e => {
 				if (e.key === ' ') {
 					if (state === 'ready') {

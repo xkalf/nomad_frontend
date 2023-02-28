@@ -23,7 +23,7 @@
 		</div>
 		<div class="mx-auto flex flex-grow flex-col justify-center md:w-4/5 md:-translate-y-24">
 			<div class="mx-auto flex w-4/5 flex-col justify-center md:w-full">
-				<img src={horizontalLogo} alt="rubik logo" class="w-full" />
+				<img src={horizontalLogo} alt="rubik logo" class="mx-auto mb-4 w-3/5" width="300" />
 				<p class="text-center text-[8px] text-black md:text-xs">
 					Илүү олууллаа болцгооё. Тэмцээнд хэрхэн бүртгүүлэх талаар аль болох дэлгэрэнгүй заавар
 					бичлэг бэлтгэлээ. Анх оролцох гэж байгаа тамирчидад маш их хэрэг болон гэдэгт итгэлтэй

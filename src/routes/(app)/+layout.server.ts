@@ -63,6 +63,11 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 		}
 
 		if (session) {
+			cookies.set('sessionId', session.id.toString(), {
+				path: '/',
+				secure: process.env.NODE_ENV === 'production'
+			})
+
 			sessions = await db.session.findMany({
 				where: {
 					cube: session?.cube,

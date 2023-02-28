@@ -52,11 +52,11 @@ export const getAvg = (arr: Solve[], length: number) => {
 		return displayTime(0)
 	}
 
-	if (arr.filter(i => i.status === 'dnf').length >= 2) {
+	const array = arr.slice(-1 * length)
+
+	if (array.filter(i => i.status === 'dnf').length >= 2) {
 		return 'DNF'
 	}
-
-	const array = arr.slice(-1 * length)
 
 	const sum = array.filter(i => i.status !== 'dnf').reduce((a, b) => (a += b.time), 0)
 	const max = array.find(i => i.status === 'dnf') ? 0 : Math.max(...array.map(i => i.time))
