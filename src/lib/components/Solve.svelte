@@ -3,7 +3,7 @@
 	import type { Solve } from '@prisma/client'
 	import { changeSolveStats, deleteSolves } from '../stores/solves'
 	import type { SolveStatus } from '../utils/types'
-	import { displayTime } from '../utils/timer-utils'
+	import { formatTime } from '../utils/timer-utils'
 
 	export let order: number
 	export let solve: Solve
@@ -54,13 +54,7 @@
 </Modal>
 
 <div class="flex justify-between p-2 text-white">
-	{#if solve.status === 'ok'}
-		<span>{order}. {displayTime(solve.time)}</span>
-	{:else if solve.status === 'dnf'}
-		<span>{order}. (DNF)</span>
-	{:else if solve.status === '+2'}
-		<span>{order}. +{displayTime(solve.time + 2000)}</span>
-	{/if}
+	<span>{order}. {formatTime(solve)}</span>
 	<div class="flex gap-1">
 		<button
 			class="text-red-500"

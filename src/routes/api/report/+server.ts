@@ -1,5 +1,5 @@
 import db from '$lib/db'
-import { displayTime } from '$lib/utils/timer-utils'
+import { formatTime } from '$lib/utils/timer-utils'
 import type { RequestHandler } from '@sveltejs/kit'
 
 export const GET: RequestHandler = async ({ url }) => {
@@ -19,9 +19,9 @@ export const GET: RequestHandler = async ({ url }) => {
 			}
 		},
 		orderBy: {
-			createdAt: 'desc'
+			createdAt: 'asc'
 		}
 	})
 
-	return new Response(JSON.stringify(sessions.map(i => ({ ...i, time: displayTime(i.time) }))))
+	return new Response(JSON.stringify(sessions.map(i => ({ ...i, time: formatTime(i) }))))
 }

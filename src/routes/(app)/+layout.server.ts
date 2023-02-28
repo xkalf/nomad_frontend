@@ -59,6 +59,9 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 					deleted: null,
 					userId: locals.user.id
 				},
+				orderBy: {
+					name: 'asc'
+				},
 				include: {
 					_count: {
 						select: { solves: { where: { deleted: null } } }

@@ -23,16 +23,38 @@ export const displayTime = (time: number) => {
 	return base
 }
 
-const pad = (num: number) => {
+export const formatTime = (solve: Solve) => {
+	switch (solve.status as SolveStatus) {
+		case 'ok':
+			return displayTime(solve.time)
+		case '+2':
+			return '+' + displayTime(solve.time + 2000)
+		case 'dnf':
+			return 'DNF'
+	}
+}
+
+export const pad = (num: number) => {
 	return num.toString().padStart(2, '0')
 }
 
-export const getBest = (arr: Solve[]) => {
+export const getBest = (arr: Solve[]): string => {
 	if (arr.length === 0) {
 		return displayTime(0)
 	}
 
-	const best = Math.min(...arr.filter(i => i.status !== 'dnf').map(i => i.time))
+	const best = Math.min(
+		...arr
+			.filter(i => i.status !== 'dnf')
+			.map(i => {
+				if (i.status === '+2') {
+					return { ...i, time: i.time + 2000 }
+				} else {
+					return i
+				}
+			})
+			.map(i => i.time)
+	)
 
 	return displayTime(best)
 }
@@ -67,9 +89,10 @@ export const getAvg = (arr: Solve[], length: number) => {
 	return displayTime(avg)
 }
 
-export const getBestAverage = (arr: Solve[], length: number) => {
-	if (arr.length < length) return displayTime(0)
+export const getBestAverage = (arr: Solve[], length: number): Solve[] => {
+	if (arr.length < length) return []
 	let best: number | undefined
+	let bestArray: Solve[] = []
 
 	for (let i = 0; i < arr.length - length + 1; i++) {
 		const array = arr.slice(i, length + i)
@@ -82,14 +105,13 @@ export const getBestAverage = (arr: Solve[], length: number) => {
 
 		const avg = (sum - min - max) / (array.length - 2)
 
-		if (!best) {
+		if (!best || avg < best) {
 			best = avg
-		} else if (avg < best) {
-			best = avg
+			bestArray = array
 		}
 	}
 
-	return displayTime(best || 0)
+	return bestArray
 }
 
 export function getMean(solves: Solve[]) {

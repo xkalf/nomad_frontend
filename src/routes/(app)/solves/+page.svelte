@@ -6,8 +6,9 @@
 	import { solves } from '$lib/stores/solves'
 	import type { CubeType } from '$lib/utils/types'
 	import { getAvg, getBest, getBestAverage, getMean } from '$lib/utils/timer-utils'
+	import type { Solve } from '@prisma/client'
 
-	let averages: { label: string; value: string }[]
+	let averages: { label: string; value?: string; solves?: Solve[]; count?: number }[]
 
 	$: $solves,
 		(averages = [
@@ -21,27 +22,33 @@
 			},
 			{
 				label: 'Ao5 Best',
-				value: getBestAverage($solves, 5)
+				solves: getBestAverage($solves, 5),
+				count: 5
 			},
 			{
 				label: 'Ao5',
-				value: getAvg($solves, 5)
+				solves: $solves.slice(-5),
+				count: 5
 			},
 			{
 				label: 'Ao12 Best',
-				value: getBestAverage($solves, 12)
+				solves: getBestAverage($solves, 12),
+				count: 12
 			},
 			{
 				label: 'Ao12',
-				value: getAvg($solves, 12)
+				solves: $solves.slice(-12),
+				count: 12
 			},
 			{
 				label: 'Ao50',
-				value: getAvg($solves, 50)
+				solves: $solves.slice(-50),
+				count: 50
 			},
 			{
 				label: 'Ao100',
-				value: getAvg($solves, 100)
+				solves: $solves.slice(-100),
+				count: 100
 			}
 		])
 
@@ -57,7 +64,14 @@
 		<h2 class="text-2xl text-white">Stats</h2>
 		<div class="grid grid-cols-2 gap-4">
 			{#each averages as average}
-				<Average best mobile label={average.label} value={average.value} />
+				<Average
+					best
+					mobile
+					label={average.label}
+					value={average.value}
+					count={average.count}
+					solves={average.solves}
+				/>
 			{/each}
 		</div>
 		<h2 class="mt-2 text-2xl text-white">Solves</h2>

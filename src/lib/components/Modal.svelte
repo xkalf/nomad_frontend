@@ -48,9 +48,4 @@
 		border-radius: 10px;
 		transform: translate(-50%, -50%);
 	}
-
-	.button {
-		background: linear-gradient(180deg, #363c41 29.35%, #1f252b 128.76%);
-		border-radius: 10px;
-	}
 </style>
