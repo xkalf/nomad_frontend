@@ -12,7 +12,7 @@
 	import { getSessionByCube, getSessionById } from '$lib/utils/api'
 	import { shortcutMapper, type StateType } from '$lib/utils/types'
 	import { generateScramble } from '$lib/utils/timer-utils'
-	import { CubeType, SolveStatus, type Solve } from '@prisma/client'
+	import type { CubeType, SolveStatus, Solve } from '@prisma/client'
 	import { onMount } from 'svelte'
 	import Desktop from './Desktop.svelte'
 	import Mobile from './Mobile.svelte'
@@ -208,15 +208,15 @@
 					switch (e.code) {
 						case 'Digit1':
 							e.preventDefault()
-							await updateLastSolve(SolveStatus.Ok)
+							await updateLastSolve('Ok')
 							return
 						case 'Digit2':
 							e.preventDefault()
-							await updateLastSolve(SolveStatus.Plus2)
+							await updateLastSolve('Plus2')
 							return
 						case 'Digit3':
 							e.preventDefault()
-							await updateLastSolve(SolveStatus.Dnf)
+							await updateLastSolve('Dnf')
 							return
 					}
 				}

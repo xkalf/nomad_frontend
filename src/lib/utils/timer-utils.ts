@@ -1,4 +1,4 @@
-import { CubeType, SolveStatus, type Solve } from '@prisma/client'
+import { SolveStatus, type Solve, type CubeType } from '@prisma/client'
 import { randomScrambleForEvent } from 'cubing/scramble'
 import { scrambleMappper } from './types'
 

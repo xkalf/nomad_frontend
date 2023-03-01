@@ -15,7 +15,7 @@
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
 	import Modal from '$lib/components/Modal.svelte'
-	import { CubeType, SolveStatus } from '@prisma/client'
+	import type { CubeType, SolveStatus } from '@prisma/client'
 
 	export let time: number
 	export let scramble: string | null
@@ -250,7 +250,7 @@
 			<button
 				class="w-full"
 				on:click={async () => {
-					await updateLastSolve(SolveStatus.Plus2)
+					await updateLastSolve('Plus2')
 					isStateOpen = false
 				}}>+2</button
 			>
@@ -259,7 +259,7 @@
 			<button
 				class="w-full"
 				on:click={async () => {
-					await updateLastSolve(SolveStatus.Dnf)
+					await updateLastSolve('Dnf')
 					isStateOpen = false
 				}}>DNF</button
 			>
@@ -268,7 +268,7 @@
 			<button
 				class="w-full"
 				on:click={async () => {
-					await updateLastSolve(SolveStatus.Ok)
+					await updateLastSolve('Ok')
 					isStateOpen = false
 				}}>OK</button
 			>
