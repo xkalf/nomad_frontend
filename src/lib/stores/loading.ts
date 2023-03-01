@@ -12,3 +12,7 @@ export const setLayoutLoading = (l: boolean) => {
 export const setPageLoading = (l: boolean) => {
 	loading.update(i => ({ ...i, page: l }))
 }
+
+export const setLoading = (l: boolean) => {
+	loading.set({ layout: l, page: l })
+}

@@ -14,8 +14,6 @@
 	import { generateScramble } from '$lib/utils/timer-utils'
 	import type { CubeType, SolveStatus, Solve } from '@prisma/client'
 	import { onMount } from 'svelte'
-	import Desktop from './Desktop.svelte'
-	import Mobile from './Mobile.svelte'
 	import Modal from '$lib/components/Modal.svelte'
 	import { sortMode } from '$lib/stores/sortModa'
 	import { setPageLoading } from '$lib/stores/loading'
@@ -29,6 +27,7 @@
 	let deleteAllModalOpen = false
 	let deleteLastModalOpen = false
 	let deleteCount = 1
+	let width: number
 
 	function startTime() {
 		if (!$session) {
@@ -268,13 +267,16 @@
 	<title>Хугацаа хэмжигч</title>
 </svelte:head>
 
-<!-- <div class="h-screen" /> -->
-
-<div class="md:hidden">
-	<Mobile {...mobileFunctions} {time} {scramble} {state} />
-</div>
-<div class="hidden md:block">
-	<Desktop {...desktopFunctions} {time} {scramble} {state} />
+<div bind:clientWidth={width}>
+	{#if width > 768}
+		{#await import('./Desktop.svelte') then Module}
+			<Module.default {...desktopFunctions} {time} {scramble} {state} />
+		{/await}
+	{:else}
+		{#await import('./Mobile.svelte') then Module}
+			<Module.default {...mobileFunctions} {time} {scramble} {state} />
+		{/await}
+	{/if}
 </div>
 
 <Modal
