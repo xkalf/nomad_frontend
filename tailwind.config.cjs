@@ -26,8 +26,15 @@ module.exports = {
 			fontFamily: {
 				inter: 'Inter, sans-serif'
 			},
+			keyframes: {
+				rotate: {
+					'0%, 15%': { transform: 'rotate(0deg)' },
+					'85%, 100%': { transform: 'rotate(360deg)' }
+				}
+			},
 			animation: {
-				'spin-slow': 'spin 2s linear'
+				'spin-slow': 'spin 2s linear infinite',
+				rotate: 'rotate 2s ease-in-out infinite 2s'
 			}
 		}
 	},

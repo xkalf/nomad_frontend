@@ -1,20 +1,8 @@
 <script lang="ts">
 	import arrow from '$lib/assets/arrow.webp'
 	import loadingLogo from '$lib/assets/loading-logo.webp'
-	import { onMount } from 'svelte'
 
 	export let loading = false
-	let start = false
-
-	onMount(() => {
-		function rotateSpinner() {
-			start = false
-			setTimeout(() => {
-				start = true
-			}, 200)
-		}
-		setInterval(rotateSpinner, 2200)
-	})
 </script>
 
 <div
@@ -27,5 +15,5 @@
 		src={loadingLogo}
 		alt="loading-logo"
 	/>
-	<img class={`z-0 ${start ? 'animate-spin-slow' : ''}`} src={arrow} alt="arrow" />
+	<img class={`z-0 animate-rotate`} src={arrow} alt="arrow" />
 </div>

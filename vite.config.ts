@@ -3,6 +3,7 @@ import type { UserConfig } from 'vite'
 import { createRequire } from 'module'
 import path from 'path'
 
+// For Prisma enums
 const require = createRequire(import.meta.url)
 
 const prismaClient = require
