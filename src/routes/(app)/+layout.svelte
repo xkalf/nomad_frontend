@@ -1,5 +1,7 @@
 <script lang="ts">
+	import Loading from '$lib/components/Loading.svelte'
 	import { setCubeType } from '$lib/stores/cubeType'
+	import { loading, setLoading } from '$lib/stores/loading'
 	import { setSession } from '$lib/stores/session'
 	import { initialSessions } from '$lib/stores/sessions'
 	import { setSettings } from '$lib/stores/settings'
@@ -29,9 +31,12 @@
 
 	onMount(() => {
 		if (data.getSessions?.session) {
+			setLoading(false)
 			getSolves(data.getSessions.session.id)
 		}
 	})
 </script>
+
+<Loading loading={$loading} />
 
 <slot />

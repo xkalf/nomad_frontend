@@ -6,14 +6,18 @@
 </script>
 
 <div
-	class={`absolute top-1/2 left-1/2 h-60 w-60 -translate-x-1/2 -translate-y-1/2 overflow-hidden md:h-96 md:w-96 ${
+	class={`absolute top-0 left-0 z-40 h-screen w-full backdrop-blur-sm ${
 		loading ? 'block' : 'hidden'
 	}`}
 >
-	<img
-		class="absolute top-1/2 left-1/2 z-10 w-40 -translate-x-1/2 -translate-y-1/2 md:w-64"
-		src={loadingLogo}
-		alt="loading-logo"
-	/>
-	<img class={`z-0 animate-rotate`} src={arrow} alt="arrow" />
+	<div
+		class={`absolute top-1/2 left-1/2 h-60 w-60 -translate-x-1/2 -translate-y-1/2 overflow-hidden md:h-96 md:w-96`}
+	>
+		<img
+			class="absolute top-1/2 left-1/2 z-10 w-40 -translate-x-1/2 -translate-y-1/2 md:w-64"
+			src={loadingLogo}
+			alt="loading-logo"
+		/>
+		<img class={`z-0 animate-rotate`} src={arrow} alt="arrow" />
+	</div>
 </div>

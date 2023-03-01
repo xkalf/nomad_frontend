@@ -18,7 +18,7 @@
 	import Mobile from './Mobile.svelte'
 	import Modal from '$lib/components/Modal.svelte'
 	import { sortMode } from '$lib/stores/sortModa'
-	import Loading from '$lib/components/Loading.svelte'
+	import { setLoading } from '$lib/stores/loading'
 
 	let scramble: string | null
 	let currentScramble: string | null = null
@@ -29,7 +29,6 @@
 	let deleteAllModalOpen = false
 	let deleteLastModalOpen = false
 	let deleteCount = 1
-	let loading = false
 
 	function startTime() {
 		if (!$session) {
@@ -162,9 +161,9 @@
 
 	onMount(async () => {
 		if (browser) {
-			loading = true
+			setLoading(true)
 			await newScramble()
-			loading = false
+			setLoading(false)
 			window.addEventListener('keyup', e => {
 				if (e.key === ' ') {
 					if (state === 'ready') {
@@ -275,8 +274,6 @@
 <div class="hidden md:block">
 	<Desktop {...desktopFunctions} {time} {scramble} {state} />
 </div>
-
-<Loading {loading} />
 
 <Modal
 	okFunction={() => deleteLastSolve(deleteCount)}
