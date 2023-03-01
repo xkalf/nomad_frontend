@@ -18,7 +18,7 @@
 	import Mobile from './Mobile.svelte'
 	import Modal from '$lib/components/Modal.svelte'
 	import { sortMode } from '$lib/stores/sortModa'
-	import { setLoading } from '$lib/stores/loading'
+	import { setPageLoading } from '$lib/stores/loading'
 
 	let scramble: string | null
 	let currentScramble: string | null = null
@@ -161,9 +161,9 @@
 
 	onMount(async () => {
 		if (browser) {
-			setLoading(true)
+			setPageLoading(true)
 			await newScramble()
-			setLoading(false)
+			setPageLoading(false)
 			window.addEventListener('keyup', e => {
 				if (e.key === ' ') {
 					if (state === 'ready') {
