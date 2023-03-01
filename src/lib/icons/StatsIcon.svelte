@@ -3,9 +3,9 @@
 </script>
 
 <svg
-	width="58"
-	height="56"
-	viewBox="-4 -4 58 56"
+	width="50"
+	height="30"
+	viewBox="0 9 50 30"
 	fill="white"
 	fill-opacity={open ? 1 : 0.5}
 	xmlns="http://www.w3.org/2000/svg"

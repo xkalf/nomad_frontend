@@ -268,6 +268,8 @@
 	<title>Хугацаа хэмжигч</title>
 </svelte:head>
 
+<!-- <div class="h-screen" /> -->
+
 <div class="md:hidden">
 	<Mobile {...mobileFunctions} {time} {scramble} {state} />
 </div>

@@ -14,7 +14,7 @@
 
 <div class="mobile-page relative flex h-screen flex-col">
 	<slot />
-	<div class="mt-auto flex items-center justify-around bg-[#040404] p-4">
+	<div class="mt-auto flex h-24 items-center justify-around bg-[#040404] p-4">
 		<a data-sveltekit-preload-data href="/">
 			<HomeIcon open={getIconColor('/(app)')} />
 		</a>
