@@ -1,12 +1,6 @@
 <script lang="ts">
 	import logo from '$lib/assets/scramble-logo.png'
-	import {
-		cubeTypeMapper,
-		cubeTypes,
-		type CubeType,
-		type SolveStatus,
-		type StateType
-	} from '$lib/utils/types'
+	import { cubeTypeMapper, cubeTypes, type StateType } from '$lib/utils/types'
 	import {
 		displayTime,
 		formatMegaminxScramble,
@@ -21,6 +15,7 @@
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
 	import Modal from '$lib/components/Modal.svelte'
+	import { CubeType, SolveStatus } from '@prisma/client'
 
 	export let time: number
 	export let scramble: string | null
@@ -46,7 +41,7 @@
 	let isCustomTimeModalOpen = false
 
 	async function createCustomSolve() {
-		await createSolve(formatTimeInput(customTime))
+		Promise.all([createSolve(formatTimeInput(customTime)), newScramble()])
 		isCustomTimeModalOpen = false
 	}
 
@@ -54,20 +49,20 @@
 		state === 'ready' ? 'text-green-500' : state === 'waiting' ? 'text-red-400' : 'text-white'
 
 	const scrambleSizeMapper: Record<CubeType, string> = {
-		'222': 'text-2xl',
-		'333': 'text-2xl',
-		'444': 'text-base',
-		'555': 'text-sm',
-		'666': 'text-xs',
-		'777': 'text-xs',
-		'333bf': 'text-2xl',
-		'444bf': 'text-base',
-		'555bf': 'text-sm',
-		sq1: 'text-2xl',
-		pyram: 'text-2xl',
-		minx: 'text-sm',
-		clock: 'text-2xl',
-		skewb: 'text-2xl'
+		N2: 'text-2xl',
+		N3: 'text-2xl',
+		N4: 'text-base',
+		N5: 'text-sm',
+		N6: 'text-xs',
+		N7: 'text-xs',
+		Bld3: 'text-2xl',
+		Bld4: 'text-base',
+		Bld5: 'text-sm',
+		Sq1: 'text-2xl',
+		Pyraminx: 'text-2xl',
+		Megaminx: 'text-sm',
+		Clock: 'text-2xl',
+		Skewb: 'text-2xl'
 	}
 
 	onMount(async () => {
@@ -113,7 +108,10 @@
 			})
 
 			hammer.on('swipeDown', () => {
-				if (isReady()) isCustomTimeModalOpen = true
+				if (isReady()) {
+					customTime = 0
+					isCustomTimeModalOpen = true
+				}
 			})
 
 			sHammer.on('swipeRight', async () => {
@@ -161,10 +159,10 @@
 				bind:this={scrambleEl}
 				class={`${scrambleSizeMapper[$cubeType]} mt-8 flex items-center justify-center text-center text-[#b8b8b8]`}
 			>
-				<p class={`${$cubeType === 'minx' && 'text-justify'}`}>
+				<p class={`${$cubeType === 'Megaminx' && 'text-justify'}`}>
 					{#if !scramble}
 						Холилт хийж байна
-					{:else if $cubeType === 'minx'}
+					{:else if $cubeType === 'Megaminx'}
 						{@html formatMegaminxScramble(scramble)}
 					{:else}
 						{scramble}
@@ -252,7 +250,7 @@
 			<button
 				class="w-full"
 				on:click={async () => {
-					await updateLastSolve('+2')
+					await updateLastSolve(SolveStatus.Plus2)
 					isStateOpen = false
 				}}>+2</button
 			>
@@ -261,7 +259,7 @@
 			<button
 				class="w-full"
 				on:click={async () => {
-					await updateLastSolve('dnf')
+					await updateLastSolve(SolveStatus.Dnf)
 					isStateOpen = false
 				}}>DNF</button
 			>
@@ -270,7 +268,7 @@
 			<button
 				class="w-full"
 				on:click={async () => {
-					await updateLastSolve('ok')
+					await updateLastSolve(SolveStatus.Ok)
 					isStateOpen = false
 				}}>OK</button
 			>

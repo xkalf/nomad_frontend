@@ -1,5 +1,5 @@
 import db from '$lib/db'
-import type { SolveStatus } from '$lib/utils/types'
+import type { SolveStatus } from '@prisma/client'
 import type { RequestHandler } from './$types'
 
 export const DELETE: RequestHandler = async ({ params: { id } }) => {

@@ -11,7 +11,7 @@
 		const { ScrambleDisplay } = await import('scramble-display')
 		el = new ScrambleDisplay()
 		el.event = $cubeType
-		el.visualization = $cubeType === 'pyram' ? '2D' : '3D'
+		el.visualization = $cubeType === 'Pyraminx' ? '2D' : '3D'
 		el.style.width = '100%'
 		el.scramble = scramble
 

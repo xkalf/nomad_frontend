@@ -27,7 +27,7 @@ module.exports = {
 				inter: 'Inter, sans-serif'
 			},
 			animation: {
-				'spin-slow': 'spin 1.8s linear infinite'
+				'spin-slow': 'spin 2s linear'
 			}
 		}
 	},

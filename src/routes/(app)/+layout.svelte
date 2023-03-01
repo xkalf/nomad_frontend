@@ -3,9 +3,8 @@
 	import { setSession } from '$lib/stores/session'
 	import { initialSessions } from '$lib/stores/sessions'
 	import { setSettings } from '$lib/stores/settings'
-	import { addManySolves, initialSolves, sortSolvesByCreatedAt } from '$lib/stores/solves'
-	import type { CubeType } from '$lib/utils/types'
-	import type { Solve } from '@prisma/client'
+	import { initialSolves } from '$lib/stores/solves'
+	import type { CubeType, Solve } from '@prisma/client'
 	import { onMount } from 'svelte'
 	import type { LayoutServerData } from './$types'
 

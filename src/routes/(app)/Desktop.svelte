@@ -2,9 +2,10 @@
 	import timerLogo from '$lib/assets/timer-logo.webp'
 	import Sidebar from './Sidebar.svelte'
 	import { displayTime, formatMegaminxScramble } from '$lib/utils/timer-utils'
-	import type { CubeType, StateType } from '$lib/utils/types'
+	import type { StateType } from '$lib/utils/types'
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
+	import type { CubeType } from '@prisma/client'
 
 	export let time: number
 	export let state: StateType
@@ -21,12 +22,12 @@
 		<div class="h-1/6 mt-[3vh] flex items-center justify-center p-20 pt-5 text-center">
 			<p
 				class={`text-5xl text-scramble ${
-					$cubeType === 'minx' && 'text-justify font-mono text-2xl md:text-3xl'
-				} ${$cubeType === '777' || $cubeType === '666' ? 'text-2xl lg:text-3xl' : ''}`}
+					$cubeType === 'Megaminx' && 'text-justify font-mono text-2xl md:text-3xl'
+				} ${$cubeType === 'N7' || $cubeType === 'N6' ? 'text-2xl lg:text-3xl' : ''}`}
 			>
 				{#if !scramble}
 					Холилт хийж байна
-				{:else if $cubeType === 'minx'}
+				{:else if $cubeType === 'Megaminx'}
 					{@html formatMegaminxScramble(scramble)}
 				{:else}
 					{scramble}

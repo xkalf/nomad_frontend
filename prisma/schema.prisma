@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["filteredRelationCount"]
 }
 
@@ -13,29 +13,27 @@ model Session {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   name      String
-  cube      String
   userId    Int?
   main      Boolean   @default(false)
+  deleted   DateTime?
+  cube      CubeType @default(N3)
   User      User?     @relation(fields: [userId], references: [id])
   solves    Solve[]
-  deleted   DateTime?
-
-  @@index([userId, cube, main])
 }
 
 model Solve {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id          Int         @id @default(autoincrement())
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   scramble    String
   time        Int
-  status      String    @default("ok")
-  description String?   @db.VarChar
+  description String?     @db.VarChar
   sessionId   Int
   deleted     DateTime?
-  Session     Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  status      SolveStatus @default(Ok)
+  Session     Session     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
-  @@index([sessionId])
+  @@index([sessionId, deleted])
 }
 
 model User {
@@ -48,30 +46,30 @@ model User {
   birthdate   DateTime
   password    String
   role        String        @default("user")
-  sessions    Session[]
-  userSession UserSession[]
-  settings    Settings?
   settingsId  Int?
+  sessions    Session[]
+  settings    Settings?
+  userSession UserSession[]
 }
 
 model UserSession {
   id     Int    @id @default(autoincrement())
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   token  String @unique @default(uuid())
   userId Int
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
 
 model Settings {
-  id                Int               @id @default(autoincrement())
-  displaySettings   DisplaySettings?
-  timerSettings     TimerSettings?
-  scrambleSettings   ScrambleSettings?
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
-  userId            Int               @unique
-  user              User              @relation(fields: [userId], references: [id])
+  id               Int               @id @default(autoincrement())
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  userId           Int               @unique
+  displaySettings  DisplaySettings?
+  scrambleSettings ScrambleSettings?
+  user             User              @relation(fields: [userId], references: [id])
+  timerSettings    TimerSettings?
 
   @@index([userId])
 }
@@ -83,14 +81,10 @@ model DisplaySettings {
   backgroundImageOpacity Int      @default(25)
   timerSize              Int      @default(25)
   backgroundImage        String?
-  settings               Settings @relation(fields: [settingsId], references: [id])
   settingsId             Int      @unique
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
-}
-
-enum Font {
-  Mono
+  settings               Settings @relation(fields: [settingsId], references: [id])
 }
 
 model TimerSettings {
@@ -104,10 +98,26 @@ model TimerSettings {
   multiPhase              Int                     @default(1)
   timerUpdate             TimerUpdate             @default(Point)
   spaceDown               SpaceDown               @default(Three)
-  settings                Settings                @relation(fields: [settingsId], references: [id])
   settingsId              Int                     @unique
   createdAt               DateTime                @default(now())
   updatedAt               DateTime                @updatedAt
+  settings                Settings                @relation(fields: [settingsId], references: [id])
+}
+
+model ScrambleSettings {
+  id           Int       @id @default(autoincrement())
+  limitHeight  Boolean   @default(false)
+  scrambleSize Int       @default(25)
+  monospaced   Boolean   @default(false)
+  alignArea    AlignArea @default(Center)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  settingsId   Int       @unique
+  settings     Settings  @relation(fields: [settingsId], references: [id])
+}
+
+enum Font {
+  Mono
 }
 
 enum UnitWhenEnteringInteger {
@@ -133,31 +143,42 @@ enum TimerUpdate {
   Update
   Inspection
   Seconds
-  Point // 0.1s
+  Point
   None
 }
 
 enum SpaceDown {
-  Zero // 0
-  Three // 0.3
-  Five // 0.55
-  One // 1
-}
-
-model ScrambleSettings {
-  id           Int       @id @default(autoincrement())
-  limitHeight  Boolean   @default(false)
-  scrambleSize Int       @default(25)
-  monospaced   Boolean   @default(false)
-  alignArea    AlignArea @default(Center)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  settings     Settings  @relation(fields: [settingsId], references: [id])
-  settingsId   Int @unique
+  Zero
+  Three
+  Five
+  One
 }
 
 enum AlignArea {
   Center
   Left
   Right
+}
+
+enum SolveStatus {
+  Ok
+  Dnf
+  Plus2
+}
+
+enum CubeType {
+  N2
+  N3
+  N4
+  N5
+  N6
+  N7
+  Megaminx
+  Pyraminx
+  Clock
+  Sq1
+  Bld3
+  Bld4
+  Bld5
+  Skewb
 }

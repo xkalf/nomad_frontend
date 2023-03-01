@@ -3,7 +3,8 @@ import { setCubeType } from '$lib/stores/cubeType'
 import { setSession } from '$lib/stores/session'
 import { initialSessions } from '$lib/stores/sessions'
 import { initialSolves } from '$lib/stores/solves'
-import type { CubeType, SessionWithSolves, SessionWithSolvesCount } from './types'
+import type { CubeType } from '@prisma/client'
+import type { SessionWithSolves, SessionWithSolvesCount } from './types'
 
 export async function getSessionByCube(type: CubeType): Promise<void> {
 	const result = (await (await fetch(`/api/session?cube=${type}&main=true`)).json()) as {
@@ -32,7 +33,7 @@ export async function getSessionById(id: number): Promise<void> {
 	}
 
 	if (!currentSession.session) {
-		return getSessionByCube('333')
+		return getSessionByCube('N3')
 	}
 
 	setSession(currentSession.session)

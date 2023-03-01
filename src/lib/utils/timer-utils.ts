@@ -1,6 +1,6 @@
-import type { Solve } from '@prisma/client'
+import { CubeType, SolveStatus, type Solve } from '@prisma/client'
 import { randomScrambleForEvent } from 'cubing/scramble'
-import type { CubeType, SolveStatus } from './types'
+import { scrambleMappper } from './types'
 
 export const displayTime = (time: number) => {
 	const hours = Math.floor(time / 3_600_000) // 1 Hour = 3600000 Milliseconds
@@ -24,12 +24,12 @@ export const displayTime = (time: number) => {
 }
 
 export const formatTime = (solve: Solve) => {
-	switch (solve.status as SolveStatus) {
-		case 'ok':
+	switch (solve.status) {
+		case SolveStatus.Ok:
 			return displayTime(solve.time)
-		case '+2':
+		case SolveStatus.Plus2:
 			return '+' + displayTime(solve.time + 2000)
-		case 'dnf':
+		case SolveStatus.Dnf:
 			return 'DNF'
 	}
 }
@@ -43,11 +43,16 @@ export const getBest = (arr: Solve[]): string => {
 		return displayTime(0)
 	}
 
+	const filtered = arr.filter(i => i.status !== SolveStatus.Dnf)
+
+	if (filtered.length === 0) {
+		return 'DNF'
+	}
+
 	const best = Math.min(
-		...arr
-			.filter(i => i.status !== 'dnf')
+		...filtered
 			.map(i => {
-				if (i.status === '+2') {
+				if (i.status === SolveStatus.Plus2) {
 					return { ...i, time: i.time + 2000 }
 				} else {
 					return i
@@ -55,6 +60,8 @@ export const getBest = (arr: Solve[]): string => {
 			})
 			.map(i => i.time)
 	)
+
+	console.log(best)
 
 	return displayTime(best)
 }
@@ -64,7 +71,7 @@ export const getWorst = (arr: Solve[]) => {
 		return displayTime(0)
 	}
 
-	const worst = Math.max(...arr.filter(i => i.status !== 'dnf').map(i => i.time))
+	const worst = Math.max(...arr.filter(i => i.status !== SolveStatus.Dnf).map(i => i.time))
 
 	return displayTime(worst)
 }
@@ -76,12 +83,14 @@ export const getAvg = (arr: Solve[], length: number) => {
 
 	const array = arr.slice(-1 * length)
 
-	if (array.filter(i => i.status === 'dnf').length >= 2) {
+	if (array.filter(i => i.status === SolveStatus.Dnf).length >= 2) {
 		return 'DNF'
 	}
 
-	const sum = array.filter(i => i.status !== 'dnf').reduce((a, b) => (a += b.time), 0)
-	const max = array.find(i => i.status === 'dnf') ? 0 : Math.max(...array.map(i => i.time))
+	const sum = array.filter(i => i.status !== SolveStatus.Dnf).reduce((a, b) => (a += b.time), 0)
+	const max = array.find(i => i.status === SolveStatus.Dnf)
+		? 0
+		: Math.max(...array.map(i => i.time))
 	const min = Math.min(...array.map(i => i.time))
 
 	const avg = (sum - min - max) / (array.length - 2)
@@ -97,10 +106,12 @@ export const getBestAverage = (arr: Solve[], length: number): Solve[] => {
 	for (let i = 0; i < arr.length - length + 1; i++) {
 		const array = arr.slice(i, length + i)
 
-		if (array.filter(i => i.status === 'dnf').length > 2) continue
+		if (array.filter(i => i.status === SolveStatus.Dnf).length > 2) continue
 
-		const sum = array.filter(i => i.status !== 'dnf').reduce((a, b) => (a += b.time), 0)
-		const max = array.find(i => i.status === 'dnf') ? 0 : Math.max(...array.map(i => i.time))
+		const sum = array.filter(i => i.status !== SolveStatus.Dnf).reduce((a, b) => (a += b.time), 0)
+		const max = array.find(i => i.status === SolveStatus.Dnf)
+			? 0
+			: Math.max(...array.map(i => i.time))
 		const min = Math.min(...arr.map(i => i.time))
 
 		const avg = (sum - min - max) / (array.length - 2)
@@ -120,9 +131,9 @@ export function getMean(solves: Solve[]) {
 	}
 
 	const filtered = solves
-		.filter(i => (i.status as SolveStatus) !== 'dnf')
+		.filter(i => i.status !== SolveStatus.Dnf)
 		.map(i => {
-			if ((i.status as SolveStatus) === '+2') {
+			if (i.status === SolveStatus.Plus2) {
 				return (i.time += 2000)
 			} else {
 				return i.time
@@ -139,9 +150,9 @@ export function getMean(solves: Solve[]) {
 }
 
 export const generateScramble = async (cubeType: CubeType) => {
-	const s = await randomScrambleForEvent(cubeType)
+	const s = await randomScrambleForEvent(scrambleMappper[cubeType])
 
-	if (cubeType === 'pyram') {
+	if (cubeType === 'Pyraminx') {
 		return s.experimentalSimplify({ cancel: true }).toString().replace(/2/g, "'").replace("''", '')
 	}
 

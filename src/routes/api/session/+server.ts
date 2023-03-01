@@ -1,6 +1,7 @@
 import type { RequestHandler } from './$types'
 import db from '$lib/db'
-import { cubeTypeMapper, type CubeType } from '$lib/utils/types'
+import { cubeTypeMapper } from '$lib/utils/types'
+import type { CubeType } from '@prisma/client'
 
 export const GET: RequestHandler = async ({ locals, url, cookies }) => {
 	const cube = url.searchParams.get('cube') as CubeType

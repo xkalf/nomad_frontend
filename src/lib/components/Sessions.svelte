@@ -4,9 +4,9 @@
 	import { deleteSession, sessions } from '$lib/stores/sessions'
 	import { solves } from '$lib/stores/solves'
 	import { getSessionByCube, getSessionById } from '$lib/utils/api'
-	import { cubeTypeMapper, cubeTypes, type CubeType } from '$lib/utils/types'
+	import { cubeTypeMapper, cubeTypes } from '$lib/utils/types'
 	import Icon from '@iconify/svelte'
-	import type { Session } from '@prisma/client'
+	import type { CubeType, Session } from '@prisma/client'
 	import Modal from './Modal.svelte'
 
 	export let changeCubeType: (type: CubeType) => Promise<void>
@@ -162,7 +162,7 @@
 					isCubeTypeOpen ? 'block' : 'hidden'
 				}`}
 			>
-				{#each cubeTypes.filter(i => i !== $cubeType) as type}
+				{#each cubeTypes as type}
 					<li class="w-full px-1 text-center hover:bg-[#606C76]">
 						<button class="w-full" on:click={async () => await changeCurrentCubeType(type)}
 							>{cubeTypeMapper[type]}</button

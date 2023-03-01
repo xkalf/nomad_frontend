@@ -29,7 +29,7 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 			session = await db.session.findFirst({
 				where: {
 					deleted: null,
-					cube: '333',
+					cube: 'N3',
 					main: true,
 					userId: locals.user.id
 				}
@@ -39,8 +39,8 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 		if (!session) {
 			session = await db.session.create({
 				data: {
-					cube: '333',
-					name: cubeTypeMapper['333'],
+					cube: 'N3',
+					name: cubeTypeMapper['N3'],
 					main: true,
 					userId: locals.user.id
 				}

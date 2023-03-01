@@ -10,14 +10,15 @@
 		solves
 	} from '$lib/stores/solves'
 	import { getSessionByCube, getSessionById } from '$lib/utils/api'
-	import { shortcutMapper, type CubeType, type SolveStatus, type StateType } from '$lib/utils/types'
+	import { shortcutMapper, type StateType } from '$lib/utils/types'
 	import { generateScramble } from '$lib/utils/timer-utils'
-	import type { Solve } from '@prisma/client'
+	import { CubeType, SolveStatus, type Solve } from '@prisma/client'
 	import { onMount } from 'svelte'
 	import Desktop from './Desktop.svelte'
 	import Mobile from './Mobile.svelte'
 	import Modal from '$lib/components/Modal.svelte'
 	import { sortMode } from '$lib/stores/sortModa'
+	import Loading from '$lib/components/Loading.svelte'
 
 	let scramble: string | null
 	let currentScramble: string | null = null
@@ -28,6 +29,7 @@
 	let deleteAllModalOpen = false
 	let deleteLastModalOpen = false
 	let deleteCount = 1
+	let loading = false
 
 	function startTime() {
 		if (!$session) {
@@ -160,7 +162,9 @@
 
 	onMount(async () => {
 		if (browser) {
+			loading = true
 			await newScramble()
+			loading = false
 			window.addEventListener('keyup', e => {
 				if (e.key === ' ') {
 					if (state === 'ready') {
@@ -204,15 +208,15 @@
 					switch (e.code) {
 						case 'Digit1':
 							e.preventDefault()
-							await updateLastSolve('ok')
+							await updateLastSolve(SolveStatus.Ok)
 							return
 						case 'Digit2':
 							e.preventDefault()
-							await updateLastSolve('+2')
+							await updateLastSolve(SolveStatus.Plus2)
 							return
 						case 'Digit3':
 							e.preventDefault()
-							await updateLastSolve('dnf')
+							await updateLastSolve(SolveStatus.Dnf)
 							return
 					}
 				}
@@ -271,6 +275,8 @@
 <div class="hidden md:block">
 	<Desktop {...desktopFunctions} {time} {scramble} {state} />
 </div>
+
+<Loading {loading} />
 
 <Modal
 	okFunction={() => deleteLastSolve(deleteCount)}

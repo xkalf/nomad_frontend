@@ -1,5 +1,4 @@
-import type { SolveStatus } from '$lib/utils/types'
-import type { Solve } from '@prisma/client'
+import type { Solve, SolveStatus } from '@prisma/client'
 import { writable } from 'svelte/store'
 
 export const solves = writable<Solve[]>([])

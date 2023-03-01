@@ -4,9 +4,8 @@
 	import Sessions from '$lib/components/Sessions.svelte'
 	import Solves from '$lib/components/Solves.svelte'
 	import { solves } from '$lib/stores/solves'
-	import type { CubeType } from '$lib/utils/types'
-	import { getAvg, getBest, getBestAverage, getMean } from '$lib/utils/timer-utils'
-	import type { Solve } from '@prisma/client'
+	import { getBest, getBestAverage, getMean } from '$lib/utils/timer-utils'
+	import type { CubeType, Solve } from '@prisma/client'
 
 	let averages: { label: string; value?: string; solves?: Solve[]; count?: number }[]
 

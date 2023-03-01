@@ -1,8 +1,7 @@
 <script lang="ts">
 	import Modal from '$lib/components/Modal.svelte'
-	import type { Solve } from '@prisma/client'
+	import { SolveStatus, type Solve } from '@prisma/client'
 	import { changeSolveStats, deleteSolves } from '../stores/solves'
-	import type { SolveStatus } from '../utils/types'
 	import { formatTime } from '../utils/timer-utils'
 
 	export let order: number
@@ -29,12 +28,12 @@
 	async function updateSolve(status: SolveStatus) {
 		let st: SolveStatus
 
-		if (status !== 'ok' && solve.status !== 'ok' && status !== solve.status) {
+		if (status !== SolveStatus.Ok && solve.status !== SolveStatus.Ok && status !== solve.status) {
 			return
 		}
 
 		if (solve.status === status) {
-			st = 'ok'
+			st = SolveStatus.Ok
 		} else {
 			st = status
 		}
@@ -59,14 +58,14 @@
 		<button
 			class="text-red-500"
 			on:click={e => {
-				updateSolve('+2')
+				updateSolve(SolveStatus.Plus2)
 				e.currentTarget.blur()
 			}}>+2</button
 		>
 		<button
 			class="text-white"
 			on:click={e => {
-				updateSolve('dnf')
+				updateSolve(SolveStatus.Dnf)
 				e.currentTarget.blur()
 			}}>DNF</button
 		>
