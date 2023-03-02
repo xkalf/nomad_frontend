@@ -44,9 +44,13 @@
 						name="email"
 						autocomplete="email"
 					/>
-					{#if form?.error}
-						<p>{form.error}</p>
-					{/if}
+					<p>
+						{#if form?.error}
+							{form.error}
+						{:else if form?.success}
+							Нэврэх линкийг и-мэйл хаяг руу илгээлээ.
+						{/if}
+					</p>
 				</div>
 				<div class="relative w-full px-4 text-[#cecfd5] md:w-4/5">
 					<input

@@ -32,7 +32,7 @@ export const actions: Actions = {
 			email: string
 		}
 
-		const { email } = formData
+		const email = formData.email.trim().toLocaleLowerCase()
 
 		const { error: err } = await locals.sb.auth.signInWithOtp({
 			email,
@@ -43,10 +43,16 @@ export const actions: Actions = {
 		})
 
 		if (err) {
-			if (err instanceof AuthApiError && err.status === 400) {
-				return fail(400, {
-					error: 'Хэрэглэгчийн и-мэйл хаяг эсвэл нууц үг буруу байна.'
-				})
+			if (err instanceof AuthApiError) {
+				if (err.status === 400) {
+					return fail(400, {
+						error: 'Хэрэглэгчийн и-мэйл хаяг эсвэл нууц үг буруу байна.'
+					})
+				} else if (err.status === 429) {
+					return fail(400, {
+						error: 'Нэврэх линкийг и-мэйл хаяг руу илгээсэн байна.'
+					})
+				}
 			}
 
 			return fail(500, {
@@ -54,6 +60,8 @@ export const actions: Actions = {
 			})
 		}
 
-		throw redirect(303, '/')
+		return {
+			success: true
+		}
 	}
 }
