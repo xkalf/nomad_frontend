@@ -27,7 +27,7 @@
 			await navigator.clipboard.writeText(
 				`${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
 					date.getDate()
-				)}-д NomamTimer гаргасан\n${count} эвлүүлэлтийн дундаж ${getAvg(
+				)}-нд NomadTimer гаргасан\n${count} эвлүүлэлтийн дундаж ${getAvg(
 					solves,
 					count
 				)}\n\nЭвлүүлэлтийн жагсаалт:\n${solves
