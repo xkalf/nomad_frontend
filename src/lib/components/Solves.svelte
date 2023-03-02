@@ -3,14 +3,46 @@
 	import Solve from './Solve.svelte'
 	import { solves } from '../stores/solves'
 	import { changeSortMode, sortMode } from '$lib/stores/sortModa'
+	import type { Solve as SolveItem } from '@prisma/client'
 
 	export let mobile = false
 
+	function compare(a: SolveItem, b: SolveItem) {
+		if (a.status === 'Ok' && b.status === 'Ok') {
+			return a.time - b.time
+		}
+
+		if (a.status === 'Dnf' && b.status === 'Dnf') {
+			return 0
+		}
+
+		if (a.status === 'Dnf') {
+			return 1
+		}
+
+		if (b.status === 'Dnf') {
+			return -1
+		}
+
+		let timeA = a.time
+		let timeB = b.time
+
+		if (a.status === 'Plus2') {
+			timeA += 2000
+		}
+
+		if (b.status === 'Plus2') {
+			timeB += 2000
+		}
+
+		return timeA - timeB
+	}
+
 	$: formattedSolves =
 		$sortMode === 'asc'
-			? $solves.slice().sort((a, b) => a.time - b.time)
+			? $solves.slice().sort((a, b) => compare(a, b))
 			: $sortMode === 'desc'
-			? $solves.slice().sort((a, b) => b.time - a.time)
+			? $solves.slice().sort((a, b) => compare(b, a))
 			: $solves.slice().reverse()
 </script>
 
