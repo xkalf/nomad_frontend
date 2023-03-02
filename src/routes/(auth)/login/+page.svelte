@@ -1,5 +1,6 @@
 <script lang="ts">
 	import horizontalLogo from '$lib/assets/horizontal-logo.webp'
+	import GoogleIcon from '$lib/icons/GoogleIcon.svelte'
 	import type { ActionData } from './$types'
 
 	export let form: ActionData
@@ -60,9 +61,10 @@
 				<div class="relative w-full px-4 md:w-4/5">
 					<button
 						formaction="?/login&provider=google"
-						class="w-full rounded-lg border border-black bg-white p-2 drop-shadow md:p-4"
+						class="flex w-full items-center justify-center gap-2 rounded-lg border border-black bg-white p-2 drop-shadow md:p-4"
 					>
-						login with google
+						<GoogleIcon />
+						Sign in with Google
 					</button>
 				</div>
 			</form>
