@@ -1,7 +1,5 @@
-import db from '$lib/db'
-import { AuthApiError } from '@supabase/supabase-js'
+import { AuthApiError, type Provider } from '@supabase/supabase-js'
 import { fail, redirect } from '@sveltejs/kit'
-import bcrypt from 'bcrypt'
 import { z } from 'zod'
 import type { Actions, PageServerLoad } from './$types'
 
@@ -21,7 +19,24 @@ export const load: PageServerLoad = async ({ locals }) => {
 }
 
 export const actions: Actions = {
-	login: async ({ request, locals }) => {
+	login: async ({ request, locals, url }) => {
+		const provider = url.searchParams.get('provider') as Provider
+
+		if (provider) {
+			const { data, error: err } = await locals.sb.auth.signInWithOAuth({
+				provider
+			})
+
+			if (err) {
+				console.log(err)
+				return fail(400, {
+					error: 'Алдаа гарлаа.'
+				})
+			}
+
+			throw redirect(303, data.url)
+		}
+
 		const formData = Object.fromEntries(await request.formData())
 
 		const resullt = loginSchema.safeParse(formData)
@@ -57,38 +72,5 @@ export const actions: Actions = {
 		}
 
 		throw redirect(303, '/')
-
-		// const user = await db.user.findUnique({
-		// 	where: {
-		// 		email: email.toLocaleLowerCase()
-		// 	}
-		// })
-
-		// if (!user) {
-		// 	return fail(401, { message: 'Хэрэглэгч олдсонгүй.', data: formData })
-		// }
-
-		// const ok = await bcrypt.compare(password, user.password)
-
-		// if (!ok) {
-		// 	return fail(400, { message: 'Нууц үг буруу байна.', data: formData })
-		// }
-
-		// const userSession = await db.userSession.create({
-		// 	data: {
-		// 		userId: user.id,
-		// 		token: crypto.randomUUID()
-		// 	}
-		// })
-
-		// cookies.set('session', userSession.token, {
-		// 	path: '/',
-		// 	httpOnly: true,
-		// 	sameSite: 'strict',
-		// 	secure: process.env.NODE_ENV === 'production',
-		// 	maxAge: 60 * 60 * 24 * 30
-		// })
-
-		// throw redirect(302, '/')
 	}
 }

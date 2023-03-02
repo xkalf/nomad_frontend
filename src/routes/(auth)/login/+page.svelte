@@ -54,9 +54,16 @@
 						class="w-full rounded-lg bg-black p-2 text-white drop-shadow md:p-4"
 						value="Нэвтрэх"
 					/>
-					<!-- <button class="mt-4 w-full rounded-lg bg-white p-2 drop-shadow md:p-4">
+				</div>
+			</form>
+			<form method="POST" class="mt-4 flex w-full flex-col items-center gap-4 md:gap-6">
+				<div class="relative w-full px-4 md:w-4/5">
+					<button
+						formaction="?/login&provider=google"
+						class="w-full rounded-lg border border-black bg-white p-2 drop-shadow md:p-4"
+					>
 						login with google
-					</button> -->
+					</button>
 				</div>
 			</form>
 		</div>
