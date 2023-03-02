@@ -43,10 +43,9 @@
 						placeholder="и-мэйл"
 						name="email"
 						autocomplete="email"
-						value={form?.data?.email || ''}
 					/>
-					{#if form?.errors?.find(i => i.field === 'email')}
-						<p class="text-red-500">{form?.errors.find(i => i.field === 'email')?.message}</p>
+					{#if form?.error}
+						<p>{form.error}</p>
 					{/if}
 				</div>
 				<div class="relative w-full px-4 text-[#cecfd5] md:w-4/5">
