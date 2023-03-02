@@ -28,12 +28,11 @@ module.exports = {
 			},
 			keyframes: {
 				rotate: {
-					'0%, 15%': { transform: 'rotate(0deg)' },
-					'85%, 100%': { transform: 'rotate(360deg)' }
+					'0%': { transform: 'rotate(0deg)' },
+					'70%, 100%': { transform: 'rotate(360deg)' }
 				}
 			},
 			animation: {
-				'spin-slow': 'spin 2s linear infinite',
 				rotate: 'rotate 2s ease-in-out infinite 2s'
 			}
 		}

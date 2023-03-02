@@ -60,7 +60,7 @@
 		Bld5: 'text-sm',
 		Sq1: 'text-2xl',
 		Pyraminx: 'text-2xl',
-		Megaminx: 'text-sm',
+		Megaminx: 'text-sm text-justify font-mono',
 		Clock: 'text-2xl',
 		Skewb: 'text-2xl'
 	}
@@ -157,17 +157,19 @@
 		<div>
 			<div
 				bind:this={scrambleEl}
-				class={`${scrambleSizeMapper[$cubeType]} mt-8 flex items-center justify-center text-center text-[#b8b8b8]`}
+				class={`mt-8 flex items-center justify-center text-center text-scramble`}
 			>
-				<p class={`${$cubeType === 'Megaminx' && 'text-justify'}`}>
-					{#if !scramble}
-						Холилт хийж байна
-					{:else if $cubeType === 'Megaminx'}
-						{@html formatMegaminxScramble(scramble)}
-					{:else}
-						{scramble}
-					{/if}
-				</p>
+				{#if !scramble}
+					<p class="text-2xl">Холилт хийж байна</p>
+				{:else}
+					<p class={`text-scramble ${scrambleSizeMapper[$cubeType]}`}>
+						{#if $cubeType === 'Megaminx'}
+							{@html formatMegaminxScramble(scramble)}
+						{:else}
+							{scramble}
+						{/if}
+					</p>
+				{/if}
 			</div>
 		</div>
 		<div bind:this={timerEl} class="flex flex-grow select-none flex-col">

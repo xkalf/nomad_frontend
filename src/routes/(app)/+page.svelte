@@ -17,6 +17,8 @@
 	import Modal from '$lib/components/Modal.svelte'
 	import { sortMode } from '$lib/stores/sortModa'
 	import { setPageLoading } from '$lib/stores/loading'
+	import Desktop from './Desktop.svelte'
+	import Mobile from './Mobile.svelte'
 
 	let scramble: string | null
 	let currentScramble: string | null = null
@@ -28,6 +30,7 @@
 	let deleteLastModalOpen = false
 	let deleteCount = 1
 	let width: number
+	let component: any
 
 	function startTime() {
 		if (!$session) {
@@ -245,11 +248,7 @@
 		deleteAllModalOpen = true
 	}
 
-	const desktopFunctions = {
-		changeCubeType
-	}
-
-	const mobileFunctions = {
+	const functions = {
 		startTime,
 		stopTime,
 		updateState,
@@ -261,22 +260,24 @@
 		updateLastSolve,
 		createSolve
 	}
+
+	$: props = {
+		time,
+		scramble,
+		state,
+		...functions
+	}
 </script>
 
 <svelte:head>
 	<title>Хугацаа хэмжигч</title>
 </svelte:head>
 
-<div bind:clientWidth={width}>
-	{#if width > 768}
-		{#await import('./Desktop.svelte') then Module}
-			<Module.default {...desktopFunctions} {time} {scramble} {state} />
-		{/await}
-	{:else}
-		{#await import('./Mobile.svelte') then Module}
-			<Module.default {...mobileFunctions} {time} {scramble} {state} />
-		{/await}
-	{/if}
+<div class="hidden md:block">
+	<Desktop {...props} />
+</div>
+<div class="block md:hidden">
+	<Mobile {...props} />
 </div>
 
 <Modal
