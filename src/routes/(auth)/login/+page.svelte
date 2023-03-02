@@ -14,10 +14,7 @@
 <div class="h-screen md:grid md:grid-cols-2">
 	<div class="hidden bg-black md:block" />
 	<div class="flex h-full flex-col p-2 md:p-3">
-		<div class="flex justify-end">
-			<button class="max-h-[50px] rounded-md bg-[#121315] p-2 text-white">MN</button>
-		</div>
-		<div class="mx-auto flex flex-grow flex-col justify-center md:w-4/5 md:-translate-y-24">
+		<div class="mx-auto flex flex-grow flex-col justify-center md:w-4/5">
 			<div class="mx-auto flex w-4/5 flex-col justify-center md:w-full">
 				<img
 					src={horizontalLogo}
@@ -79,12 +76,6 @@
 					</button>
 				</div>
 			</form>
-		</div>
-		<div class="mt-auto mb-4">
-			<p class="text-center text-[#ccc]">
-				Бүртгэл хэрэгтэй байна ?
-				<a href="/register" class="text-black underline">БҮРТГҮҮЛЭХ </a>
-			</p>
 		</div>
 	</div>
 </div>
