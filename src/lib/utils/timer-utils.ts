@@ -61,8 +61,6 @@ export const getBest = (arr: Solve[]): string => {
 			.map(i => i.time)
 	)
 
-	console.log(best)
-
 	return displayTime(best)
 }
 

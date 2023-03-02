@@ -7,6 +7,12 @@ import type { LayoutServerLoad } from './$types'
 export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 	const sessionId = cookies.get('sessionId')
 
+	// console.log(locals.user)
+
+	if (!locals.session) {
+		throw redirect(303, '/login')
+	}
+
 	if (!locals.user) {
 		throw redirect(307, '/login')
 	}

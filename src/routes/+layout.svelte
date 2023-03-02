@@ -2,6 +2,9 @@
 	import '../app.css'
 	import logo from '$lib/assets/vertical-logo.png'
 	import { page } from '$app/stores'
+	import { onMount } from 'svelte'
+	import { supabaseClient } from '$lib/supabase'
+	import { invalidateAll } from '$app/navigation'
 
 	$: {
 		if (typeof gtag !== 'undefined') {
@@ -11,6 +14,18 @@
 			})
 		}
 	}
+
+	onMount(() => {
+		const {
+			data: { subscription }
+		} = supabaseClient.auth.onAuthStateChange(() => {
+			invalidateAll()
+		})
+
+		return () => {
+			subscription.unsubscribe()
+		}
+	})
 </script>
 
 <svelte:head>

@@ -1,42 +1,33 @@
 import db from '$lib/db'
 import type { Handle } from '@sveltejs/kit'
+import '$lib/supabase'
+import { getSupabase } from '@supabase/auth-helpers-sveltekit'
 
 export const handle: Handle = async ({ event, resolve }) => {
-	// get cookies from browser
-	const session = event.cookies.get('session')
+	const { session, supabaseClient } = await getSupabase(event)
 
-	if (!session) {
-		// if there is no session load page as normal
-		return await resolve(event)
-	}
+	event.locals.sb = supabaseClient
+	event.locals.session = session
 
-	// find the user based on the session
-	const token = await db.userSession.findFirst({
-		where: {
-			token: session
-		},
-		include: {
-			user: {
-				select: {
-					email: true,
-					role: true,
-					id: true
-				}
+	if (session) {
+		const user = await db.user.findFirst({
+			where: {
+				OR: [{ authId: session.user.id }, { email: session.user.email }]
 			}
-		}
-	})
+		})
 
-	const user = token?.user
-
-	// if `user` exists set `events.local`
-	if (user) {
-		event.locals.user = {
-			email: user.email,
-			role: user.role,
-			id: user.id
+		if (user) {
+			await db.user.update({
+				where: {
+					id: user.id
+				},
+				data: {
+					authId: session.user.id
+				}
+			})
+			event.locals.user = user
 		}
 	}
 
-	// load page as normal
-	return await resolve(event)
+	return resolve(event)
 }

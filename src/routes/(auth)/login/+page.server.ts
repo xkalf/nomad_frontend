@@ -1,4 +1,5 @@
 import db from '$lib/db'
+import { AuthApiError } from '@supabase/supabase-js'
 import { fail, redirect } from '@sveltejs/kit'
 import bcrypt from 'bcrypt'
 import { z } from 'zod'
@@ -9,8 +10,7 @@ const loginSchema = z.object({
 		.string({ required_error: 'И-мэйл хаяг оруулна уу.' })
 		.email({ message: 'И-мэйл хаяг буруу байна.' })
 		.trim()
-		.transform(i => i.toLocaleLowerCase()),
-	password: z.string({ required_error: 'Нууц үг оруулна уу.' }).trim()
+		.transform(i => i.toLocaleLowerCase())
 })
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 }
 
 export const actions: Actions = {
-	default: async ({ request, cookies }) => {
+	login: async ({ request, locals }) => {
 		const formData = Object.fromEntries(await request.formData())
 
 		const resullt = loginSchema.safeParse(formData)
@@ -35,39 +35,60 @@ export const actions: Actions = {
 			return fail(400, { errors, data: formData })
 		}
 
-		const { email, password } = resullt.data
+		const { email } = resullt.data
 
-		const user = await db.user.findUnique({
-			where: {
-				email: email.toLocaleLowerCase()
+		const { error: err } = await locals.sb.auth.signInWithOtp({
+			email,
+			options: {
+				emailRedirectTo: 'http://localhost:5173'
 			}
 		})
 
-		if (!user) {
-			return fail(401, { message: 'Хэрэглэгч олдсонгүй.', data: formData })
-		}
-
-		const ok = await bcrypt.compare(password, user.password)
-
-		if (!ok) {
-			return fail(400, { message: 'Нууц үг буруу байна.', data: formData })
-		}
-
-		const userSession = await db.userSession.create({
-			data: {
-				userId: user.id,
-				token: crypto.randomUUID()
+		if (err) {
+			if (err instanceof AuthApiError && err.status === 400) {
+				return fail(400, {
+					error: 'Хэрэглэгчийн и-мэйл хаяг эсвэл нууц үг буруу байна.'
+				})
 			}
-		})
 
-		cookies.set('session', userSession.token, {
-			path: '/',
-			httpOnly: true,
-			sameSite: 'strict',
-			secure: process.env.NODE_ENV === 'production',
-			maxAge: 60 * 60 * 24 * 30
-		})
+			return fail(500, {
+				error: 'Сервер алдаа гарлаа.'
+			})
+		}
 
-		throw redirect(302, '/')
+		throw redirect(303, '/')
+
+		// const user = await db.user.findUnique({
+		// 	where: {
+		// 		email: email.toLocaleLowerCase()
+		// 	}
+		// })
+
+		// if (!user) {
+		// 	return fail(401, { message: 'Хэрэглэгч олдсонгүй.', data: formData })
+		// }
+
+		// const ok = await bcrypt.compare(password, user.password)
+
+		// if (!ok) {
+		// 	return fail(400, { message: 'Нууц үг буруу байна.', data: formData })
+		// }
+
+		// const userSession = await db.userSession.create({
+		// 	data: {
+		// 		userId: user.id,
+		// 		token: crypto.randomUUID()
+		// 	}
+		// })
+
+		// cookies.set('session', userSession.token, {
+		// 	path: '/',
+		// 	httpOnly: true,
+		// 	sameSite: 'strict',
+		// 	secure: process.env.NODE_ENV === 'production',
+		// 	maxAge: 60 * 60 * 24 * 30
+		// })
+
+		// throw redirect(302, '/')
 	}
 }

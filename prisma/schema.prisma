@@ -16,7 +16,7 @@ model Session {
   userId    Int?
   main      Boolean   @default(false)
   deleted   DateTime?
-  cube      CubeType @default(N3)
+  cube      CubeType  @default(N3)
   User      User?     @relation(fields: [userId], references: [id])
   solves    Solve[]
 }
@@ -47,6 +47,7 @@ model User {
   password    String
   role        String        @default("user")
   settingsId  Int?
+  authId      String?
   sessions    Session[]
   settings    Settings?
   userSession UserSession[]
