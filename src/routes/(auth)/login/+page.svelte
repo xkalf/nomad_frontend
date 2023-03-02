@@ -1,5 +1,6 @@
 <script lang="ts">
 	import horizontalLogo from '$lib/assets/horizontal-logo.webp'
+	import FacebookIcon from '$lib/icons/FacebookIcon.svelte'
 	import GoogleIcon from '$lib/icons/GoogleIcon.svelte'
 	import type { ActionData } from './$types'
 
@@ -61,13 +62,20 @@
 				</div>
 			</form>
 			<form method="POST" class="mt-4 flex w-full flex-col items-center gap-4 md:gap-6">
-				<div class="relative w-full px-4 md:w-4/5">
+				<div class="relative flex w-full flex-col gap-2 px-4 md:w-4/5">
 					<button
 						formaction="?/login&provider=google"
 						class="flex w-full items-center justify-center gap-2 rounded-lg border border-black bg-white p-2 drop-shadow md:p-4"
 					>
 						<GoogleIcon />
 						Sign in with Google
+					</button>
+					<button
+						formaction="?/login&provider=facebook"
+						class="flex w-full items-center justify-center gap-2 rounded-lg border border-black bg-white p-2 drop-shadow md:p-4"
+					>
+						<FacebookIcon />
+						Sign in with Facebook
 					</button>
 				</div>
 			</form>
