@@ -40,7 +40,7 @@ export const actions: Actions = {
 		const { error: err } = await locals.sb.auth.signInWithOtp({
 			email,
 			options: {
-				emailRedirectTo: 'http://localhost:5173'
+				emailRedirectTo: 'https://nomad-team.com'
 			}
 		})
 
