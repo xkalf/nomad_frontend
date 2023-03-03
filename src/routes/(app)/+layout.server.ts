@@ -23,7 +23,6 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 			session = await db.session.findFirst({
 				where: {
 					id: +sessionId,
-					deleted: null,
 					userId: locals.user.id
 				}
 			})
@@ -32,7 +31,6 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 		if (!session) {
 			session = await db.session.findFirst({
 				where: {
-					deleted: null,
 					cube: 'N3',
 					main: true,
 					userId: locals.user.id
@@ -60,7 +58,6 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 			sessions = await db.session.findMany({
 				where: {
 					cube: session?.cube,
-					deleted: null,
 					userId: locals.user.id
 				},
 				orderBy: {
@@ -68,7 +65,7 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 				},
 				include: {
 					_count: {
-						select: { solves: { where: { deleted: null } } }
+						select: { solves: true }
 					}
 				}
 			})

@@ -42,10 +42,6 @@ export const cubeTypes: CubeType[] = [
 	'Skewb'
 ]
 
-export const userRoles = ['user', 'admin'] as const
-
-export type UserRole = (typeof userRoles)[number]
-
 export const cubeTypeMapper: Record<CubeType, string> = {
 	N2: '2x2',
 	N3: '3x3',

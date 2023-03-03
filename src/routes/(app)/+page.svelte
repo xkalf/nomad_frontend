@@ -20,8 +20,6 @@
 	import Desktop from './Desktop.svelte'
 	import Mobile from './Mobile.svelte'
 
-	console.log(displayTime(25079841))
-
 	let scramble: string | null
 	let currentScramble: string | null = null
 	let lastScramble: string | null = null
@@ -31,8 +29,6 @@
 	let deleteAllModalOpen = false
 	let deleteLastModalOpen = false
 	let deleteCount = 1
-	let width: number
-	let component: any
 
 	function startTime() {
 		if (!$session) {

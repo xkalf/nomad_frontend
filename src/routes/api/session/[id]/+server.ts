@@ -4,16 +4,12 @@ import type { RequestHandler } from './$types'
 export const GET: RequestHandler = async ({ params: { id }, cookies }) => {
 	const session = await db.session.findFirst({
 		where: {
-			id: +id,
-			deleted: null
+			id: +id
 		},
 		include: {
 			solves: {
 				orderBy: {
 					createdAt: 'asc'
-				},
-				where: {
-					deleted: null
 				}
 			}
 		}
@@ -27,7 +23,10 @@ export const GET: RequestHandler = async ({ params: { id }, cookies }) => {
 }
 
 export const DELETE: RequestHandler = async ({ params: { id } }) => {
-	const session = await db.session.findUnique({ where: { id: +id } })
+	const [session, solves] = await db.$transaction([
+		db.session.findUnique({ where: { id: +id } }),
+		db.solve.findMany({ where: { sessionId: +id } })
+	])
 
 	if (!session) {
 		return new Response(JSON.stringify({ success: false, error: 'Session олдсонгүй.' }))
@@ -39,22 +38,29 @@ export const DELETE: RequestHandler = async ({ params: { id } }) => {
 		)
 	}
 
+	const { id: sessionId, ...sessionRest } = session
+
 	await db.$transaction([
-		db.session.update({
-			where: { id: +id },
-			data: {
-				deleted: new Date()
-			}
+		db.sessionDeleted.create({
+			data: { sessionId, ...sessionRest }
 		}),
-		db.solve.updateMany({
-			where: {
-				sessionId: +id
-			},
-			data: {
-				deleted: new Date()
-			}
+		db.solveDeleted.createMany({
+			data: [
+				...solves.map(i => {
+					const { id, ...rest } = i
+					return { solveId: id, ...rest }
+				})
+			]
 		})
 	])
+
+	await db.solve.deleteMany({
+		where: { sessionId: +id }
+	})
+
+	await db.session.delete({
+		where: { id: +id }
+	})
 
 	return new Response(JSON.stringify({ success: true }))
 }

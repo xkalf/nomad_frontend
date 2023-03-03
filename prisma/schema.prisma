@@ -8,21 +8,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Deleted salgah
 model Session {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   name      String
-  userId    Int?
-  main      Boolean   @default(false)
-  deleted   DateTime?
-  cube      CubeType  @default(N3)
-  User      User?     @relation(fields: [userId], references: [id])
+  userId    Int
+  main      Boolean  @default(false)
+  cube      CubeType @default(N3)
+  User      User     @relation(fields: [userId], references: [id])
   solves    Solve[]
 }
 
-// Deleted salgah
 model Solve {
   id           Int           @id @default(autoincrement())
   createdAt    DateTime      @default(now())
@@ -31,13 +28,12 @@ model Solve {
   time         Int
   description  String?       @db.VarChar
   sessionId    Int
-  deleted      DateTime?
   status       SolveStatus   @default(Ok)
+  CfopSolve    CfopSolve?
   Session      Session       @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   TwoLookSolve TwoLookSolve?
-  CfopSolve    CfopSolve?
 
-  @@index([sessionId, deleted])
+  @@index([sessionId])
 }
 
 model TwoLookSolve {
@@ -54,8 +50,8 @@ model TwoLookSolve {
   pll2       String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  solve      Solve    @relation(fields: [solveId], references: [id])
   solveId    Int      @unique
+  solve      Solve    @relation(fields: [solveId], references: [id])
 
   @@index([solveId])
 }
@@ -69,15 +65,14 @@ model CfopSolve {
   f2l4      String?
   oll       String?
   pll       String?
-  solve     Solve    @relation(fields: [solveId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   solveId   Int      @unique
+  solve     Solve    @relation(fields: [solveId], references: [id])
 
   @@index([solveId])
 }
 
-// email map hiisnii daraa ustgah password ustgah
 model User {
   id          Int           @id @default(autoincrement())
   createdAt   DateTime      @default(now())
@@ -87,15 +82,14 @@ model User {
   lastname    String
   birthdate   DateTime
   password    String
-  role        String        @default("user")
   settingsId  Int?
   authId      String?
+  role        UserRole @default(User)
   sessions    Session[]
   settings    Settings?
   userSession UserSession[]
 }
 
-// ustgah
 model UserSession {
   id     Int    @id @default(autoincrement())
   token  String @unique @default(uuid())
@@ -105,7 +99,6 @@ model UserSession {
   @@index([userId])
 }
 
-// 1 Table bolgoh
 model Settings {
   id               Int               @id @default(autoincrement())
   createdAt        DateTime          @default(now())
@@ -119,7 +112,7 @@ model Settings {
   @@index([userId])
 }
 
-model DisplaySettings { 
+model DisplaySettings {
   id                     Int      @id @default(autoincrement())
   zoom                   Int      @default(100)
   font                   Font     @default(Mono)
@@ -159,6 +152,31 @@ model ScrambleSettings {
   updatedAt    DateTime  @updatedAt
   settingsId   Int       @unique
   settings     Settings  @relation(fields: [settingsId], references: [id])
+}
+
+model SessionDeleted {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime
+  updatedAt DateTime
+  name      String
+  userId    Int
+  main      Boolean  @default(false)
+  deleted   DateTime @default(now())
+  cube      CubeType @default(N3)
+  sessionId Int
+}
+
+model SolveDeleted {
+  id          Int         @id @default(autoincrement())
+  solveId     Int
+  createdAt   DateTime
+  updatedAt   DateTime
+  scramble    String
+  time        Int
+  description String?     @db.VarChar
+  sessionId   Int
+  deleted     DateTime    @default(now())
+  status      SolveStatus @default(Ok)
 }
 
 enum Font {
@@ -226,4 +244,9 @@ enum CubeType {
   Bld4
   Bld5
   Skewb
+}
+
+enum UserRole {
+  User
+  Admin
 }

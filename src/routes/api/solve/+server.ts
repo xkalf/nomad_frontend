@@ -10,8 +10,7 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	const solves = await db.solve.findMany({
 		where: {
-			sessionId: +sessionId,
-			deleted: null
+			sessionId: +sessionId
 		},
 		orderBy: {
 			createdAt: 'asc'
@@ -38,17 +37,33 @@ export const POST: RequestHandler = async ({ request }) => {
 
 export const DELETE: RequestHandler = async ({ request }) => {
 	const data = (await request.json()) as { ids: number[] }
-
-	await db.solve.updateMany({
+	const solves = await db.solve.findMany({
 		where: {
 			id: {
 				in: data.ids
 			}
-		},
-		data: {
-			deleted: new Date()
 		}
 	})
+
+	console.log(solves)
+
+	await db.$transaction([
+		db.solveDeleted.createMany({
+			data: [
+				...solves.map(i => {
+					const { id, ...rest } = i
+					return { solveId: id, ...rest }
+				})
+			]
+		}),
+		db.solve.deleteMany({
+			where: {
+				id: {
+					in: data.ids
+				}
+			}
+		})
+	])
 
 	return new Response(JSON.stringify({ success: true }))
 }

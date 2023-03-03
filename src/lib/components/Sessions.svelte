@@ -87,6 +87,7 @@
 
 		if (data.success) {
 			deleteSession(id)
+			updateIsSessionDelete(id, false)
 			if (id === $session.id) {
 				await getSessionByCube($cubeType)
 			}
