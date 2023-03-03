@@ -177,7 +177,7 @@
 				<p class={`font-mono text-7xl ${textColor}`}>{displayTime(time)}</p>
 			</div>
 			<div class="flex flex-grow items-end justify-between">
-				<div class="space-y-2 text-[#b8b8b8]">
+				<div class="space-y-2 text-scramble">
 					<p>Best time: {getBest($solves)}</p>
 					<p>
 						Average of 5: {getAvg($solves, 5)}
@@ -218,7 +218,7 @@
 	<p class="text-lg text-white">Эвлүүлэлтийн хугацаа</p>
 	<input
 		bind:value={customTime}
-		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 pl-3 text-lg text-[#b8b8b8]"
+		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 pl-3 text-lg text-scramble"
 		type="number"
 	/>
 </Modal>

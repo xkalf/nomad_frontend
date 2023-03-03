@@ -8,6 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Deleted salgah
 model Session {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
@@ -21,21 +22,62 @@ model Session {
   solves    Solve[]
 }
 
+// Deleted salgah
 model Solve {
-  id          Int         @id @default(autoincrement())
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  scramble    String
-  time        Int
-  description String?     @db.VarChar
-  sessionId   Int
-  deleted     DateTime?
-  status      SolveStatus @default(Ok)
-  Session     Session     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  id           Int           @id @default(autoincrement())
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  scramble     String
+  time         Int
+  description  String?       @db.VarChar
+  sessionId    Int
+  deleted      DateTime?
+  status       SolveStatus   @default(Ok)
+  Session      Session       @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  TwoLookSolve TwoLookSolve?
+  CfopSolve    CfopSolve?
 
   @@index([sessionId, deleted])
 }
 
+model TwoLookSolve {
+  id         Int      @id @default(autoincrement())
+  cross      String?
+  firstLayer String?
+  edge1      String?
+  edge2      String?
+  edge3      String?
+  edge4      String?
+  oll1       String?
+  oll2       String?
+  pll1       String?
+  pll2       String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  solve      Solve    @relation(fields: [solveId], references: [id])
+  solveId    Int      @unique
+
+  @@index([solveId])
+}
+
+model CfopSolve {
+  id        Int      @id @default(autoincrement())
+  cross     String?
+  f2l1      String?
+  f2l2      String?
+  f2l3      String?
+  f2l4      String?
+  oll       String?
+  pll       String?
+  solve     Solve    @relation(fields: [solveId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  solveId   Int      @unique
+
+  @@index([solveId])
+}
+
+// email map hiisnii daraa ustgah password ustgah
 model User {
   id          Int           @id @default(autoincrement())
   createdAt   DateTime      @default(now())
@@ -53,6 +95,7 @@ model User {
   userSession UserSession[]
 }
 
+// ustgah
 model UserSession {
   id     Int    @id @default(autoincrement())
   token  String @unique @default(uuid())
@@ -62,6 +105,7 @@ model UserSession {
   @@index([userId])
 }
 
+// 1 Table bolgoh
 model Settings {
   id               Int               @id @default(autoincrement())
   createdAt        DateTime          @default(now())
@@ -75,7 +119,7 @@ model Settings {
   @@index([userId])
 }
 
-model DisplaySettings {
+model DisplaySettings { 
   id                     Int      @id @default(autoincrement())
   zoom                   Int      @default(100)
   font                   Font     @default(Mono)

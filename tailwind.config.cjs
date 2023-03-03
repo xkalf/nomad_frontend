@@ -20,7 +20,6 @@ module.exports = {
 				sidebarBg: '#454f57',
 				sidebarElement: '#33393E',
 				scramble: '#B8B8B8',
-				mobileAverage: '#121315',
 				mainBg: '#363C41'
 			},
 			fontFamily: {

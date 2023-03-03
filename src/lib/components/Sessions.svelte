@@ -192,7 +192,7 @@
 	<input
 		id="sessionName"
 		type="text"
-		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 pl-3 text-lg text-[#b8b8b8]"
+		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 pl-3 text-lg text-scramble"
 		bind:value={sessionName}
 	/>
 </Modal>

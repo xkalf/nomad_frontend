@@ -1,6 +1,7 @@
 import { AuthApiError, type Provider } from '@supabase/supabase-js'
 import { fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
+import { NODE_ENV } from '$env/static/private'
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const ok = locals.user ? true : false
@@ -19,7 +20,6 @@ export const actions: Actions = {
 			})
 
 			if (err) {
-				console.log(err)
 				return fail(400, {
 					error: 'Алдаа гарлаа.'
 				})
@@ -38,7 +38,7 @@ export const actions: Actions = {
 			email,
 			options: {
 				emailRedirectTo:
-					process.env.NODE_ENV === 'production' ? 'https://nomad-team.com' : 'http://localhost:5173'
+					NODE_ENV === 'production' ? 'https://nomad-team.com' : 'http://localhost:5173'
 			}
 		})
 

@@ -42,7 +42,7 @@
 <div
 	class={`flex rounded-xl py-4 px-3 text-white md:px-4 ${
 		best ? 'w-full' : 'w-1/2 cursor-pointer'
-	} ${mobile ? 'justify-evenly bg-mobileAverage' : 'justify-between bg-sidebarElement'}`}
+	} ${mobile ? 'justify-evenly bg-black' : 'justify-between bg-sidebarElement'}`}
 	on:click={openModal}
 >
 	<span>{label}</span>

@@ -11,7 +11,7 @@
 	} from '$lib/stores/solves'
 	import { getSessionByCube, getSessionById } from '$lib/utils/api'
 	import { shortcutMapper, type StateType } from '$lib/utils/types'
-	import { generateScramble } from '$lib/utils/timer-utils'
+	import { displayTime, generateScramble } from '$lib/utils/timer-utils'
 	import type { CubeType, SolveStatus, Solve } from '@prisma/client'
 	import { onMount } from 'svelte'
 	import Modal from '$lib/components/Modal.svelte'
@@ -19,6 +19,8 @@
 	import { setPageLoading } from '$lib/stores/loading'
 	import Desktop from './Desktop.svelte'
 	import Mobile from './Mobile.svelte'
+
+	console.log(displayTime(25079841))
 
 	let scramble: string | null
 	let currentScramble: string | null = null
