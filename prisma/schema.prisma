@@ -18,6 +18,8 @@ model Session {
   cube      CubeType @default(N3)
   User      User     @relation(fields: [userId], references: [id])
   solves    Solve[]
+
+  @@index([userId, cube, main])
 }
 
 model Solve {
@@ -29,9 +31,9 @@ model Solve {
   description  String?       @db.VarChar
   sessionId    Int
   status       SolveStatus   @default(Ok)
-  CfopSolve    CfopSolve?
-  Session      Session       @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  TwoLookSolve TwoLookSolve?
+  cfopSolve    CfopSolve?
+  session      Session       @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  twoLookSolve TwoLookSolve?
 
   @@index([sessionId])
 }
@@ -56,6 +58,25 @@ model TwoLookSolve {
   @@index([solveId])
 }
 
+model TwoLookSolveDeleted {
+  id         Int      @id @default(autoincrement())
+  cross      String?
+  firstLayer String?
+  edge1      String?
+  edge2      String?
+  edge3      String?
+  edge4      String?
+  oll1       String?
+  oll2       String?
+  pll1       String?
+  pll2       String?
+  createdAt  DateTime 
+  updatedAt  DateTime 
+  twoLookSolveId Int
+  deleted DateTime @default(now())
+  solveId    Int      
+}
+
 model CfopSolve {
   id        Int      @id @default(autoincrement())
   cross     String?
@@ -73,6 +94,22 @@ model CfopSolve {
   @@index([solveId])
 }
 
+model CfopSolveDeleted {
+  id        Int      @id @default(autoincrement())
+  cross     String?
+  f2l1      String?
+  f2l2      String?
+  f2l3      String?
+  f2l4      String?
+  oll       String?
+  pll       String?
+  createdAt DateTime 
+  updatedAt DateTime 
+  solveId   Int      
+  deleted DateTime @default(now())
+  cfopSolveId Int
+}
+
 model User {
   id          Int           @id @default(autoincrement())
   createdAt   DateTime      @default(now())
@@ -87,16 +124,6 @@ model User {
   role        UserRole @default(User)
   sessions    Session[]
   settings    Settings?
-  userSession UserSession[]
-}
-
-model UserSession {
-  id     Int    @id @default(autoincrement())
-  token  String @unique @default(uuid())
-  userId Int
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
 }
 
 model Settings {

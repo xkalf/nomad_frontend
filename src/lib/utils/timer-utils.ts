@@ -80,8 +80,21 @@ export const getAvg = (arr: Solve[], length: number) => {
 	}
 
 	const array = arr.slice(-1 * length)
+	const dnfs = array.filter(i => i.status === SolveStatus.Dnf)
 
-	if (array.filter(i => i.status === SolveStatus.Dnf).length >= 2) {
+	if (dnfs.length >= 2 && length >= 5) {
+		return 'DNF'
+	}
+
+	if (dnfs.length >= 3 && length >= 25) {
+		return 'DNF'
+	}
+
+	if (dnfs.length >= 4 && length >= 50) {
+		return 'DNF'
+	}
+
+	if (dnfs.length >= 5 && length >= 100) {
 		return 'DNF'
 	}
 
@@ -158,8 +171,7 @@ export const generateScramble = async (cubeType: CubeType) => {
 }
 
 export function formatMegaminxScramble(scramble: string) {
-	const formatted = scramble.replace(/\n/g, '<br />')
-	return formatted
+	return scramble.replace(/\n/g, '<br />')
 }
 
 export function formatTimeInput(time: number) {

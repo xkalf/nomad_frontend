@@ -2,7 +2,7 @@
 	import Icon from '@iconify/svelte'
 	import Solve from './Solve.svelte'
 	import { solves } from '../stores/solves'
-	import { changeSortMode, sortMode } from '$lib/stores/sortModa'
+	import { changeSortMode, sortMode } from '$lib/stores/sortMode'
 	import type { Solve as SolveItem } from '@prisma/client'
 
 	export let mobile = false

@@ -1,6 +1,14 @@
 import db from '$lib/db'
 import type { RequestHandler } from './$types'
 
+export const GET: RequestHandler = async ({ params: { id } }) => {
+	const cfop = await db.cfopSolve.findUnique({
+		where: { solveId: +id }
+	})
+
+	return new Response(JSON.stringify(cfop))
+}
+
 export const POST: RequestHandler = async ({ request, params: { id } }) => {
 	const data = await request.json()
 
@@ -9,8 +17,8 @@ export const POST: RequestHandler = async ({ request, params: { id } }) => {
 			where: {
 				solveId: +id
 			},
-			create: { ...data },
-			update: { ...data }
+			create: { ...data, solveId: +id },
+			update: { ...data, solveId: +id }
 		})
 
 		return new Response(JSON.stringify({ success: true }))

@@ -11,11 +11,11 @@
 	} from '$lib/stores/solves'
 	import { getSessionByCube, getSessionById } from '$lib/utils/api'
 	import { shortcutMapper, type StateType } from '$lib/utils/types'
-	import { displayTime, generateScramble } from '$lib/utils/timer-utils'
+	import { generateScramble } from '$lib/utils/timer-utils'
 	import type { CubeType, SolveStatus, Solve } from '@prisma/client'
 	import { onMount } from 'svelte'
 	import Modal from '$lib/components/Modal.svelte'
-	import { sortMode } from '$lib/stores/sortModa'
+	import { sortMode } from '$lib/stores/sortMode'
 	import { setPageLoading } from '$lib/stores/loading'
 	import Desktop from './Desktop.svelte'
 	import Mobile from './Mobile.svelte'
@@ -164,7 +164,14 @@
 			setPageLoading(true)
 			await newScramble()
 			setPageLoading(false)
+
+			const exceptTags = ['INPUT', 'BUTTON', 'TEXTAREA']
+
 			window.addEventListener('keyup', e => {
+				if (e.target instanceof HTMLElement && exceptTags.includes(e.target.tagName)) {
+					return
+				}
+
 				if (e.key === ' ') {
 					if (state === 'ready') {
 						startTime()
@@ -174,6 +181,10 @@
 			})
 
 			window.addEventListener('keydown', async e => {
+				if (e.target instanceof HTMLElement && exceptTags.includes(e.target.tagName)) {
+					return
+				}
+
 				if (e.key === ' ') {
 					if (state === 'stopped' && scramble) {
 						state = 'ready'

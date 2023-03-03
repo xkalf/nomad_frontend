@@ -1,25 +1,27 @@
 <script lang="ts">
 	import Modal from '$lib/components/Modal.svelte'
 	import { SolveStatus, type Solve } from '@prisma/client'
-	import { onMount } from 'svelte'
 	import { changeSolveStats, deleteSolves } from '../stores/solves'
 	import { formatTime } from '../utils/timer-utils'
+	import CfopSolve from './CfopSolve.svelte'
+	import TwoLookSolve from './TwoLookSolve.svelte'
 
 	export let order: number
 	export let solve: Solve
 
 	let deleteModalOpen = false
 	let modal: HTMLDialogElement
-	let selected: 'two-look' | 'cfop' = 'cfop'
-	let cfop = {
-		cross: '',
-		f2l1: '',
-		f2l2: '',
-		f2l3: '',
-		f2l4: '',
-		oll: '',
-		pll: ''
-	}
+	const options = [
+		{
+			label: 'CFOP',
+			component: CfopSolve
+		},
+		{
+			label: 'Two Look',
+			component: TwoLookSolve
+		}
+	]
+	let selected = options[0]
 
 	async function deleteSolve() {
 		const response = await fetch(`/api/solve/${solve.id}`, {
@@ -58,14 +60,14 @@
 
 		if (data.success === true) changeSolveStats(solve.id, st)
 	}
-
-	onMount(() => {
-		// modal.showModal()
-	})
 </script>
 
 <div class="flex justify-between p-2 text-white">
-	<span>{order}. {formatTime(solve)}</span>
+	<button
+		on:click={() => {
+			modal.showModal()
+		}}>{order}. {formatTime(solve)}</button
+	>
 	<div class="flex gap-1">
 		<button
 			class="text-red-500"
@@ -97,7 +99,7 @@
 	class="w-[60vw] rounded-xl bg-[#454F57] py-4 px-4 font-sans text-white md:px-0"
 >
 	<div class="mx-auto w-full md:w-3/5">
-		<h2 class="text-center text-2xl text-white md:text-3xl">Эвлүүлэлт №1</h2>
+		<h2 class="text-center text-2xl text-white md:text-3xl">Эвлүүлэлт №{order}</h2>
 		<div class="flex w-full items-center justify-between p-2 text-2xl text-white">
 			<span>{formatTime(solve)}</span>
 			<div class="flex gap-4">
@@ -142,13 +144,24 @@
 			/>
 		</div>
 		<div>
-			{#if selected === 'cfop'}
-				<form action={`api/solve/${solve.id}/cfop`} method="POST">
-					<div class="flex rounded-lg bg-[#2B2F32]">
-						<p>cross</p>
-					</div>
-				</form>
-			{/if}
+			<p class="mt-4 text-xl text-scramble">Эвлүүлэлт үүсгэх</p>
+			<div class="mt-2 flex gap-4">
+				{#each options as option}
+					<button
+						class="text-base"
+						on:click={() => {
+							selected = option
+						}}>{option.label}</button
+					>
+				{/each}
+			</div>
+			<svelte:component
+				this={selected.component}
+				solveId={solve.id}
+				closeFunction={() => {
+					modal.close()
+				}}
+			/>
 		</div>
 	</div>
 </dialog>

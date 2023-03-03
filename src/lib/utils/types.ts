@@ -1,11 +1,13 @@
 import type {
+	CfopSolve,
 	CubeType,
 	DisplaySettings,
 	ScrambleSettings,
 	Session,
 	Settings,
 	Solve,
-	TimerSettings
+	TimerSettings,
+	TwoLookSolve
 } from '@prisma/client'
 
 export const scrambleMappper: Record<CubeType, string> = {
@@ -111,4 +113,9 @@ export type SessionWithSolvesCount = Session & {
 	_count: {
 		solves: number
 	}
+}
+
+export type SolveWithDetail = Solve & {
+	twoLookSolve: TwoLookSolve | null
+	cfopSolve: CfopSolve | null
 }

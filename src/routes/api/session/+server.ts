@@ -2,6 +2,7 @@ import type { RequestHandler } from './$types'
 import db from '$lib/db'
 import { cubeTypeMapper } from '$lib/utils/types'
 import type { CubeType } from '@prisma/client'
+import { NODE_ENV } from '$env/static/private'
 
 export const GET: RequestHandler = async ({ locals, url, cookies }) => {
 	const cube = url.searchParams.get('cube') as CubeType
@@ -41,7 +42,7 @@ export const GET: RequestHandler = async ({ locals, url, cookies }) => {
 		})
 		cookies.set('sessionId', newSession.id.toString(), {
 			path: '/',
-			secure: process.env.NODE_ENV === 'production'
+			secure: NODE_ENV === 'production'
 		})
 		return new Response(JSON.stringify({ sessions: [newSession] }))
 	}

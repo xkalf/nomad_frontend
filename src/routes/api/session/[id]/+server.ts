@@ -1,5 +1,6 @@
 import db from '$lib/db'
 import type { RequestHandler } from './$types'
+import { NODE_ENV } from '$env/static/private'
 
 export const GET: RequestHandler = async ({ params: { id }, cookies }) => {
 	const session = await db.session.findFirst({
@@ -17,7 +18,7 @@ export const GET: RequestHandler = async ({ params: { id }, cookies }) => {
 
 	cookies.set('sessionId', id, {
 		path: '/',
-		secure: process.env.NODE_ENV === 'production'
+		secure: NODE_ENV === 'production'
 	})
 	return new Response(JSON.stringify({ session }))
 }
