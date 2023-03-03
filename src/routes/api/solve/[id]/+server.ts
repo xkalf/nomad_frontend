@@ -8,7 +8,7 @@ export const GET: RequestHandler = async ({ params: { id } }) => {
 		include: { twoLookSolve: true, cfopSolve: true }
 	})
 
-	return new Response(JSON.stringify({ solve }))
+	return new Response(JSON.stringify(solve))
 }
 
 export const DELETE: RequestHandler = async ({ params: { id } }) => {

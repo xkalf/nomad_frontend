@@ -1,10 +1,12 @@
 <script lang="ts">
 	import Modal from '$lib/components/Modal.svelte'
+	import type { SolveWithDetail } from '$lib/utils/types'
 	import { SolveStatus, type Solve } from '@prisma/client'
 	import { changeSolveStats, deleteSolves } from '../stores/solves'
 	import { formatTime } from '../utils/timer-utils'
 	import CfopSolve from './CfopSolve.svelte'
 	import TwoLookSolve from './TwoLookSolve.svelte'
+	import type { CfopSolve as CfopType, TwoLookSolve as TwoLookType } from '@prisma/client'
 
 	export let order: number
 	export let solve: Solve
@@ -22,6 +24,9 @@
 		}
 	]
 	let selected = options[0]
+
+	let cfopData: CfopType | null = null
+	let twoLookData: TwoLookType | null = null
 
 	async function deleteSolve() {
 		const response = await fetch(`/api/solve/${solve.id}`, {
@@ -60,14 +65,20 @@
 
 		if (data.success === true) changeSolveStats(solve.id, st)
 	}
+
+	async function openModal() {
+		selected = options[0]
+		modal.showModal()
+		const data = (await (await fetch(`/api/solve/${solve.id}`)).json()) as SolveWithDetail | null
+		if (data) {
+			cfopData = data.cfopSolve
+			twoLookData = data.twoLookSolve
+		}
+	}
 </script>
 
 <div class="flex justify-between p-2 text-white">
-	<button
-		on:click={() => {
-			modal.showModal()
-		}}>{order}. {formatTime(solve)}</button
-	>
+	<button on:click={openModal}>{order}. {formatTime(solve)}</button>
 	<div class="flex gap-1">
 		<button
 			class="text-red-500"
@@ -158,6 +169,8 @@
 			<svelte:component
 				this={selected.component}
 				solveId={solve.id}
+				{cfopData}
+				{twoLookData}
 				closeFunction={() => {
 					modal.close()
 				}}

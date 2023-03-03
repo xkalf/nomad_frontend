@@ -48,18 +48,27 @@
 	}
 
 	async function createSolve(time: number) {
-		const response = await fetch('/api/solve', {
-			method: 'POST',
-			body: JSON.stringify({
-				time,
-				scramble,
-				sessionId: $session.id
+		console.log('front')
+
+		try {
+			const response = await fetch('/api/solve', {
+				method: 'POST',
+				body: JSON.stringify({
+					time,
+					scramble,
+					sessionId: $session.id
+				})
 			})
-		})
 
-		const result: Solve = await response.json()
+			console.log(response)
 
-		addSolves(result)
+			const result: Solve = await response.json()
+			console.log(result)
+
+			addSolves(result)
+		} catch (e) {
+			console.log(e)
+		}
 	}
 
 	async function removeSolves() {

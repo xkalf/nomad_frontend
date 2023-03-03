@@ -20,6 +20,8 @@ export const GET: RequestHandler = async ({ url }) => {
 }
 
 export const POST: RequestHandler = async ({ request }) => {
+	console.log('post')
+
 	const data = await request.json()
 
 	const solve = await db.solve.create({
@@ -27,10 +29,6 @@ export const POST: RequestHandler = async ({ request }) => {
 			...data
 		}
 	})
-
-	if (!solve) {
-		return new Response(JSON.stringify({ success: false }))
-	}
 
 	return new Response(JSON.stringify(solve))
 }

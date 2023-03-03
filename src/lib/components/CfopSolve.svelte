@@ -1,19 +1,9 @@
 <script lang="ts">
 	import type { CfopSolve } from '@prisma/client'
-	import { onMount } from 'svelte'
 
 	export let closeFunction: () => void
 	export let solveId: number
-
-	let cfop = {
-		cross: '',
-		f2l1: '',
-		f2l2: '',
-		f2l3: '',
-		f2l4: '',
-		oll: '',
-		pll: ''
-	}
+	export let cfopData: CfopSolve | null
 
 	async function submit() {
 		const response = await fetch(`/api/solve/${solveId}/cfop`, {
@@ -30,21 +20,15 @@
 		}
 	}
 
-	onMount(async () => {
-		const data = (await (await fetch(`/api/solve/${solveId}/cfop`)).json()) as CfopSolve
-
-		if (data) {
-			cfop = {
-				cross: data.cross || '',
-				f2l1: data.f2l1 || '',
-				f2l2: data.f2l2 || '',
-				f2l3: data.f2l3 || '',
-				f2l4: data.f2l4 || '',
-				oll: data.oll || '',
-				pll: data.pll || ''
-			}
-		}
-	})
+	let cfop = {
+		cross: cfopData?.cross || '',
+		f2l1: cfopData?.f2l1 || '',
+		f2l2: cfopData?.f2l2 || '',
+		f2l3: cfopData?.f2l3 || '',
+		f2l4: cfopData?.f2l4 || '',
+		oll: cfopData?.oll || '',
+		pll: cfopData?.pll || ''
+	}
 </script>
 
 <form method="POST" on:submit|preventDefault={submit} class="mt-2">

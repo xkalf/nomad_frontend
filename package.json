@@ -44,7 +44,6 @@
 	"type": "module",
 	"dependencies": {
 		"@prisma/client": "^4.9.0",
-		"bcrypt": "^5.1.0",
 		"cubing": "^0.35.6",
 		"hammerjs": "^2.0.8",
 		"scramble-display": "^0.5.4",
