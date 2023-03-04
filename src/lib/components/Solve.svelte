@@ -13,6 +13,9 @@
 
 	let deleteModalOpen = false
 	let modal: HTMLDialogElement
+	let cfopData: CfopType | null = null
+	let twoLookData: TwoLookType | null = null
+
 	const options = [
 		{
 			label: 'CFOP',
@@ -24,9 +27,6 @@
 		}
 	]
 	let selected = options[0]
-
-	let cfopData: CfopType | null = null
-	let twoLookData: TwoLookType | null = null
 
 	async function deleteSolve() {
 		const response = await fetch(`/api/solve/${solve.id}`, {
@@ -74,6 +74,10 @@
 			cfopData = data.cfopSolve
 			twoLookData = data.twoLookSolve
 		}
+	}
+
+	function closeModal() {
+		modal.close()
 	}
 </script>
 
@@ -166,15 +170,11 @@
 					>
 				{/each}
 			</div>
-			<svelte:component
-				this={selected.component}
-				solveId={solve.id}
-				{cfopData}
-				{twoLookData}
-				closeFunction={() => {
-					modal.close()
-				}}
-			/>
+			{#if selected === options[0]}
+				<CfopSolve solveId={solve.id} closeFunction={closeModal} data={cfopData} />
+			{:else if selected === options[1]}
+				<TwoLookSolve solveId={solve.id} closeFunction={closeModal} data={twoLookData} />
+			{/if}
 		</div>
 	</div>
 </dialog>

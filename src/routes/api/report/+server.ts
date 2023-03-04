@@ -6,12 +6,12 @@ export const GET: RequestHandler = async ({ url }) => {
 	const userId = url.searchParams.get('userId')
 	const sessions = await db.solve.findMany({
 		where: {
-			Session: {
+			session: {
 				userId: parseInt(userId || '1')
 			}
 		},
 		include: {
-			Session: {
+			session: {
 				select: {
 					name: true,
 					cube: true

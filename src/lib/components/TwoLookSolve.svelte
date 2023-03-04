@@ -3,19 +3,19 @@
 
 	export let closeFunction: () => void
 	export let solveId: number
-	export let twoLookData: TwoLookSolve | null
+	export let data: TwoLookSolve | null
 
 	let twoLook = {
-		cross: twoLookData?.cross || '',
-		firstLayer: twoLookData?.firstLayer || '',
-		edge1: twoLookData?.edge1 || '',
-		edge2: twoLookData?.edge2 || '',
-		edge3: twoLookData?.edge3 || '',
-		edge4: twoLookData?.edge4 || '',
-		oll1: twoLookData?.oll1 || '',
-		oll2: twoLookData?.oll2 || '',
-		pll1: twoLookData?.pll1 || '',
-		pll2: twoLookData?.pll2 || ''
+		cross: data?.cross || '',
+		firstLayer: data?.firstLayer || '',
+		edge1: data?.edge1 || '',
+		edge2: data?.edge2 || '',
+		edge3: data?.edge3 || '',
+		edge4: data?.edge4 || '',
+		oll1: data?.oll1 || '',
+		oll2: data?.oll2 || '',
+		pll1: data?.pll1 || '',
+		pll2: data?.pll2 || ''
 	}
 
 	async function submit() {

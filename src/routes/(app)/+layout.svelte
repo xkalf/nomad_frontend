@@ -29,10 +29,10 @@
 		}
 	}
 
-	onMount(() => {
+	onMount(async () => {
 		if (data.getSessions?.session) {
+			await getSolves(data.getSessions.session.id)
 			setLayoutLoading(false)
-			getSolves(data.getSessions.session.id)
 		}
 	})
 </script>

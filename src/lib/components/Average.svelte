@@ -50,7 +50,7 @@
 		{#if solves.length !== count}
 			<span>{displayTime(0)}</span>
 		{:else}
-			<span>{getAvg(solves, solves.length)}</span>
+			<span>{getAvg(solves, count)}</span>
 		{/if}
 	{:else}
 		<span>{value}</span>
