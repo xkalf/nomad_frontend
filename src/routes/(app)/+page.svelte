@@ -48,27 +48,18 @@
 	}
 
 	async function createSolve(time: number) {
-		console.log('front')
-
-		try {
-			const response = await fetch('/api/solve', {
-				method: 'POST',
-				body: JSON.stringify({
-					time,
-					scramble,
-					sessionId: $session.id
-				})
+		const response = await fetch('/api/solve', {
+			method: 'POST',
+			body: JSON.stringify({
+				time,
+				scramble,
+				sessionId: $session.id
 			})
+		})
 
-			console.log(response)
+		const result: Solve = await response.json()
 
-			const result: Solve = await response.json()
-			console.log(result)
-
-			addSolves(result)
-		} catch (e) {
-			console.log(e)
-		}
+		addSolves(result)
 	}
 
 	async function removeSolves() {
@@ -282,8 +273,7 @@
 	$: props = {
 		time,
 		scramble,
-		state,
-		...functions
+		state
 	}
 </script>
 
@@ -292,10 +282,10 @@
 </svelte:head>
 
 <div class="hidden md:block">
-	<Desktop {...props} />
+	<Desktop {...props} {changeCubeType} />
 </div>
 <div class="block md:hidden">
-	<Mobile {...props} />
+	<Mobile {...props} {...functions} />
 </div>
 
 <Modal

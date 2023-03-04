@@ -9,8 +9,6 @@
 
 	let averages: { label: string; value?: string; solves?: Solve[]; count?: number }[]
 
-	$: $solves, console.log(getBestAverage($solves, 5))
-
 	$: $solves,
 		(averages = [
 			{

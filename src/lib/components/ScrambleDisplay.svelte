@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cubeType } from '$lib/stores/cubeType'
+	import { scrambleMappper } from '$lib/utils/types'
 	import { onMount } from 'svelte'
 
 	export let scramble: string | null
@@ -23,7 +24,7 @@
 	}
 
 	$: if (el) {
-		el.event = $cubeType
+		el.event = scrambleMappper[$cubeType]
 	}
 </script>
 

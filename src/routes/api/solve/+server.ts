@@ -20,8 +20,6 @@ export const GET: RequestHandler = async ({ url }) => {
 }
 
 export const POST: RequestHandler = async ({ request }) => {
-	console.log('post')
-
 	const data = await request.json()
 
 	const solve = await db.solve.create({
@@ -42,8 +40,6 @@ export const DELETE: RequestHandler = async ({ request }) => {
 			}
 		}
 	})
-
-	console.log(solves)
 
 	await db.$transaction([
 		db.solveDeleted.createMany({

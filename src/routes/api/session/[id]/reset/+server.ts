@@ -68,8 +68,6 @@ export const DELETE: RequestHandler = async ({ params: { id } }) => {
 
 		return new Response(JSON.stringify({ success: true }))
 	} catch (e) {
-		console.log(e)
-
 		return new Response(JSON.stringify({ success: false }))
 	}
 }

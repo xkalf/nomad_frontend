@@ -36,7 +36,6 @@ export const DELETE: RequestHandler = async ({ params: { id } }) => {
 
 		return new Response(JSON.stringify({ success: true }))
 	} catch (error) {
-		console.log(error)
 		return new Response(JSON.stringify({ success: false }))
 	}
 }
@@ -56,7 +55,6 @@ export const PUT: RequestHandler = async ({ params: { id }, request }) => {
 
 		return new Response(JSON.stringify({ success: true }))
 	} catch (e) {
-		console.log(e)
 		return new Response(JSON.stringify({ success: false }))
 	}
 }

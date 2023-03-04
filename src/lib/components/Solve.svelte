@@ -66,7 +66,12 @@
 		if (data.success === true) changeSolveStats(solve.id, st)
 	}
 
-	async function openModal() {
+	async function openModal(
+		e: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement
+		}
+	) {
+		e.currentTarget.blur()
 		selected = options[0]
 		modal.showModal()
 		const data = (await (await fetch(`/api/solve/${solve.id}`)).json()) as SolveWithDetail | null
@@ -134,7 +139,9 @@
 				>
 				<button
 					class="text-red-500"
-					on:click={() => {
+					on:click={e => {
+						e.currentTarget.blur()
+						closeModal()
 						deleteModalOpen = true
 					}}
 				>
