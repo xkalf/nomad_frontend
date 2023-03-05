@@ -11,7 +11,7 @@
 </script>
 
 <SidebarContainer>
-	<div class="mt-4 flex flex-col justify-center gap-4 border-t border-[#797878] p-4">
+	<div class="mt-4 flex flex-col justify-center gap-4 p-4">
 		<Average label="Best" value={getBest($solves)} best={true} />
 		<div class="flex gap-2">
 			<Average label="Ao5" solves={$solves.slice(-5)} count={5} />

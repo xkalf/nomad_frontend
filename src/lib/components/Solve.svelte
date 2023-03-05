@@ -116,11 +116,11 @@
 
 <dialog
 	bind:this={modal}
-	class="w-[60vw] rounded-xl bg-[#454F57] py-4 px-4 font-sans text-white md:px-0"
+	class="w-[60vw] rounded-xl bg-background py-4 px-4 font-sans text-primary md:px-0"
 >
 	<div class="mx-auto w-full md:w-3/5">
-		<h2 class="text-center text-2xl text-white md:text-3xl">Эвлүүлэлт №{order}</h2>
-		<div class="flex w-full items-center justify-between p-2 text-2xl text-white">
+		<h2 class="text-center text-2xl md:text-3xl">Эвлүүлэлт №{order}</h2>
+		<div class="flex w-full items-center justify-between p-2 text-2xl text-primary">
 			<span>{formatTime(solve)}</span>
 			<div class="flex gap-4">
 				<button
@@ -131,7 +131,7 @@
 					}}>+2</button
 				>
 				<button
-					class="text-white"
+					class="text-primary"
 					on:click={e => {
 						updateSolve(SolveStatus.Dnf)
 						e.currentTarget.blur()
@@ -150,27 +150,27 @@
 			</div>
 		</div>
 		<div class="mt-2">
-			<p class="text-xl text-scramble">Холилт</p>
+			<p class="text-xl">Холилт</p>
 			<input
 				type="text"
 				value={solve.scramble}
-				class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 text-scramble"
+				class="mt-2 w-full rounded-lg border border-primary p-2"
 			/>
 		</div>
 		<div class="mt-2">
-			<p class="text-xl text-scramble">Тайлбар</p>
+			<p class="text-xl">Тайлбар</p>
 			<input
 				type="text"
 				placeholder="Тайлбар бичнэ үү"
-				class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 text-scramble"
+				class="mt-2 w-full rounded-lg border border-primary p-2"
 			/>
 		</div>
 		<div>
-			<p class="mt-4 text-xl text-scramble">Эвлүүлэлт үүсгэх</p>
+			<p class="mt-4 text-xl">Эвлүүлэлт үүсгэх</p>
 			<div class="mt-2 flex gap-4">
 				{#each options as option}
 					<button
-						class="text-base"
+						class={`${selected === option ? 'bg-[#52AAEA] bg-opacity-10 text-[#52AAEA]' : ''} py-1 px-2 rounded-lg`}
 						on:click={() => {
 							selected = option
 						}}>{option.label}</button
@@ -187,5 +187,5 @@
 </dialog>
 
 <Modal okFunction={deleteSolve} isOpen={deleteModalOpen} cancelFunction={hideModal}>
-	<p class="text-lg text-white">Уг эвлүүлэлтийг устгах уу?</p>
+	<p class="text-lg text-primary">Уг эвлүүлэлтийг устгах уу?</p>
 </Modal>

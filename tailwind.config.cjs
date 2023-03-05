@@ -16,11 +16,10 @@ module.exports = {
 		}),
 		extend: {
 			colors: {
-				black: '#121315',
-				sidebarBg: '#454f57',
-				sidebarElement: '#33393E',
-				scramble: '#B8B8B8',
-				mainBg: '#363C41'
+				primary: 'var(--primary-color)',
+				secondary: 'var(--secondary-color)',
+				sidebar: 'var(--sidebar-color)',
+				background: 'var(--background-color)'
 			},
 			fontFamily: {
 				inter: 'Inter, sans-serif'

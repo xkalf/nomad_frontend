@@ -295,10 +295,10 @@
 	}}
 	isOpen={deleteLastModalOpen}
 >
-	<p class="text-lg text-white">Сүүлийн хэдэн эвлүүлэлтийг устгах уу?</p>
+	<p class="text-lg text-primary">Сүүлийн хэдэн эвлүүлэлтийг устгах уу?</p>
 	<input
 		bind:value={deleteCount}
-		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 pl-3 text-lg text-[#b8b8b8]"
+		class="mt-2 w-full rounded-lg bg-secondary p-2 pl-3 text-lg text-white"
 		type="text"
 	/>
 </Modal>
@@ -310,5 +310,5 @@
 		deleteAllModalOpen = false
 	}}
 >
-	<p class="text-lg text-white">Энэ session-ийн эвлүүлэлтүүдийг устгах уу?</p>
+	<p class="text-lg text-primary">Энэ session-ийн эвлүүлэлтүүдийг устгах уу?</p>
 </Modal>

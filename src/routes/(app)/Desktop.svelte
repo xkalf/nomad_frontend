@@ -12,7 +12,7 @@
 	export let scramble: string | null
 	export let changeCubeType: (type: CubeType) => Promise<void>
 
-	$: textColor = state === 'ready' ? 'text-green-500' : 'text-white'
+	$: textColor = state === 'ready' ? 'text-green-500' : 'text-primary'
 
 	const scrambleSizeMapper: Record<CubeType, string> = {
 		N2: 'text-5xl',
@@ -34,15 +34,15 @@
 
 <div class="grid h-screen w-full grid-cols-[minmax(350px,_1fr)_4fr]">
 	<Sidebar {changeCubeType} />
-	<div class="relative flex flex-col justify-between overflow-hidden bg-mainBg p-4">
+	<div class="relative flex flex-col justify-between overflow-hidden bg-background p-4">
 		<!-- Scramble -->
 		<div
-			class="h-1/6 mt-[3vh] flex items-center justify-center p-20 pt-5 text-center text-scramble"
+			class="h-1/6 mt-[3vh] flex items-center justify-center p-20 pt-5 text-center text-primary"
 		>
 			{#if !scramble}
 				<p class="text-5xl">Холилт хийж байна</p>
 			{:else}
-				<p class={`text-scramble ${scrambleSizeMapper[$cubeType]}`}>
+				<p class={`${scrambleSizeMapper[$cubeType]}`}>
 					{#if $cubeType === 'Megaminx'}
 						{@html formatMegaminxScramble(scramble)}
 					{:else}
@@ -60,11 +60,11 @@
 				<img src={timerLogo} alt="Nomad Team" />
 			</div>
 			<!-- Tools -->
-			<div class="z-20 col-start-4 rounded-xl bg-sidebarBg">
+			<div class="z-20 col-start-4 rounded-xl bg-secondary">
 				<ScrambleDisplay {scramble} />
 				<div class="flex items-center justify-around p-3">
 					<span class="py-2 text-xl text-white">Function</span>
-					<select class="rounded-xl bg-sidebarElement py-2 px-4 text-xl text-white">
+					<select class="rounded-xl bg-background py-2 px-4 text-xl text-black">
 						<option>Draw Scramble</option>
 					</select>
 				</div>

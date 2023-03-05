@@ -48,11 +48,11 @@
 
 <div
 	class={`${
-		mobile ? 'max-h-96 min-h-[200px] bg-black' : 'mx-4 flex-grow bg-sidebarElement'
-	} flex flex-col overflow-y-auto rounded-xl`}
+		mobile ? 'max-h-96 min-h-[200px]' : 'mx-4 flex-grow'
+	} flex flex-col overflow-y-auto rounded-xl bg-secondary`}
 >
 	<div
-		class="flex w-full items-center justify-center rounded-t-xl bg-[#3E4449] py-2 text-lg text-white"
+		class="flex w-full items-center justify-center rounded-t-xl bg-primary py-2 text-lg text-white"
 	>
 		<button class="h-5" on:click={changeSortMode}>
 			{#if $sortMode === 'none'}

@@ -16,7 +16,10 @@ export const actions: Actions = {
 
 		if (provider) {
 			const { data, error: err } = await locals.sb.auth.signInWithOAuth({
-				provider
+				provider,
+				options: {
+					redirectTo: NODE_ENV === 'production' ? 'https://nomad-team.com' : 'http://localhost:5173'
+				}
 			})
 
 			if (err) {

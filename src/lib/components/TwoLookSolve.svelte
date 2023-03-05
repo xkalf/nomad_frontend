@@ -34,10 +34,10 @@
 	}
 </script>
 
-<form method="POST" on:submit|preventDefault={submit} class="mt-2">
+<form method="POST" on:submit|preventDefault={submit} class="mt-2 text-white">
 	<div class="scrollbar flex max-h-40 flex-col gap-2 overflow-y-auto pr-2">
-		<div class="flex w-full rounded-lg bg-[#2B2F32]">
-			<div class="w-1/5 rounded-xl bg-[#33393e] p-3 text-center">Нэмэх тэмдэг</div>
+		<div class="flex w-full rounded-lg bg-secondary">
+			<div class="w-1/5 rounded-xl bg-primary p-3 text-center">Нэмэх тэмдэг</div>
 			<div class="flex w-4/5 items-center justify-center text-center">
 				<input
 					class="h-full w-full bg-transparent pl-4 focus:outline-none"
@@ -46,8 +46,8 @@
 				/>
 			</div>
 		</div>
-		<div class="flex w-full rounded-lg bg-[#2B2F32]">
-			<div class="w-1/5 rounded-xl bg-[#33393e] p-3 text-center">Эхний үе</div>
+		<div class="flex w-full rounded-lg bg-secondary">
+			<div class="w-1/5 rounded-xl bg-primary p-3 text-center">Эхний үе</div>
 			<div class="flex w-4/5 items-center justify-center text-center">
 				<input
 					class="h-full w-full bg-transparent pl-4 focus:outline-none"
@@ -56,8 +56,8 @@
 				/>
 			</div>
 		</div>
-		<div class="flex w-full rounded-lg bg-[#2B2F32]">
-			<div class="w-1/5 rounded-xl bg-[#33393e] p-3 text-center">Edge 1</div>
+		<div class="flex w-full rounded-lg bg-secondary">
+			<div class="w-1/5 rounded-xl bg-primary p-3 text-center">Edge 1</div>
 			<div class="flex w-4/5 items-center justify-center text-center">
 				<input
 					class="h-full w-full bg-transparent pl-4 focus:outline-none"
@@ -66,8 +66,8 @@
 				/>
 			</div>
 		</div>
-		<div class="flex w-full rounded-lg bg-[#2B2F32]">
-			<div class="w-1/5 rounded-xl bg-[#33393e] p-3 text-center">Edge 2</div>
+		<div class="flex w-full rounded-lg bg-secondary">
+			<div class="w-1/5 rounded-xl bg-primary p-3 text-center">Edge 2</div>
 			<div class="flex w-4/5 items-center justify-center text-center">
 				<input
 					class="h-full w-full bg-transparent pl-4 focus:outline-none"
@@ -76,8 +76,8 @@
 				/>
 			</div>
 		</div>
-		<div class="flex w-full rounded-lg bg-[#2B2F32]">
-			<div class="w-1/5 rounded-xl bg-[#33393e] p-3 text-center">Edge 3</div>
+		<div class="flex w-full rounded-lg bg-secondary">
+			<div class="w-1/5 rounded-xl bg-primary p-3 text-center">Edge 3</div>
 			<div class="flex w-4/5 items-center justify-center text-center">
 				<input
 					class="h-full w-full bg-transparent pl-4 focus:outline-none"
@@ -86,8 +86,8 @@
 				/>
 			</div>
 		</div>
-		<div class="flex w-full rounded-lg bg-[#2B2F32]">
-			<div class="w-1/5 rounded-xl bg-[#33393e] p-3 text-center">Edge 4</div>
+		<div class="flex w-full rounded-lg bg-secondary">
+			<div class="w-1/5 rounded-xl bg-primary p-3 text-center">Edge 4</div>
 			<div class="flex w-4/5 items-center justify-center text-center">
 				<input
 					class="h-full w-full bg-transparent pl-4 focus:outline-none"
@@ -96,8 +96,8 @@
 				/>
 			</div>
 		</div>
-		<div class="flex w-full rounded-lg bg-[#2B2F32]">
-			<div class="w-1/5 rounded-xl bg-[#33393e] p-3 text-center">OLL 1</div>
+		<div class="flex w-full rounded-lg bg-secondary">
+			<div class="w-1/5 rounded-xl bg-primary p-3 text-center">OLL 1</div>
 			<div class="flex w-4/5 items-center justify-center text-center">
 				<input
 					class="h-full w-full bg-transparent pl-4 focus:outline-none"
@@ -106,8 +106,8 @@
 				/>
 			</div>
 		</div>
-		<div class="flex w-full rounded-lg bg-[#2B2F32]">
-			<div class="w-1/5 rounded-xl bg-[#33393e] p-3 text-center">OLL 2</div>
+		<div class="flex w-full rounded-lg bg-secondary">
+			<div class="w-1/5 rounded-xl bg-primary p-3 text-center">OLL 2</div>
 			<div class="flex w-4/5 items-center justify-center text-center">
 				<input
 					class="h-full w-full bg-transparent pl-4 focus:outline-none"
@@ -116,8 +116,8 @@
 				/>
 			</div>
 		</div>
-		<div class="flex w-full rounded-lg bg-[#2B2F32]">
-			<div class="w-1/5 rounded-xl bg-[#33393e] p-3 text-center">PLL 1</div>
+		<div class="flex w-full rounded-lg bg-secondary">
+			<div class="w-1/5 rounded-xl bg-primary p-3 text-center">PLL 1</div>
 			<div class="flex w-4/5 items-center justify-center text-center">
 				<input
 					class="h-full w-full bg-transparent pl-4 focus:outline-none"
@@ -126,8 +126,8 @@
 				/>
 			</div>
 		</div>
-		<div class="flex w-full rounded-lg bg-[#2B2F32]">
-			<div class="w-1/5 rounded-xl bg-[#33393e] p-3 text-center">PLL 2</div>
+		<div class="flex w-full rounded-lg bg-secondary">
+			<div class="w-1/5 rounded-xl bg-primary p-3 text-center">PLL 2</div>
 			<div class="flex w-4/5 items-center justify-center text-center">
 				<input
 					class="h-full w-full bg-transparent pl-4 focus:outline-none"
@@ -138,7 +138,7 @@
 		</div>
 	</div>
 	<div class="mt-2 flex justify-center gap-4 text-xl text-white">
-		<button class="button py-2 px-4" type="button" on:click={closeFunction}>Болих</button>
-		<button class="button py-2 px-4" type="submit">Хадгалах</button>
+		<button class="rounded-xl bg-primary py-2 px-4 text-xl text-white" type="button" on:click={closeFunction}>Болих</button>
+		<button class="rounded-xl bg-primary py-2 px-4 text-xl text-white" type="submit">Хадгалах</button>
 	</div>
 </form>

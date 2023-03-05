@@ -4,18 +4,25 @@
 @tailwind components;
 @tailwind utilities;
 
+[data-theme='nomad'] {
+	--primary-color: #0b487e;
+	--secondary-color: #547fa5;
+	--sidebar-color: #f4f4f4;
+	--background-color: #fff;
+}
+
 .scrollbar::-webkit-scrollbar {
 	width: 10px;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-	background-color: #c4c4c4;
+	background-color: #fff;
 	border-radius: 10px;
 }
 
 .scrollbar::-webkit-scrollbar-track {
 	background-color: none;
-	margin-block: 0.5rem;
+	margin-block: 0.7rem;
 }
 
 @media (max-width: 1024px) {
@@ -23,13 +30,9 @@
 		width: 5px;
 	}
 	.scrollbar::-webkit-scrollbar-thumb {
-		background-color: #c4c4c4;
+		background-color: #fff;
 		border-radius: 5px;
 	}
-}
-
-.mobile-page {
-	background: linear-gradient(180deg, #363c41 29.35%, #1f252b 128.76%);
 }
 
 .button {

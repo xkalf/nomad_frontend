@@ -1,12 +1,13 @@
 <script lang="ts">
 	export let open: boolean = false
+	export let isPrimary = false
 </script>
 
 <svg
 	width="50"
 	height="30"
 	viewBox="-7 -2 50 30"
-	fill="white"
+	fill={isPrimary ? '#0B487E' : 'white'}
 	fill-opacity={open ? 1 : 0.5}
 	preserveAspectRatio="xMidYMid"
 	xmlns="http://www.w3.org/2000/svg"

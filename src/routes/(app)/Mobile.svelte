@@ -46,7 +46,7 @@
 	}
 
 	$: textColor =
-		state === 'ready' ? 'text-green-500' : state === 'waiting' ? 'text-red-400' : 'text-white'
+		state === 'ready' ? 'text-green-500' : state === 'waiting' ? 'text-red-400' : 'text-primary'
 
 	const scrambleSizeMapper: Record<CubeType, string> = {
 		N2: 'text-2xl',
@@ -157,12 +157,12 @@
 		<div>
 			<div
 				bind:this={scrambleEl}
-				class={`mt-8 flex items-center justify-center text-center text-scramble`}
+				class={`mt-8 flex items-center justify-center text-center text-primary`}
 			>
 				{#if !scramble}
 					<p class="text-2xl">Холилт хийж байна</p>
 				{:else}
-					<p class={`text-scramble ${scrambleSizeMapper[$cubeType]}`}>
+					<p class={`${scrambleSizeMapper[$cubeType]}`}>
 						{#if $cubeType === 'Megaminx'}
 							{@html formatMegaminxScramble(scramble)}
 						{:else}
@@ -177,7 +177,7 @@
 				<p class={`font-mono text-7xl ${textColor}`}>{displayTime(time)}</p>
 			</div>
 			<div class="flex flex-grow items-end justify-between">
-				<div class="space-y-2 text-scramble">
+				<div class="space-y-2 text-primary">
 					<p>Best time: {getBest($solves)}</p>
 					<p>
 						Average of 5: {getAvg($solves, 5)}
@@ -200,7 +200,7 @@
 	<div
 		class={`${
 			isScrambleDisplayOpen ? 'block' : 'hidden'
-		} absolute bottom-20 right-1/2 w-4/5 translate-x-[60%] bg-[#3A3E42] pb-4`}
+		} absolute bottom-20 right-1/2 w-4/5 translate-x-[60%] bg-primary pb-4`}
 	>
 		<div class="flex w-full items-center justify-end text-2xl text-white">
 			<button class="p-4" on:click={() => (isScrambleDisplayOpen = false)}>X</button>
@@ -215,10 +215,10 @@
 	cancelFunction={() => (isCustomTimeModalOpen = false)}
 	mode="create"
 >
-	<p class="text-lg text-white">Эвлүүлэлтийн хугацаа</p>
+	<p class="text-lg text-primary">Эвлүүлэлтийн хугацаа</p>
 	<input
 		bind:value={customTime}
-		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 pl-3 text-lg text-scramble"
+		class="mt-2 w-full rounded-lg bg-secondary p-2 pl-3 text-lg text-white"
 		type="number"
 	/>
 </Modal>

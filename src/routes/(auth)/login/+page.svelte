@@ -62,14 +62,14 @@
 				<div class="relative flex w-full flex-col gap-2 px-4 md:w-4/5">
 					<button
 						formaction="?/login&provider=google"
-						class="flex w-full items-center justify-center gap-2 rounded-lg border border-black bg-white p-2 drop-shadow md:p-4"
+						class="flex w-full items-center justify-center gap-2 rounded-lg border border-black bg-background p-2 drop-shadow md:p-4"
 					>
 						<GoogleIcon />
 						Sign in with Google
 					</button>
 					<button
 						formaction="?/login&provider=facebook"
-						class="flex w-full items-center justify-center gap-2 rounded-lg border border-black bg-white p-2 drop-shadow md:p-4"
+						class="flex w-full items-center justify-center gap-2 rounded-lg border border-black bg-background p-2 drop-shadow md:p-4"
 					>
 						<FacebookIcon />
 						Sign in with Facebook

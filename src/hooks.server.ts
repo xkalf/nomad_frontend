@@ -29,5 +29,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	}
 
-	return resolve(event)
+	return resolve(event, {
+		transformPageChunk: ({ html }) => html.replace('data-theme=""', 'data-theme="nomad"')
+	})
 }

@@ -1,56 +1,8 @@
 <script lang="ts">
 	export let open = false
+	export let isPrimary = false
 </script>
 
-<svg
-	width="50"
-	height="30"
-	viewBox="0 9 50 30"
-	fill="white"
-	fill-opacity={open ? 1 : 0.5}
-	xmlns="http://www.w3.org/2000/svg"
->
-	<g filter="url(#filter0_dd_408_15185)">
-		<path
-			d="M39.4942 26.2H26.2339L35.065 35.0892C35.4025 35.429 35.958 35.4566 36.305 35.1275C38.4676 33.0766 39.9552 30.3119 40.3916 27.204C40.4665 26.6719 40.0278 26.2 39.4942 26.2ZM38.6096 22.5549C38.1491 15.8352 32.8146 10.4655 26.1389 10.002C25.6292 9.9666 25.2001 10.3992 25.2001 10.9133V23.4999H37.7048C38.2156 23.4999 38.6448 23.0679 38.6096 22.5549ZM22.5177 26.2V12.8523C22.5177 12.3151 22.0489 11.8735 21.5208 11.9489C14.8613 12.8961 9.77101 18.7524 10.0079 25.7708C10.2516 32.9787 16.4171 38.8895 23.5812 38.799C26.3976 38.7635 29.0001 37.85 31.1398 36.3223C31.5813 36.0073 31.6103 35.3531 31.2275 34.9677L22.5177 26.2Z"
-		/>
-	</g>
-	<defs>
-		<filter
-			id="filter0_dd_408_15185"
-			x="0.862059"
-			y="0.862059"
-			width="56.2011"
-			height="54.6013"
-			filterUnits="userSpaceOnUse"
-			color-interpolation-filters="sRGB"
-		>
-			<feFlood flood-opacity="0" result="BackgroundImageFix" />
-			<feColorMatrix
-				in="SourceAlpha"
-				type="matrix"
-				values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-				result="hardAlpha"
-			/>
-			<feOffset dx="3.76268" dy="3.76268" />
-			<feGaussianBlur stdDeviation="6.45031" />
-			<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0" />
-			<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_408_15185" />
-			<feColorMatrix
-				in="SourceAlpha"
-				type="matrix"
-				values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-				result="hardAlpha"
-			/>
-			<feOffset dx="-1.61258" dy="-1.61258" />
-			<feGaussianBlur stdDeviation="3.22516" />
-			<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.12 0" />
-			<feBlend
-				mode="normal"
-				in2="effect1_dropShadow_408_15185"
-				result="effect2_dropShadow_408_15185"
-			/>
-			<feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_408_15185" result="shape" />
-		</filter>
-	</defs>
+<svg width="31" height="29" viewBox="0 0 31 29" fill={isPrimary ? '#0B487E' : 'white'} fill-opacity={open ? 1 : 0.5} xmlns="http://www.w3.org/2000/svg">
+<path d="M29.4942 16.2H16.2339L25.065 25.0892C25.4025 25.429 25.9579 25.4566 26.305 25.1275C28.4676 23.0766 29.9552 20.3119 30.3916 17.204C30.4665 16.6719 30.0278 16.2 29.4942 16.2ZM28.6096 12.5549C28.1491 5.83522 22.8146 0.465539 16.1389 0.00203403C15.6292 -0.0334039 15.2001 0.399163 15.2001 0.913294V13.4999H27.7048C28.2156 13.4999 28.6448 13.0679 28.6096 12.5549ZM12.5177 16.2V2.85225C12.5177 2.31506 12.0489 1.87349 11.5208 1.94887C4.86131 2.89613 -0.228995 8.75238 0.00794564 15.7708C0.251592 22.9787 6.41707 28.8895 13.5812 28.799C16.3976 28.7635 19.0001 27.85 21.1398 26.3223C21.5813 26.0073 21.6103 25.3531 21.2275 24.9677L12.5177 16.2Z"/>
 </svg>

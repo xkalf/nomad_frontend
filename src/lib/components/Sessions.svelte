@@ -96,7 +96,7 @@
 </script>
 
 <div
-	class={`m-4 ${mobile ? 'mx-auto w-full' : ''} rounded-xl bg-sidebarElement py-2 px-4 text-white`}
+	class={`m-4 ${mobile ? 'mx-auto w-full' : ''} rounded-xl bg-secondary py-2 px-4 text-white`}
 >
 	<div>
 		{#if isSessionOpen}
@@ -124,7 +124,7 @@
 									updateIsSessionDelete(s.id, false)
 								}}
 							>
-								<p class="text-lg text-white">Уг session-ийг устгах уу?</p>
+								<p class="text-lg text-primary">Уг session-ийг устгах уу?</p>
 							</Modal>
 						{/if}
 					</li>
@@ -146,7 +146,7 @@
 				icon={!isSessionOpen
 					? 'material-symbols:keyboard-arrow-up-rounded'
 					: 'material-symbols:keyboard-arrow-down-rounded'}
-				color="#b8b8b8"
+				color="#fff"
 				width="25"
 				height="25"
 				inline={true}
@@ -154,17 +154,17 @@
 		</button>
 		<!-- CubeType -->
 		<div
-			class={`relative flex flex-grow items-center justify-center rounded-xl bg-[#424B53] py-1 text-xl ${
+			class={`relative flex flex-grow items-center justify-center rounded-xl bg-primary py-1 text-xl ${
 				mobile ? 'hidden' : 'block'
 			}`}
 		>
 			<ul
-				class={`absolute left-0 bottom-0 z-0 flex w-full flex-col rounded-xl bg-[#424B53] pt-3 pb-10 ${
+				class={`absolute left-0 bottom-0 z-0 flex w-full flex-col rounded-xl bg-primary pt-3 pb-10 ${
 					isCubeTypeOpen ? 'block' : 'hidden'
 				}`}
 			>
 				{#each cubeTypes as type}
-					<li class="w-full px-1 text-center hover:bg-[#606C76]">
+					<li class="w-full px-1 text-center hover:bg-secondary">
 						<button class="w-full" on:click={async () => await changeCurrentCubeType(type)}
 							>{cubeTypeMapper[type]}</button
 						>
@@ -176,7 +176,7 @@
 		<!-- Session -->
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div
-			class="z-10 flex flex-grow items-center justify-center rounded-xl bg-[#424b53] py-1 text-xl text-green-400"
+			class="z-10 flex flex-grow items-center justify-center rounded-xl bg-primary py-1 text-xl text-green-400"
 		>
 			<button class="w-full" on:click={showSessionCreate}>+ Session</button>
 		</div>
@@ -189,11 +189,11 @@
 	cancelFunction={() => (isSessionCreate = false)}
 	mode="create"
 >
-	<label for="sessionName" class="text-xl text-white">Session-ийн нэр</label>
+	<label for="sessionName" class="text-xl text-primary">Session-ийн нэр</label>
 	<input
 		id="sessionName"
 		type="text"
-		class="mt-2 w-full rounded-lg bg-[#2B2F32] p-2 pl-3 text-lg text-scramble"
+		class="mt-2 w-full rounded-lg bg-secondary p-2 pl-3 text-lg text-white"
 		bind:value={sessionName}
 	/>
 </Modal>
