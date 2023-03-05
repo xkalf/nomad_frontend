@@ -19,7 +19,7 @@
 	import Desktop from './Desktop.svelte'
 	import Mobile from './Mobile.svelte'
 
-	let scramble: string | null
+	let scramble: string = generateScramble($cubeType)
 	let currentScramble: string | null = null
 	let lastScramble: string | null = null
 	let time = 0
@@ -107,7 +107,6 @@
 	}
 
 	async function changeCubeType(type: CubeType) {
-		scramble = null
 		setCubeType(type)
 
 		if (browser) {
@@ -160,8 +159,6 @@
 
 	onMount(async () => {
 		if (browser) {
-			newScramble()
-
 			const exceptTags = ['INPUT', 'BUTTON', 'TEXTAREA']
 
 			window.addEventListener('keyup', e => {

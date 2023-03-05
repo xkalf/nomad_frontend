@@ -9,7 +9,7 @@
 
 	export let time: number
 	export let state: StateType
-	export let scramble: string | null
+	export let scramble: string
 	export let changeCubeType: (type: CubeType) => Promise<void>
 
 	$: textColor = state === 'ready' ? 'text-green-500' : 'text-primary'
@@ -39,17 +39,13 @@
 		<div
 			class="h-1/6 mt-[3vh] flex items-center justify-center p-20 pt-5 text-center text-primary"
 		>
-			{#if !scramble}
-				<p class="text-5xl">Холилт хийж байна</p>
-			{:else}
-				<p class={`${scrambleSizeMapper[$cubeType]}`}>
-					{#if $cubeType === 'Megaminx'}
-						{@html formatMegaminxScramble(scramble)}
-					{:else}
-						{scramble}
-					{/if}
-				</p>
-			{/if}
+			<p class={`${scrambleSizeMapper[$cubeType]}`}>
+				{#if $cubeType === 'Megaminx'}
+					{@html formatMegaminxScramble(scramble)}
+				{:else}
+					{scramble}
+				{/if}
+			</p>
 		</div>
 		<!-- Time -->
 		<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">

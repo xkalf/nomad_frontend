@@ -17,7 +17,7 @@
 			<button type="submit">Гарах</button>
 		</form>
 	</div>
-	<div class="flex justify-between">
+	<div class="flex justify-between px-2">
 		<div class="flex h-14 w-14 items-center justify-center rounded-lg">
 			<a data-sveltekit-preload-data href="/">
 				<HomeIcon open={getIconColor('/(app)')} isPrimary />

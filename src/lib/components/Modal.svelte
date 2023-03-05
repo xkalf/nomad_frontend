@@ -23,10 +23,12 @@
 	})
 </script>
 
-<div class={`absolute top-0 left-0 w-full flex h-screen items-center justify-center ${isOpen ? "block" : 'hidden'} bg-black bg-opacity-50 z-50`}>
-	<div
-		class="rounded-xl bg-background p-12 pb-4"
-	>
+<div
+	class={`absolute top-0 left-0 flex h-screen w-full items-center justify-center ${
+		isOpen ? 'block' : 'hidden'
+	} z-50 bg-black bg-opacity-50`}
+>
+	<div class="w-4/5 rounded-xl bg-background p-12 pb-4 md:w-auto">
 		<img alt="ads" src={image} class="h-[250px] w-[250px] md:h-[500px] md:w-[500px]" />
 		<div class="my-4">
 			<slot />

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import logo from '$lib/assets/scramble-logo.png'
+	import logo from '$lib/assets/scramble-logo.webp'
 	import { cubeTypeMapper, cubeTypes, type StateType } from '$lib/utils/types'
 	import {
 		displayTime,
@@ -18,7 +18,7 @@
 	import type { CubeType, SolveStatus } from '@prisma/client'
 
 	export let time: number
-	export let scramble: string | null
+	export let scramble: string
 	export let state: StateType
 	export let startTime: () => void
 	export let stopTime: () => Promise<void>
@@ -159,17 +159,13 @@
 				bind:this={scrambleEl}
 				class={`mt-8 flex items-center justify-center text-center text-primary`}
 			>
-				{#if !scramble}
-					<p class="text-2xl">Холилт хийж байна</p>
-				{:else}
-					<p class={`${scrambleSizeMapper[$cubeType]}`}>
-						{#if $cubeType === 'Megaminx'}
-							{@html formatMegaminxScramble(scramble)}
-						{:else}
-							{scramble}
-						{/if}
-					</p>
-				{/if}
+				<p class={`${scrambleSizeMapper[$cubeType]}`}>
+					{#if $cubeType === 'Megaminx'}
+						{@html formatMegaminxScramble(scramble)}
+					{:else}
+						{scramble}
+					{/if}
+				</p>
 			</div>
 		</div>
 		<div bind:this={timerEl} class="flex flex-grow select-none flex-col">

@@ -3,7 +3,7 @@
 	import { scrambleMappper } from '$lib/utils/types'
 	import { onMount } from 'svelte'
 
-	export let scramble: string | null
+	export let scramble: string
 
 	let container: HTMLDivElement
 	let el: any
@@ -29,10 +29,3 @@
 </script>
 
 <div bind:this={container} />
-
-<!-- <scramble-display
-	style="width: 100%;"
-	{scramble}
-	event={$cubeType}
-	visualization={mobile ? '2D' : $cubeType === 'pyram' ? '2D' : '3D'}
-/> -->

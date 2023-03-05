@@ -7,8 +7,8 @@
 [data-theme='nomad'] {
 	--primary-color: #0b487e;
 	--secondary-color: #547fa5;
-	--sidebar-color: #f4f4f4;
-	--background-color: #fff;
+	--sidebar-color: #fff;
+	--background-color: #f4f4f4;
 }
 
 .scrollbar::-webkit-scrollbar {
