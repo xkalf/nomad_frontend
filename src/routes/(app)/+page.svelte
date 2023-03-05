@@ -16,7 +16,6 @@
 	import { onMount } from 'svelte'
 	import Modal from '$lib/components/Modal.svelte'
 	import { sortMode } from '$lib/stores/sortMode'
-	import { setPageLoading } from '$lib/stores/loading'
 	import Desktop from './Desktop.svelte'
 	import Mobile from './Mobile.svelte'
 
@@ -121,12 +120,12 @@
 		}
 	}
 
-	async function newScramble() {
+	function newScramble() {
 		lastScramble = scramble
 		if (currentScramble) {
 			scramble = currentScramble
 		} else {
-			scramble = await generateScramble($cubeType)
+			scramble = generateScramble($cubeType)
 		}
 		currentScramble = null
 	}
@@ -155,15 +154,13 @@
 
 	session.subscribe(async value => {
 		if (value?.cube && browser) {
-			scramble = await generateScramble(value.cube as CubeType)
+			scramble = generateScramble(value.cube as CubeType)
 		}
 	})
 
 	onMount(async () => {
 		if (browser) {
-			setPageLoading(true)
-			await newScramble()
-			setPageLoading(false)
+			newScramble()
 
 			const exceptTags = ['INPUT', 'BUTTON', 'TEXTAREA']
 

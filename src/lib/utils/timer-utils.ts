@@ -1,5 +1,5 @@
-import { SolveStatus, type Solve, type CubeType } from '@prisma/client'
-import { randomScrambleForEvent } from 'cubing/scramble'
+import { SolveStatus, type Solve, CubeType } from '@prisma/client'
+import { Scrambow } from 'scrambow'
 import { scrambleMappper } from './types'
 
 export const displayTime = (time: number) => {
@@ -160,14 +160,42 @@ export function getMean(solves: Solve[]) {
 	return displayTime(sum / filtered.length)
 }
 
-export const generateScramble = async (cubeType: CubeType) => {
-	const s = await randomScrambleForEvent(scrambleMappper[cubeType])
+function getBlindWideMove() {
+	const moves = ['Uw', 'Lw', 'Rw', 'Fw']
+	const move = moves[Math.floor(Math.random() * moves.length)]
+	const randState = Math.random()
 
-	if (cubeType === 'Pyraminx') {
-		return s.experimentalSimplify({ cancel: true }).toString().replace(/2/g, "'").replace("''", '')
+	if (randState < 0.33) {
+		return `${move}'`
+	} else if (randState < 0.66) {
+		return `${move}2`
 	}
 
-	return s.toString()
+	return move
+}
+
+export const generateScramble = (cubeType: CubeType) => {
+	const scrambow = new Scrambow()
+	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
+	const blindTypeMapper: { [key: string]: CubeType } = {
+		Bld3: 'N3',
+		Bld4: 'N4',
+		Bld5: 'N5'
+	}
+	let blind = false
+
+	if (bldTypes.includes(cubeType)) {
+		cubeType = blindTypeMapper[cubeType.toString()] as CubeType
+		blind = true
+	}
+
+	let scramble = scrambow.setType(scrambleMappper[cubeType]).get()[0].scramble_string
+
+	if (blind) {
+		scramble += ' ' + getBlindWideMove()
+	}
+
+	return scramble
 }
 
 export function formatMegaminxScramble(scramble: string) {

@@ -1,18 +1,7 @@
 import { writable } from 'svelte/store'
 
-export const loading = writable({
-	layout: true,
-	page: false
-})
-
-export const setLayoutLoading = (l: boolean) => {
-	loading.update(i => ({ ...i, layout: l }))
-}
-
-export const setPageLoading = (l: boolean) => {
-	loading.update(i => ({ ...i, page: l }))
-}
+export const loading = writable(false)
 
 export const setLoading = (l: boolean) => {
-	loading.set({ layout: l, page: l })
+	loading.set(l)
 }

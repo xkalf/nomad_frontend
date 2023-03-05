@@ -24,7 +24,7 @@
 	export let stopTime: () => Promise<void>
 	export let updateState: (input: StateType) => void
 	export let changeCubeType: (type: CubeType) => Promise<void>
-	export let newScramble: () => Promise<void>
+	export let newScramble: () => void
 	export let getLastScramble: () => Promise<void>
 	export let updateLastSolve: (status: SolveStatus) => Promise<void>
 	export let openDeleteLastModal: () => void
@@ -95,8 +95,8 @@
 				if (isReady()) openDeleteAllModal()
 			})
 
-			hammer.on('swipeRight', async () => {
-				if (isReady()) await newScramble()
+			hammer.on('swipeRight', () => {
+				if (isReady()) newScramble()
 			})
 
 			hammer.on('swipeLeft', () => {
@@ -114,8 +114,8 @@
 				}
 			})
 
-			sHammer.on('swipeRight', async () => {
-				if (isReady()) await newScramble()
+			sHammer.on('swipeRight', () => {
+				if (isReady()) newScramble()
 			})
 
 			sHammer.on('swipeLeft', async () => {
