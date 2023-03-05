@@ -1,7 +1,6 @@
 import { SolveStatus, type Solve, CubeType } from '@prisma/client'
 import { scrambleMappper } from './types'
-
-const { Scrambow } = await import('scrambow')
+import Scrambow from 'scrambow'
 
 export const displayTime = (time: number) => {
 	const hours = Math.floor(time / 3_600_000) // 1 Hour = 3600000 Milliseconds
@@ -176,7 +175,7 @@ function getBlindWideMove() {
 }
 
 export const generateScramble = (cubeType: CubeType) => {
-	const scrambow = new Scrambow()
+	const scrambow = new Scrambow.Scrambow()
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
 	const blindTypeMapper: { [key: string]: CubeType } = {
 		Bld3: 'N3',
