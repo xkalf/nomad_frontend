@@ -1,6 +1,6 @@
-import { SolveStatus, type Solve, CubeType } from '@prisma/client'
+import type { Solve, CubeType } from '@prisma/client'
 import { scrambleMappper } from './types'
-import Scrambow from 'scrambow'
+import { Scrambow } from 'scrambow'
 
 export const displayTime = (time: number) => {
 	const hours = Math.floor(time / 3_600_000) // 1 Hour = 3600000 Milliseconds
@@ -25,11 +25,11 @@ export const displayTime = (time: number) => {
 
 export const formatTime = (solve: Solve) => {
 	switch (solve.status) {
-		case SolveStatus.Ok:
+		case 'Ok':
 			return displayTime(solve.time)
-		case SolveStatus.Plus2:
+		case 'Plus2':
 			return '+' + displayTime(solve.time + 2000)
-		case SolveStatus.Dnf:
+		case 'Dnf':
 			return 'DNF'
 	}
 }
@@ -43,7 +43,7 @@ export const getBest = (arr: Solve[]): string => {
 		return displayTime(0)
 	}
 
-	const filtered = arr.filter(i => i.status !== SolveStatus.Dnf)
+	const filtered = arr.filter(i => i.status !== 'Dnf')
 
 	if (filtered.length === 0) {
 		return 'DNF'
@@ -52,7 +52,7 @@ export const getBest = (arr: Solve[]): string => {
 	const best = Math.min(
 		...filtered
 			.map(i => {
-				if (i.status === SolveStatus.Plus2) {
+				if (i.status === 'Plus2') {
 					return { ...i, time: i.time + 2000 }
 				} else {
 					return i
@@ -69,9 +69,20 @@ export const getWorst = (arr: Solve[]) => {
 		return displayTime(0)
 	}
 
-	const worst = Math.max(...arr.filter(i => i.status !== SolveStatus.Dnf).map(i => i.time))
+	const worst = Math.max(...arr.filter(i => i.status !== 'Dnf').map(i => i.time))
 
 	return displayTime(worst)
+}
+
+function getAdjustedTime(solve: Solve): number {
+	switch (solve.status) {
+		case 'Ok':
+			return solve.time
+		case 'Plus2':
+			return (solve.time += 2000)
+		case 'Dnf':
+			return Number.MAX_SAFE_INTEGER
+	}
 }
 
 export const getAvg = (arr: Solve[], length: number) => {
@@ -80,33 +91,25 @@ export const getAvg = (arr: Solve[], length: number) => {
 	}
 
 	const array = arr.slice(-1 * length)
-	const dnfs = array.filter(i => i.status === SolveStatus.Dnf)
+	const dnfs = array.filter(i => i.status === 'Dnf')
 
 	if (dnfs.length >= 2 && length >= 5) {
 		return 'DNF'
 	}
 
-	if (dnfs.length >= 3 && length >= 25) {
+	if (dnfs.length >= Math.floor(length / 25) + 2 && length >= 25) {
 		return 'DNF'
 	}
 
-	if (dnfs.length >= 4 && length >= 50) {
-		return 'DNF'
-	}
+	const adjustedSolves = array.map(i => ({
+		...i,
+		time: getAdjustedTime(i)
+	}))
+	const sortedSolves = adjustedSolves.slice().sort((a, b) => a.time - b.time)
+	const filteredSolves = sortedSolves.slice(1, -1)
+	const sum = filteredSolves.reduce((a, b) => a + b.time, 0)
 
-	if (dnfs.length >= 5 && length >= 100) {
-		return 'DNF'
-	}
-
-	const sum = array.filter(i => i.status !== SolveStatus.Dnf).reduce((a, b) => (a += b.time), 0)
-	const max = array.find(i => i.status === SolveStatus.Dnf)
-		? 0
-		: Math.max(...array.map(i => i.time))
-	const min = Math.min(...array.map(i => i.time))
-
-	const avg = (sum - min - max) / (array.length - 2)
-
-	return displayTime(avg)
+	return displayTime(sum / filteredSolves.length)
 }
 
 export const getBestAverage = (arr: Solve[], length: number): Solve[] => {
@@ -117,15 +120,20 @@ export const getBestAverage = (arr: Solve[], length: number): Solve[] => {
 	for (let i = 0; i < arr.length - length + 1; i++) {
 		const array = arr.slice(i, length + i)
 
-		if (array.filter(i => i.status === SolveStatus.Dnf).length > 2) continue
+		const dnfs = array.filter(i => i.status === 'Dnf')
 
-		const sum = array.filter(i => i.status !== SolveStatus.Dnf).reduce((a, b) => (a += b.time), 0)
-		const max = array.find(i => i.status === SolveStatus.Dnf)
-			? 0
-			: Math.max(...array.map(i => i.time))
-		const min = Math.min(...arr.map(i => i.time))
+		if (dnfs.length >= 2 && length >= 5) continue
+		if (dnfs.length >= Math.floor(length / 25) + 2 && length >= 25) continue
 
-		const avg = (sum - min - max) / (array.length - 2)
+		const adjustedSolves = array.map(i => ({
+			...i,
+			time: getAdjustedTime(i)
+		}))
+		const sortedSolves = adjustedSolves.slice().sort((a, b) => a.time - b.time)
+		const filteredSolves = sortedSolves.slice(1, -1)
+		const sum = filteredSolves.reduce((a, b) => a + b.time, 0)
+
+		const avg = sum / filteredSolves.length
 
 		if (!best || avg < best) {
 			best = avg
@@ -142,20 +150,17 @@ export function getMean(solves: Solve[]) {
 	}
 
 	const filtered = solves
-		.filter(i => i.status !== SolveStatus.Dnf)
-		.map(i => {
-			if (i.status === SolveStatus.Plus2) {
-				return (i.time += 2000)
-			} else {
-				return i.time
-			}
-		})
+		.filter(i => i.status !== 'Dnf')
+		.map(i => ({
+			...i,
+			time: getAdjustedTime(i)
+		}))
 
 	if (filtered.length === 0) {
 		return 'DNF'
 	}
 
-	const sum = filtered.reduce((a, b) => a + b, 0)
+	const sum = filtered.reduce((a, b) => a + b.time, 0)
 
 	return displayTime(sum / filtered.length)
 }
@@ -175,7 +180,7 @@ function getBlindWideMove() {
 }
 
 export const generateScramble = (cubeType: CubeType) => {
-	const scrambow = new Scrambow.Scrambow()
+	const scrambow = new Scrambow()
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
 	const blindTypeMapper: { [key: string]: CubeType } = {
 		Bld3: 'N3',
@@ -191,7 +196,7 @@ export const generateScramble = (cubeType: CubeType) => {
 
 	let scramble = scrambow.setType(scrambleMappper[cubeType]).get()[0].scramble_string
 
-	if (blind) {
+	if (blind && cubeType == 'Bld3') {
 		scramble += ' ' + getBlindWideMove()
 	}
 

@@ -12,7 +12,7 @@
 </svelte:head>
 
 <div class="h-screen md:grid md:grid-cols-2">
-	<div class="hidden bg-black md:block" />
+	<div class="hidden bg-primary md:block" />
 	<div class="flex h-full flex-col p-2 md:p-3">
 		<div class="mx-auto flex flex-grow flex-col justify-center md:w-4/5">
 			<div class="mx-auto flex w-4/5 flex-col justify-center md:w-full">
@@ -53,7 +53,7 @@
 				<div class="relative w-full px-4 text-[#cecfd5] md:w-4/5">
 					<input
 						type="submit"
-						class="w-full rounded-lg bg-black p-2 text-white drop-shadow md:p-4"
+						class="w-full rounded-lg bg-primary p-2 text-white drop-shadow md:p-4"
 						value="Нэвтрэх"
 					/>
 				</div>
@@ -62,14 +62,14 @@
 				<div class="relative flex w-full flex-col gap-2 px-4 md:w-4/5">
 					<button
 						formaction="?/login&provider=google"
-						class="flex w-full items-center justify-center gap-2 rounded-lg border border-black bg-background p-2 drop-shadow md:p-4"
+						class="flex w-full items-center justify-center gap-2 rounded-lg border border-black bg-white p-2 drop-shadow md:p-4"
 					>
 						<GoogleIcon />
 						Sign in with Google
 					</button>
 					<button
 						formaction="?/login&provider=facebook"
-						class="flex w-full items-center justify-center gap-2 rounded-lg border border-black bg-background p-2 drop-shadow md:p-4"
+						class="flex w-full items-center justify-center gap-2 rounded-lg border border-black bg-white p-2 drop-shadow md:p-4"
 					>
 						<FacebookIcon />
 						Sign in with Facebook
