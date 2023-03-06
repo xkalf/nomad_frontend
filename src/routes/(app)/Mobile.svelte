@@ -5,8 +5,10 @@
 		displayTime,
 		formatMegaminxScramble,
 		formatTimeInput,
+		getAverageTime,
 		getAvg,
-		getBest
+		getBest,
+		getBestAverage
 	} from '$lib/utils/timer-utils'
 	import { solves } from '$lib/stores/solves'
 	import { browser } from '$app/environment'
@@ -15,7 +17,7 @@
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
 	import Modal from '$lib/components/Modal.svelte'
-	import type { CubeType, SolveStatus } from '@prisma/client'
+	import type { CubeType, Solve, SolveStatus } from '@prisma/client'
 
 	export let time: number
 	export let scramble: string
@@ -43,6 +45,17 @@
 	async function createCustomSolve() {
 		Promise.all([createSolve(formatTimeInput(customTime)), newScramble()])
 		isCustomTimeModalOpen = false
+	}
+
+	function checkBestAverage(solves: Solve[], length: number) {
+		if (
+			getAverageTime(solves, length) === getAverageTime(getBestAverage(solves, length), length) &&
+			getAverageTime(solves, length) > 0
+		) {
+			return 'text-green-500'
+		} else {
+			return ''
+		}
 	}
 
 	$: textColor =
@@ -175,10 +188,10 @@
 			<div class="flex flex-grow items-end justify-between">
 				<div class="space-y-2 text-primary">
 					<p>Best time: {getBest($solves)}</p>
-					<p>
+					<p class={`${checkBestAverage($solves, 5)}`}>
 						Average of 5: {getAvg($solves, 5)}
 					</p>
-					<p>
+					<p class={`${checkBestAverage($solves, 12)}`}>
 						Average of 12: {getAvg($solves, 12)}
 					</p>
 				</div>
