@@ -32,7 +32,7 @@
 </script>
 
 <form method="POST" on:submit|preventDefault={submit} class="mt-2 text-white">
-	<div class="scrollbar flex max-h-40 flex-col gap-2 overflow-y-auto pr-2">
+	<div class="flex max-h-40 flex-col gap-2 overflow-y-auto pr-2">
 		<div class="flex w-full rounded-lg bg-secondary">
 			<div class="w-1/5 rounded-xl bg-primary p-3 text-center">Cross</div>
 			<div class="flex w-4/5 items-center justify-center text-center">
@@ -105,7 +105,13 @@
 		</div>
 	</div>
 	<div class="mt-2 flex justify-center gap-4 text-xl text-white">
-		<button class="rounded-xl bg-primary py-2 px-4 text-xl text-white" type="button" on:click={closeFunction}>Болих</button>
-		<button class="rounded-xl bg-primary py-2 px-4 text-xl text-white" type="submit">Хадгалах</button>
+		<button
+			class="rounded-xl bg-primary py-2 px-4 text-xl text-white"
+			type="button"
+			on:click={closeFunction}>Болих</button
+		>
+		<button class="rounded-xl bg-primary py-2 px-4 text-xl text-white" type="submit"
+			>Хадгалах</button
+		>
 	</div>
 </form>

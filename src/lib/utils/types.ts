@@ -61,23 +61,6 @@ export const cubeTypeMapper: Record<CubeType, string> = {
 	Skewb: 'skewb'
 }
 
-export const playerMapper: Record<CubeType, string> = {
-	N2: '2x2x2',
-	N3: '3x3x3',
-	N4: '4x4x4',
-	N5: '5x5x5',
-	N6: '6x6x6',
-	N7: '7x7x7',
-	Bld3: '3x3x3',
-	Bld4: '4x4x4',
-	Bld5: '5x5x5',
-	Sq1: 'square1',
-	Pyraminx: 'pyraminx',
-	Megaminx: 'megaminx',
-	Clock: 'clock',
-	Skewb: 'skewb'
-}
-
 export const shortcutMapper: { [key: string]: CubeType } = {
 	Digit1: 'Sq1',
 	Digit2: 'N2',
@@ -91,10 +74,6 @@ export const shortcutMapper: { [key: string]: CubeType } = {
 	KeyP: 'Pyraminx',
 	KeyB: 'Bld3',
 	KeyS: 'Skewb'
-}
-
-export function getCubeTypeByType(value: string) {
-	return Object.keys(scrambleMappper).find(i => i === value) as CubeType
 }
 
 export type StateType = 'stopped' | 'running' | 'ready' | 'stopping' | 'waiting'

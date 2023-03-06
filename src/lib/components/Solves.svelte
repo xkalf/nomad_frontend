@@ -65,7 +65,7 @@
 		</button>
 	</div>
 	<!-- Solves -->
-	<ul class="scrollbar mr-2 flex-grow overflow-y-auto p-4">
+	<ul class="mr-2 flex-grow overflow-y-auto p-4">
 		{#each formattedSolves as solve, index}
 			<li>
 				<Solve order={$sortMode === 'none' ? formattedSolves.length - index : index + 1} {solve} />

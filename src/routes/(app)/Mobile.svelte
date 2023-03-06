@@ -233,7 +233,7 @@
 </Modal>
 
 <div class={`${isCubeTypeOpen ? 'block' : 'hidden'} modal w-64 text-center text-2xl text-white`}>
-	<ul class="scrollbar max-h-64 overflow-y-auto rounded-xl bg-[#040404]">
+	<ul class="max-h-64 overflow-y-auto rounded-xl bg-[#040404]">
 		{#each cubeTypes as type}
 			<li class="py-3">
 				<button
@@ -256,7 +256,7 @@
 </div>
 
 <div class={`${isStateOpen ? 'block' : 'hidden'} modal w-64 text-center text-2xl text-white`}>
-	<ul class="scrollbar max-h-64 overflow-y-auto rounded-xl bg-[#040404]">
+	<ul class="max-h-64 overflow-y-auto rounded-xl bg-[#040404]">
 		<li class="py-3">
 			<button
 				class="w-full"

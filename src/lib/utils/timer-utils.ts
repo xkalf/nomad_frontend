@@ -4,7 +4,7 @@ import s from 'scrambow'
 
 const { Scrambow } = s
 
-export const displayTime = (time: number) => {
+export function displayTime(time: number): string {
 	const hours = Math.floor(time / 3_600_000) // 1 Hour = 3600000 Milliseconds
 	const minutes = Math.floor((time % 3_600_000) / 60_000) // 1 Minute = 60000 Milliseconds
 	const seconds = Math.floor(((time % 3_600_000) % 60_000) / 1000) // 1 Second = 1000 Milliseconds
@@ -25,7 +25,7 @@ export const displayTime = (time: number) => {
 	return base
 }
 
-export const formatTime = (solve: Solve) => {
+export function formatTime(solve: Solve): string {
 	switch (solve.status) {
 		case 'Ok':
 			return displayTime(solve.time)
@@ -36,11 +36,11 @@ export const formatTime = (solve: Solve) => {
 	}
 }
 
-export const pad = (num: number) => {
+export function pad(num: number): string {
 	return num.toString().padStart(2, '0')
 }
 
-export const getBest = (arr: Solve[]): string => {
+export function getBest(arr: Solve[]): string {
 	if (arr.length === 0) {
 		return displayTime(0)
 	}
@@ -56,7 +56,7 @@ export const getBest = (arr: Solve[]): string => {
 	return displayTime(best)
 }
 
-export const getWorst = (arr: Solve[]) => {
+export function getWorst(arr: Solve[]): string {
 	if (arr.length === 0) {
 		return displayTime(0)
 	}
@@ -77,7 +77,7 @@ function getAdjustedTime(solve: Solve): number {
 	}
 }
 
-export function getAverageTime(arr: Solve[], length: number) {
+export function getAverageTime(arr: Solve[], length: number): number {
 	if (arr.length < length) {
 		return 0
 	}
@@ -104,12 +104,12 @@ export function getAverageTime(arr: Solve[], length: number) {
 	return sum / filteredSolves.length
 }
 
-export const getAvg = (arr: Solve[], length: number) => {
+export function getAvg(arr: Solve[], length: number): string {
 	const time = getAverageTime(arr, length)
 	return time >= 0 ? displayTime(time) : 'DNF'
 }
 
-export const getBestAverage = (arr: Solve[], length: number): Solve[] => {
+export function getBestAverage(arr: Solve[], length: number): Solve[] {
 	if (arr.length < length) return []
 	let best: number | undefined
 	let bestArray: Solve[] = []
@@ -128,7 +128,7 @@ export const getBestAverage = (arr: Solve[], length: number): Solve[] => {
 	return bestArray
 }
 
-export function getMean(solves: Solve[]) {
+export function getMean(solves: Solve[]): string {
 	if (solves.length === 0) {
 		return displayTime(0)
 	}
@@ -149,7 +149,7 @@ export function getMean(solves: Solve[]) {
 	return displayTime(sum / filtered.length)
 }
 
-function getBlindWideMove() {
+function getBlindWideMove(): string {
 	const moves = ['Uw', 'Lw', 'Rw', 'Fw']
 	const move = moves[Math.floor(Math.random() * moves.length)]
 	const randState = Math.random()
@@ -163,7 +163,7 @@ function getBlindWideMove() {
 	return move
 }
 
-export const generateScramble = (cubeType: CubeType) => {
+export function generateScramble(cubeType: CubeType): string {
 	const scrambow = new Scrambow()
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
 	const blindTypeMapper: { [key: string]: CubeType } = {

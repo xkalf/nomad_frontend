@@ -153,7 +153,7 @@
 
 	session.subscribe(async value => {
 		if (value?.cube && browser) {
-			scramble = generateScramble(value.cube as CubeType)
+			scramble = generateScramble(value.cube)
 		}
 	})
 

@@ -95,12 +95,10 @@
 	}
 </script>
 
-<div
-	class={`m-4 ${mobile ? 'mx-auto w-full' : ''} rounded-xl bg-secondary py-2 px-4 text-white`}
->
+<div class={`m-4 ${mobile ? 'mx-auto w-full' : ''} rounded-xl bg-secondary py-2 px-4 text-white`}>
 	<div>
 		{#if isSessionOpen}
-			<ul class="scrollbar my-2 ml-2 max-h-24 w-full overflow-y-auto">
+			<ul class="my-2 ml-2 max-h-24 w-full overflow-y-auto">
 				{#each formattedSessions as s}
 					<li class="flex justify-between pr-4">
 						<button
