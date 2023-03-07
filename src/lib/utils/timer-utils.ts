@@ -1,7 +1,6 @@
 import type { Solve, CubeType } from '@prisma/client'
 import { scrambleMappper } from './types'
 import s from 'scrambow'
-
 const { Scrambow } = s
 
 export function displayTime(time: number): string {

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import logo from '$lib/assets/scramble-logo.webp'
 	import { cubeTypeMapper, cubeTypes, type StateType } from '$lib/utils/types'
 	import {
 		displayTime,
@@ -18,6 +17,7 @@
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
 	import Modal from '$lib/components/Modal.svelte'
 	import type { CubeType, Solve, SolveStatus } from '@prisma/client'
+	import ScrambleLogo from '$lib/components/ScrambleLogo.svelte'
 
 	export let time: number
 	export let scramble: string
@@ -73,7 +73,7 @@
 		Bld5: 'text-sm',
 		Sq1: 'text-2xl',
 		Pyraminx: 'text-2xl',
-		Megaminx: 'text-sm text-justify font-mono',
+		Megaminx: 'text-xs text-justify font-mono',
 		Clock: 'text-2xl',
 		Skewb: 'text-2xl'
 	}
@@ -166,7 +166,7 @@
 </script>
 
 <MobileContainer>
-	<div class="flex flex-grow flex-col p-4">
+	<div class="relative flex flex-grow flex-col p-4">
 		<div>
 			<div
 				bind:this={scrambleEl}
@@ -199,22 +199,24 @@
 					on:click={() => {
 						isScrambleDisplayOpen = true
 					}}
-					class="flex items-end justify-end"
 				>
-					<img class="w-12" src={logo} alt="scramble logo" />
+					<ScrambleLogo />
 				</button>
 			</div>
 		</div>
-	</div>
-	<div
-		class={`${
-			isScrambleDisplayOpen ? 'block' : 'hidden'
-		} absolute bottom-20 right-1/2 w-4/5 translate-x-[60%] bg-primary pb-4`}
-	>
-		<div class="flex w-full items-center justify-end text-2xl text-white">
-			<button class="p-4" on:click={() => (isScrambleDisplayOpen = false)}>X</button>
+		<div
+			class={`${
+				isScrambleDisplayOpen ? 'block' : 'hidden'
+			} absolute bottom-2 right-1/2 w-4/5 translate-x-[60%] bg-primary pb-4`}
+		>
+			<div class="relative">
+				<button
+					class="absolute right-0 top-0 z-20 p-4 text-2xl text-white"
+					on:click={() => (isScrambleDisplayOpen = false)}>&#10005;</button
+				>
+				<ScrambleDisplay {scramble} />
+			</div>
 		</div>
-		<ScrambleDisplay {scramble} />
 	</div>
 </MobileContainer>
 
@@ -232,10 +234,10 @@
 	/>
 </Modal>
 
-<div class={`${isCubeTypeOpen ? 'block' : 'hidden'} modal w-64 text-center text-2xl text-white`}>
-	<ul class="max-h-64 overflow-y-auto rounded-xl bg-[#040404]">
+<div class={`${isCubeTypeOpen ? 'block' : 'hidden'} modal w-64 text-center text-2xl text-primary`}>
+	<ul class="max-h-64 overflow-y-auto rounded-xl bg-white">
 		{#each cubeTypes as type}
-			<li class="py-3">
+			<li class="border-b border-secondary py-3 last:border-none">
 				<button
 					class="w-full"
 					on:click={() => {
@@ -248,16 +250,16 @@
 	</ul>
 
 	<button
-		class="mt-2 w-full rounded-xl bg-[#040404] py-3 text-white"
+		class="mt-2 w-full rounded-xl bg-white py-3"
 		on:click={() => {
 			isCubeTypeOpen = false
 		}}>Cancel</button
 	>
 </div>
 
-<div class={`${isStateOpen ? 'block' : 'hidden'} modal w-64 text-center text-2xl text-white`}>
-	<ul class="max-h-64 overflow-y-auto rounded-xl bg-[#040404]">
-		<li class="py-3">
+<div class={`${isStateOpen ? 'block' : 'hidden'} modal w-64 text-center text-2xl text-primary`}>
+	<ul class="max-h-64 overflow-y-auto rounded-xl bg-white">
+		<li class="border-b border-secondary py-3">
 			<button
 				class="w-full"
 				on:click={async () => {
@@ -266,7 +268,7 @@
 				}}>+2</button
 			>
 		</li>
-		<li class="py-3">
+		<li class="border-b border-secondary py-3">
 			<button
 				class="w-full"
 				on:click={async () => {
@@ -287,7 +289,7 @@
 	</ul>
 
 	<button
-		class="mt-2 w-full rounded-xl bg-[#040404] py-3 text-white"
+		class="mt-2 w-full rounded-xl bg-white py-3"
 		on:click={() => {
 			isStateOpen = false
 		}}>Cancel</button

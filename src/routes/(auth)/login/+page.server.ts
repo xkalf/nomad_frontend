@@ -13,12 +13,13 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions: Actions = {
 	login: async ({ request, locals, url }) => {
 		const provider = url.searchParams.get('provider') as Provider
+		const redirectUrl = NODE_ENV === 'production' ? 'https://nomad-team.com' : url.origin
 
 		if (provider) {
 			const { data, error: err } = await locals.sb.auth.signInWithOAuth({
 				provider,
 				options: {
-					redirectTo: NODE_ENV === 'production' ? 'https://nomad-team.com' : 'http://localhost:5173'
+					redirectTo: redirectUrl
 				}
 			})
 
@@ -40,8 +41,7 @@ export const actions: Actions = {
 		const { error: err } = await locals.sb.auth.signInWithOtp({
 			email,
 			options: {
-				emailRedirectTo:
-					NODE_ENV === 'production' ? 'https://nomad-team.com' : 'http://localhost:5173'
+				emailRedirectTo: redirectUrl
 			}
 		})
 
