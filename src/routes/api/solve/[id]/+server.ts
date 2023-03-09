@@ -44,7 +44,7 @@ export const PUT: RequestHandler = async ({ params: { id }, request }) => {
 	const { status } = (await request.json()) as { status: SolveStatus }
 
 	try {
-		await db.solve.update({
+		const solve = await db.solve.update({
 			where: {
 				id: Number(id)
 			},
@@ -53,7 +53,7 @@ export const PUT: RequestHandler = async ({ params: { id }, request }) => {
 			}
 		})
 
-		return new Response(JSON.stringify({ success: true }))
+		return new Response(JSON.stringify({ success: true, solve }))
 	} catch (e) {
 		return new Response(JSON.stringify({ success: false }))
 	}

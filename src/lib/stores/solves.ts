@@ -1,4 +1,4 @@
-import type { Solve, SolveStatus } from '@prisma/client'
+import type { Solve } from '@prisma/client'
 import { writable } from 'svelte/store'
 
 export const solves = writable<Solve[]>([])
@@ -9,10 +9,6 @@ export function addSolves(solve: Solve) {
 
 export function addManySolves(s: Solve[]) {
 	solves.update(state => [...state, ...s])
-}
-
-export function sortSolvesByCreatedAt() {
-	solves.update(state => state.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime()))
 }
 
 export function initialSolves(s: Solve[]) {
@@ -27,18 +23,15 @@ export function deleteSolvesMany(ids: number[]) {
 	solves.update(state => state.filter(i => !ids.includes(i.id)))
 }
 
-export function changeSolveStats(id: number, status: SolveStatus) {
-	solves.update(state => {
-		const index = state.findIndex(i => i.id === id)
-		if (index !== -1) {
-			state[index] = {
-				...state[index],
-				status
+export function changeSolveStats(solve: Solve) {
+	solves.update(state => [
+		...state.map(i => {
+			if (i.id === solve.id) {
+				return solve
 			}
-		}
-
-		return state
-	})
+			return i
+		})
+	])
 }
 
 export function resetSolves() {

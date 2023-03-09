@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment'
+	import { toggleBestSolve } from '$lib/stores/bestSolve'
 	import { displayTime, formatTime, getAvg, pad } from '$lib/utils/timer-utils'
 	import type { Solve } from '@prisma/client'
 
@@ -14,10 +15,14 @@
 	let today: string
 
 	function openModal() {
-		if (browser && solves && solves.length === count) {
-			const date = new Date(Math.max(...solves.map(i => new Date(i.createdAt).getTime())))
-			today = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
-			modal.showModal()
+		if (browser) {
+			if (solves && solves.length === count) {
+				const date = new Date(Math.max(...solves.map(i => new Date(i.createdAt).getTime())))
+				today = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+				modal.showModal()
+			} else if (best) {
+				toggleBestSolve()
+			}
 		}
 	}
 
@@ -40,8 +45,8 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
-	class={`flex rounded-xl bg-primary py-4 px-3 text-white md:px-4 ${
-		best ? 'w-full' : 'w-1/2 cursor-pointer'
+	class={`flex cursor-pointer rounded-xl bg-primary py-4 px-3 text-white md:px-4 ${
+		best ? 'w-full' : 'w-1/2'
 	} ${mobile ? 'justify-evenly' : 'justify-between'}`}
 	on:click={openModal}
 >

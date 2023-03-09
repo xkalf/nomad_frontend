@@ -1,7 +1,6 @@
 import type { Solve, CubeType } from '@prisma/client'
 import { scrambleMappper } from './types'
 import s from 'scrambow'
-const { Scrambow } = s
 
 export function displayTime(time: number): string {
 	const hours = Math.floor(time / 3_600_000) // 1 Hour = 3600000 Milliseconds
@@ -39,20 +38,18 @@ export function pad(num: number): string {
 	return num.toString().padStart(2, '0')
 }
 
-export function getBest(arr: Solve[]): string {
-	if (arr.length === 0) {
-		return displayTime(0)
-	}
+export function getBestSolve(arr: Solve[]): Solve {
+	const adjustedSolves = arr.slice().map(i => ({
+		...i,
+		time: getAdjustedTime(i)
+	}))
+	const sortedSolves = adjustedSolves.sort((a, b) => a.time - b.time)
+	return sortedSolves.slice(0, 1)[0]
+}
 
-	const filtered = arr.filter(i => i.status !== 'Dnf')
-
-	if (filtered.length === 0) {
-		return 'DNF'
-	}
-
-	const best = Math.min(...filtered.map(i => getAdjustedTime(i)))
-
-	return displayTime(best)
+export function getBest(best: Solve & { open: boolean }): string {
+	if (typeof best.time === 'undefined') return displayTime(0)
+	return best.time !== Number.MAX_SAFE_INTEGER ? displayTime(best.time) : 'DNF'
 }
 
 export function getWorst(arr: Solve[]): string {
@@ -60,7 +57,12 @@ export function getWorst(arr: Solve[]): string {
 		return displayTime(0)
 	}
 
-	const worst = Math.max(...arr.filter(i => i.status !== 'Dnf').map(i => getAdjustedTime(i)))
+	const worst = Math.max(
+		...arr
+			.slice()
+			.filter(i => i.status !== 'Dnf')
+			.map(i => getAdjustedTime(i))
+	)
 
 	return displayTime(worst)
 }
@@ -70,7 +72,7 @@ function getAdjustedTime(solve: Solve): number {
 		case 'Ok':
 			return solve.time
 		case 'Plus2':
-			return (solve.time += 2000)
+			return solve.time + 2000
 		case 'Dnf':
 			return Number.MAX_SAFE_INTEGER
 	}
@@ -92,7 +94,7 @@ export function getAverageTime(arr: Solve[], length: number): number {
 		return -1
 	}
 
-	const adjustedSolves = array.map(i => ({
+	const adjustedSolves = array.slice().map(i => ({
 		...i,
 		time: getAdjustedTime(i)
 	}))
@@ -133,6 +135,7 @@ export function getMean(solves: Solve[]): string {
 	}
 
 	const filtered = solves
+		.slice()
 		.filter(i => i.status !== 'Dnf')
 		.map(i => ({
 			...i,
@@ -163,7 +166,7 @@ function getBlindWideMove(): string {
 }
 
 export function generateScramble(cubeType: CubeType): string {
-	const scrambow = new Scrambow()
+	const scrambow = new s.Scrambow()
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
 	const blindTypeMapper: { [key: string]: CubeType } = {
 		Bld3: 'N3',

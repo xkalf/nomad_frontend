@@ -7,6 +7,8 @@
 	import CfopSolve from './CfopSolve.svelte'
 	import TwoLookSolve from './TwoLookSolve.svelte'
 	import type { CfopSolve as CfopType, TwoLookSolve as TwoLookType } from '@prisma/client'
+	import { bestSolve } from '$lib/stores/bestSolve'
+	import { browser } from '$app/environment'
 
 	export let order: number
 	export let solve: Solve
@@ -63,7 +65,9 @@
 		})
 		const data = await response.json()
 
-		if (data.success === true) changeSolveStats(solve.id, st)
+		if (data.success === true) {
+			changeSolveStats(data.solve)
+		}
 	}
 
 	async function openModal(
@@ -82,8 +86,26 @@
 	}
 
 	function closeModal() {
-		modal.close()
+		if (browser && modal) modal.close()
 	}
+
+	bestSolve.subscribe(async i => {
+		if (solve.id === i.id) {
+			if (i.open) {
+				selected = options[0]
+				modal.showModal()
+				const data = (await (
+					await fetch(`/api/solve/${solve.id}`)
+				).json()) as SolveWithDetail | null
+				if (data) {
+					cfopData = data.cfopSolve
+					twoLookData = data.twoLookSolve
+				}
+			} else {
+				closeModal()
+			}
+		}
+	})
 </script>
 
 <div class="flex justify-between p-2 text-white">
@@ -109,7 +131,7 @@
 				deleteModalOpen = true
 			}}
 		>
-			X
+			&#10005;
 		</button>
 	</div>
 </div>
@@ -143,10 +165,8 @@
 						e.currentTarget.blur()
 						closeModal()
 						deleteModalOpen = true
-					}}
+					}}>&#10005;</button
 				>
-					X
-				</button>
 			</div>
 		</div>
 		<div class="mt-2">
@@ -154,6 +174,7 @@
 			<input
 				type="text"
 				value={solve.scramble}
+				disabled
 				class="mt-2 w-full rounded-lg border border-primary p-2"
 			/>
 		</div>
@@ -170,7 +191,9 @@
 			<div class="mt-2 flex gap-4">
 				{#each options as option}
 					<button
-						class={`${selected === option ? 'bg-[#52AAEA] bg-opacity-10 text-[#52AAEA]' : ''} py-1 px-2 rounded-lg`}
+						class={`${
+							selected === option ? 'bg-[#52AAEA] bg-opacity-10 text-[#52AAEA]' : ''
+						} rounded-lg py-1 px-2`}
 						on:click={() => {
 							selected = option
 						}}>{option.label}</button

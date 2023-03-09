@@ -3,10 +3,10 @@
 	import {
 		displayTime,
 		formatMegaminxScramble,
+		formatTime,
 		formatTimeInput,
 		getAverageTime,
 		getAvg,
-		getBest,
 		getBestAverage
 	} from '$lib/utils/timer-utils'
 	import { solves } from '$lib/stores/solves'
@@ -18,6 +18,7 @@
 	import Modal from '$lib/components/Modal.svelte'
 	import type { CubeType, Solve, SolveStatus } from '@prisma/client'
 	import ScrambleLogo from '$lib/components/ScrambleLogo.svelte'
+	import { bestSolve } from '$lib/stores/bestSolve'
 
 	export let time: number
 	export let scramble: string
@@ -187,7 +188,7 @@
 			</div>
 			<div class="flex flex-grow items-end justify-between">
 				<div class="space-y-2 text-primary">
-					<p>Best time: {getBest($solves)}</p>
+					<p>Best time: {formatTime($bestSolve)}</p>
 					<p class={`${checkBestAverage($solves, 5)}`}>
 						Average of 5: {getAvg($solves, 5)}
 					</p>

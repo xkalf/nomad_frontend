@@ -36,9 +36,7 @@
 	<Sidebar {changeCubeType} />
 	<div class="relative flex flex-col justify-between overflow-hidden bg-background p-4">
 		<!-- Scramble -->
-		<div
-			class="h-1/6 mt-[3vh] flex items-center justify-center p-20 pt-5 text-center text-primary"
-		>
+		<div class="h-1/6 mt-[3vh] flex items-center justify-center p-20 pt-5 text-center text-primary">
 			<p class={`${scrambleSizeMapper[$cubeType]}`}>
 				{#if $cubeType === 'Megaminx'}
 					{@html formatMegaminxScramble(scramble)}
