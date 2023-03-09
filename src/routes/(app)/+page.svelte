@@ -148,7 +148,7 @@
 		})
 		const data = await response.json()
 
-		if (data.success === true) changeSolveStats(last.id, status)
+		if (data.success === true) changeSolveStats(data.solve)
 	}
 
 	session.subscribe(async value => {
