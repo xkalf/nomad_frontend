@@ -59,22 +59,22 @@ model TwoLookSolve {
 }
 
 model TwoLookSolveDeleted {
-  id         Int      @id @default(autoincrement())
-  cross      String?
-  firstLayer String?
-  edge1      String?
-  edge2      String?
-  edge3      String?
-  edge4      String?
-  oll1       String?
-  oll2       String?
-  pll1       String?
-  pll2       String?
-  createdAt  DateTime 
-  updatedAt  DateTime 
+  id             Int      @id @default(autoincrement())
+  cross          String?
+  firstLayer     String?
+  edge1          String?
+  edge2          String?
+  edge3          String?
+  edge4          String?
+  oll1           String?
+  oll2           String?
+  pll1           String?
+  pll2           String?
+  createdAt      DateTime
+  updatedAt      DateTime
   twoLookSolveId Int
-  deleted DateTime @default(now())
-  solveId    Int      
+  deleted        DateTime @default(now())
+  solveId        Int
 }
 
 model CfopSolve {
@@ -95,35 +95,40 @@ model CfopSolve {
 }
 
 model CfopSolveDeleted {
-  id        Int      @id @default(autoincrement())
-  cross     String?
-  f2l1      String?
-  f2l2      String?
-  f2l3      String?
-  f2l4      String?
-  oll       String?
-  pll       String?
-  createdAt DateTime 
-  updatedAt DateTime 
-  solveId   Int      
-  deleted DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  cross       String?
+  f2l1        String?
+  f2l2        String?
+  f2l3        String?
+  f2l4        String?
+  oll         String?
+  pll         String?
+  createdAt   DateTime
+  updatedAt   DateTime
+  solveId     Int
+  deleted     DateTime @default(now())
   cfopSolveId Int
 }
 
 model User {
-  id          Int           @id @default(autoincrement())
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  email       String        @unique
-  firstname   String
-  lastname    String
-  birthdate   DateTime
-  password    String
-  settingsId  Int?
-  authId      String?
-  role        UserRole @default(User)
-  sessions    Session[]
-  settings    Settings?
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  email      String    @unique
+  firstname  String
+  lastname   String
+  birthdate  DateTime
+  gender     Gender?
+  settingsId Int?
+  authId     String?
+  role       UserRole  @default(User)
+  sessions   Session[]
+  settings   Settings?
+}
+
+enum Gender {
+  Male
+  Female
 }
 
 model Settings {

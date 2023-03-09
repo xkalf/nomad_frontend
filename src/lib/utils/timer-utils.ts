@@ -2,6 +2,8 @@ import type { Solve, CubeType } from '@prisma/client'
 import { scrambleMappper } from './types'
 import s from 'scrambow'
 
+const { Scrambow } = s
+
 export function displayTime(time: number): string {
 	const hours = Math.floor(time / 3_600_000) // 1 Hour = 3600000 Milliseconds
 	const minutes = Math.floor((time % 3_600_000) / 60_000) // 1 Minute = 60000 Milliseconds
@@ -166,7 +168,7 @@ function getBlindWideMove(): string {
 }
 
 export function generateScramble(cubeType: CubeType): string {
-	const scrambow = new s.Scrambow()
+	const scrambow = new Scrambow()
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
 	const blindTypeMapper: { [key: string]: CubeType } = {
 		Bld3: 'N3',
@@ -182,7 +184,7 @@ export function generateScramble(cubeType: CubeType): string {
 
 	let scramble = scrambow.setType(scrambleMappper[cubeType]).get()[0].scramble_string
 
-	if (blind && cubeType == 'Bld3') {
+	if (blind) {
 		scramble += ' ' + getBlindWideMove()
 	}
 
