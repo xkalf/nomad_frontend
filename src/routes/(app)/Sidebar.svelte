@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Average from '../../lib/components/Average.svelte'
 	import { solves } from '../../lib/stores/solves'
-	import { displayTime, getBest } from '../../lib/utils/timer-utils'
+	import { getBest } from '../../lib/utils/timer-utils'
 	import Solves from '$lib/components/Solves.svelte'
 	import Sessions from '$lib/components/Sessions.svelte'
 	import SidebarContainer from '$lib/components/SidebarContainer.svelte'

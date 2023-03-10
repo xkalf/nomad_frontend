@@ -119,6 +119,7 @@ model User {
   lastname   String
   birthdate  DateTime
   gender     Gender?
+  phone String? @db.VarChar(8)
   settingsId Int?
   authId     String?
   role       UserRole  @default(User)
@@ -138,7 +139,7 @@ model Settings {
   userId           Int               @unique
   displaySettings  DisplaySettings?
   scrambleSettings ScrambleSettings?
-  user             User              @relation(fields: [userId], references: [id])
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   timerSettings    TimerSettings?
 
   @@index([userId])
@@ -154,7 +155,7 @@ model DisplaySettings {
   settingsId             Int      @unique
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
-  settings               Settings @relation(fields: [settingsId], references: [id])
+  settings               Settings @relation(fields: [settingsId], references: [id], onDelete: Cascade)
 }
 
 model TimerSettings {
@@ -171,7 +172,7 @@ model TimerSettings {
   settingsId              Int                     @unique
   createdAt               DateTime                @default(now())
   updatedAt               DateTime                @updatedAt
-  settings                Settings                @relation(fields: [settingsId], references: [id])
+  settings                Settings                @relation(fields: [settingsId], references: [id], onDelete: Cascade)
 }
 
 model ScrambleSettings {
@@ -183,7 +184,7 @@ model ScrambleSettings {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   settingsId   Int       @unique
-  settings     Settings  @relation(fields: [settingsId], references: [id])
+  settings     Settings  @relation(fields: [settingsId], references: [id], onDelete: Cascade)
 }
 
 model SessionDeleted {

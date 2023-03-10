@@ -12,7 +12,7 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 	}
 
 	if (!locals.user) {
-		throw redirect(303, '/fix')
+		throw redirect(303, '/register')
 	}
 
 	const getSessions = async () => {

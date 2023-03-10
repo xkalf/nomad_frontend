@@ -48,6 +48,7 @@
 		"hammerjs": "^2.0.8",
 		"scramble-display": "^0.5.4",
 		"scrambow": "^1.7.0",
+		"svelte-front": "link:",
 		"zod": "^3.20.2"
 	}
 }

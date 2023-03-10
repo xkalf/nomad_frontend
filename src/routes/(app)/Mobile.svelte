@@ -3,10 +3,10 @@
 	import {
 		displayTime,
 		formatMegaminxScramble,
-		formatTime,
 		formatTimeInput,
 		getAverageTime,
 		getAvg,
+		getBest,
 		getBestAverage
 	} from '$lib/utils/timer-utils'
 	import { solves } from '$lib/stores/solves'
@@ -188,7 +188,7 @@
 			</div>
 			<div class="flex flex-grow items-end justify-between">
 				<div class="space-y-2 text-primary">
-					<p>Best time: {formatTime($bestSolve)}</p>
+					<p>Best time: {getBest($bestSolve)}</p>
 					<p class={`${checkBestAverage($solves, 5)}`}>
 						Average of 5: {getAvg($solves, 5)}
 					</p>

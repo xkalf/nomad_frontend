@@ -4,9 +4,11 @@ import type { Actions, PageServerLoad } from './$types'
 import { NODE_ENV } from '$env/static/private'
 
 export const load: PageServerLoad = async ({ locals }) => {
-	const ok = locals.user ? true : false
-	if (ok) {
-		throw redirect(302, '/')
+	if (locals.session) {
+		if (!locals.user) {
+			throw redirect(303, '/register')
+		}
+		throw redirect(303, '/')
 	}
 }
 
