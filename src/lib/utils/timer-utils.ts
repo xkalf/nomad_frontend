@@ -1,9 +1,9 @@
 import type { Solve, CubeType } from '@prisma/client'
 import { scrambleMappper } from './types'
-// import { Scrambow } from 'scrambow'
-import s from 'scrambow'
+import { Scrambow } from 'scrambow'
+// import s from 'scrambow'
 
-const { Scrambow } = s
+// const { Scrambow } = s
 
 export function displayTime(time: number): string {
 	const hours = Math.floor(time / 3_600_000) // 1 Hour = 3600000 Milliseconds
@@ -207,5 +207,16 @@ export function formatTimeInput(time: number) {
 		const seconds = Math.floor(time)
 		const milliSeconds = Math.floor((time % 1) * 1000)
 		return seconds * 1000 + milliSeconds
+	}
+}
+
+export function checkBestAverage(solves: Solve[], length: number) {
+	if (
+		getAverageTime(solves, length) === getAverageTime(getBestAverage(solves, length), length) &&
+		getAverageTime(solves, length) > 0
+	) {
+		return 'text-green-500'
+	} else {
+		return ''
 	}
 }

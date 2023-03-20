@@ -18,7 +18,8 @@ export const GET: RequestHandler = async ({ params: { id }, cookies }) => {
 
 	cookies.set('sessionId', id, {
 		path: '/',
-		secure: NODE_ENV === 'production'
+		secure: NODE_ENV === 'production',
+		maxAge: 60 * 60 * 24 * 30 * 12 * 10
 	})
 	return new Response(JSON.stringify({ session }))
 }

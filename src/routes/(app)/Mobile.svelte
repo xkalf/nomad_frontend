@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { cubeTypeMapper, cubeTypes, type StateType } from '$lib/utils/types'
 	import {
+		checkBestAverage,
 		displayTime,
 		formatMegaminxScramble,
 		formatTimeInput,
@@ -46,17 +47,6 @@
 	async function createCustomSolve() {
 		Promise.all([createSolve(formatTimeInput(customTime)), newScramble()])
 		isCustomTimeModalOpen = false
-	}
-
-	function checkBestAverage(solves: Solve[], length: number) {
-		if (
-			getAverageTime(solves, length) === getAverageTime(getBestAverage(solves, length), length) &&
-			getAverageTime(solves, length) > 0
-		) {
-			return 'text-green-500'
-		} else {
-			return ''
-		}
 	}
 
 	$: textColor =
