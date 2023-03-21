@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { browser } from '$app/environment'
 	import { toggleBestSolve } from '$lib/stores/bestSolve'
-	import { displayTime, formatTime, getAvg, pad } from '$lib/utils/timer-utils'
+	import { checkBestAverage, displayTime, formatTime, getAvg, pad } from '$lib/utils/timer-utils'
+	import { solves as allSolves } from '$lib/stores/solves'
 	import type { Solve } from '@prisma/client'
 
 	export let label: string
@@ -51,15 +52,17 @@
 	on:click={openModal}
 >
 	<span>{label}</span>
-	{#if solves}
-		{#if solves.length !== count}
-			<span>{displayTime(0)}</span>
+	<span class={`${count && checkBestAverage($allSolves, count)}`}>
+		{#if solves}
+			{#if solves.length !== count}
+				{displayTime(0)}
+			{:else}
+				{getAvg(solves, count)}
+			{/if}
 		{:else}
-			<span>{getAvg(solves, count)}</span>
+			{value}
 		{/if}
-	{:else}
-		<span>{value}</span>
-	{/if}
+	</span>
 </div>
 
 {#if solves && solves.length === count}

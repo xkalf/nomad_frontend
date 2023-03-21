@@ -5,10 +5,8 @@
 		displayTime,
 		formatMegaminxScramble,
 		formatTimeInput,
-		getAverageTime,
 		getAvg,
-		getBest,
-		getBestAverage
+		getBest
 	} from '$lib/utils/timer-utils'
 	import { solves } from '$lib/stores/solves'
 	import { browser } from '$app/environment'
@@ -17,7 +15,7 @@
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
 	import Modal from '$lib/components/Modal.svelte'
-	import type { CubeType, Solve, SolveStatus } from '@prisma/client'
+	import type { CubeType, SolveStatus } from '@prisma/client'
 	import ScrambleLogo from '$lib/components/ScrambleLogo.svelte'
 	import { bestSolve } from '$lib/stores/bestSolve'
 
