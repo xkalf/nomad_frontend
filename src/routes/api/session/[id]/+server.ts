@@ -53,16 +53,14 @@ export const DELETE: RequestHandler = async ({ params: { id } }) => {
 					return { solveId: id, ...rest }
 				})
 			]
+		}),
+		db.solve.deleteMany({
+			where: { sessionId: +id }
+		}),
+		db.session.delete({
+			where: { id: +id }
 		})
 	])
-
-	await db.solve.deleteMany({
-		where: { sessionId: +id }
-	})
-
-	await db.session.delete({
-		where: { id: +id }
-	})
 
 	return new Response(JSON.stringify({ success: true }))
 }

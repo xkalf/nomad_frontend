@@ -11,7 +11,7 @@
 	} from '$lib/stores/solves'
 	import { getSessionByCube, getSessionById } from '$lib/utils/api'
 	import { shortcutMapper, type StateType } from '$lib/utils/types'
-	import { generateScramble } from '$lib/utils/timer-utils'
+	import { generateScramble } from '$lib/utils/scramble'
 	import type { CubeType, SolveStatus, Solve } from '@prisma/client'
 	import { onMount } from 'svelte'
 	import Modal from '$lib/components/Modal.svelte'
