@@ -1,9 +1,6 @@
 import type { CubeType } from '@prisma/client'
 import { scrambleMappper } from './types'
-// import { Scrambow } from 'scrambow'
-import s from 'scrambow'
-
-const { Scrambow } = s
+import { Scrambow } from 'scrambow'
 
 export function generateScramble(cubeType: CubeType): string {
 	const scrambow = new Scrambow()
