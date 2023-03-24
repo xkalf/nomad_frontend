@@ -119,7 +119,7 @@ model User {
   lastname   String
   birthdate  DateTime
   gender     Gender?
-  phone String? @db.VarChar(8)
+  phone      String?   @db.VarChar(8)
   settingsId Int?
   authId     String?
   role       UserRole  @default(User)
@@ -133,33 +133,16 @@ enum Gender {
 }
 
 model Settings {
-  id               Int               @id @default(autoincrement())
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  userId           Int               @unique
-  displaySettings  DisplaySettings?
-  scrambleSettings ScrambleSettings?
-  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  timerSettings    TimerSettings?
-
-  @@index([userId])
-}
-
-model DisplaySettings {
-  id                     Int      @id @default(autoincrement())
-  zoom                   Int      @default(100)
-  font                   Font     @default(Mono)
-  backgroundImageOpacity Int      @default(25)
-  timerSize              Int      @default(25)
-  backgroundImage        String?
-  settingsId             Int      @unique
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
-  settings               Settings @relation(fields: [settingsId], references: [id], onDelete: Cascade)
-}
-
-model TimerSettings {
   id                      Int                     @id @default(autoincrement())
+  createdAt               DateTime                @default(now())
+  updatedAt               DateTime                @updatedAt
+  userId                  Int                     @unique
+  zoom                    Int                     @default(100)
+  font                    Font                    @default(Mono)
+  backgroundImageOpacity  Int                     @default(25)
+  timerSize               Int                     @default(25)
+  backgroundImage         String?
+  freezeTime Int @default(0)
   useMouseTimer           Boolean                 @default(false)
   useWcaInspection        UseWcaInspection        @default(Never)
   voiceAlert              VoiceAlert              @default(None)
@@ -168,23 +151,13 @@ model TimerSettings {
   unitWhenEnteringInteger UnitWhenEnteringInteger @default(Full)
   multiPhase              Int                     @default(1)
   timerUpdate             TimerUpdate             @default(Point)
-  spaceDown               SpaceDown               @default(Three)
-  settingsId              Int                     @unique
-  createdAt               DateTime                @default(now())
-  updatedAt               DateTime                @updatedAt
-  settings                Settings                @relation(fields: [settingsId], references: [id], onDelete: Cascade)
-}
+  limitHeight             Boolean                 @default(false)
+  scrambleSize            Int                     @default(25)
+  monospaced              Boolean                 @default(false)
+  alignArea               AlignArea               @default(Center)
+  user                    User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-model ScrambleSettings {
-  id           Int       @id @default(autoincrement())
-  limitHeight  Boolean   @default(false)
-  scrambleSize Int       @default(25)
-  monospaced   Boolean   @default(false)
-  alignArea    AlignArea @default(Center)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  settingsId   Int       @unique
-  settings     Settings  @relation(fields: [settingsId], references: [id], onDelete: Cascade)
+  @@index([userId])
 }
 
 model SessionDeleted {
@@ -214,6 +187,9 @@ model SolveDeleted {
 
 enum Font {
   Mono
+  Montherat
+  Arial
+  Inter
 }
 
 enum UnitWhenEnteringInteger {
@@ -228,11 +204,17 @@ enum UseWcaInspection {
 
 enum VoiceAlert {
   None
+  Male
+  Female
+  Aliya
+  Mygmardorj
 }
 
 enum EnteringTimes {
   Timer
   Typing
+  Stackmat
+  Bluetooth
 }
 
 enum TimerUpdate {
@@ -241,13 +223,6 @@ enum TimerUpdate {
   Seconds
   Point
   None
-}
-
-enum SpaceDown {
-  Zero
-  Three
-  Five
-  One
 }
 
 enum AlignArea {

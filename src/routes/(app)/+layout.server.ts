@@ -1,6 +1,6 @@
 import db from '$lib/db'
-import { cubeTypeMapper, type MySettings, type SessionWithSolvesCount } from '$lib/utils/types'
-import type { Session } from '@prisma/client'
+import { cubeTypeMapper, type SessionWithSolvesCount } from '$lib/utils/types'
+import type { Session, Settings } from '@prisma/client'
 import { redirect } from '@sveltejs/kit'
 import type { LayoutServerLoad } from './$types'
 
@@ -75,36 +75,17 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 	}
 
 	const getSettings = async () => {
-		let settings: MySettings | null
+		let settings: Settings | null
 		settings = await db.settings.findFirst({
 			where: {
 				userId: locals.user.id
-			},
-			include: {
-				displaySettings: true,
-				timerSettings: true,
-				scrambleSettings: true
 			}
 		})
 
 		if (!settings) {
 			settings = await db.settings.create({
 				data: {
-					userId: locals.user.id,
-					displaySettings: {
-						create: {}
-					},
-					timerSettings: {
-						create: {}
-					},
-					scrambleSettings: {
-						create: {}
-					}
-				},
-				include: {
-					displaySettings: true,
-					timerSettings: true,
-					scrambleSettings: true
+					userId: locals.user.id
 				}
 			})
 		}

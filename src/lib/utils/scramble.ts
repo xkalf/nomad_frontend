@@ -6,9 +6,7 @@ export function generateScramble(cubeType: CubeType): string {
 	const scrambow = new Scrambow()
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
 	const blindTypeMapper: { [key: string]: CubeType } = {
-		Bld3: 'N3',
-		Bld4: 'N4',
-		Bld5: 'N5'
+		Bld3: 'N3'
 	}
 	let blind = false
 

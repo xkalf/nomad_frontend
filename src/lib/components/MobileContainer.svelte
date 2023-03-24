@@ -12,7 +12,7 @@
 	}
 </script>
 
-<div class="bg-background relative flex h-screen flex-col">
+<div class="relative flex h-screen flex-col bg-background">
 	<slot />
 	<div class="mt-auto flex h-20 items-center justify-around bg-primary p-4">
 		<a data-sveltekit-preload-data href="/">
@@ -23,6 +23,8 @@
 		</a>
 		<StatsIcon />
 		<ProfileIcon />
-		<SettingsIcon />
+		<a data-sveltekit-preload-data href="/settings">
+			<SettingsIcon open={getIconColor('/(app)/settings')} />
+		</a>
 	</div>
 </div>

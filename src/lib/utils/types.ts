@@ -1,14 +1,4 @@
-import type {
-	CfopSolve,
-	CubeType,
-	DisplaySettings,
-	ScrambleSettings,
-	Session,
-	Settings,
-	Solve,
-	TimerSettings,
-	TwoLookSolve
-} from '@prisma/client'
+import type { CfopSolve, CubeType, Session, Solve, TwoLookSolve } from '@prisma/client'
 
 export const scrambleMappper: Record<CubeType, string> = {
 	N2: '222',
@@ -77,12 +67,6 @@ export const shortcutMapper: { [key: string]: CubeType } = {
 }
 
 export type StateType = 'stopped' | 'running' | 'ready' | 'stopping' | 'waiting'
-
-export type MySettings = Settings & {
-	displaySettings: DisplaySettings | null
-	timerSettings: TimerSettings | null
-	scrambleSettings: ScrambleSettings | null
-}
 
 export type SessionWithSolves = Session & {
 	solves: Solve[]

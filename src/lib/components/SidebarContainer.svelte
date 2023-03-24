@@ -30,7 +30,7 @@
 			<ProfileIcon isPrimary />
 		</div>
 		<div class="flex h-14 w-14 items-center justify-center rounded-lg">
-			<a href="/settings/display">
+			<a href="/settings">
 				<SettingsIcon open={getIconColor('/(app)/settings/display')} isPrimary />
 			</a>
 		</div>
