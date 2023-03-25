@@ -61,7 +61,7 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 					userId: locals.user.id
 				},
 				orderBy: {
-					name: 'asc'
+					name: 'desc'
 				},
 				include: {
 					_count: {

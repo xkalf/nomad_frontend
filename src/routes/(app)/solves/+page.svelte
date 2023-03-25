@@ -61,7 +61,7 @@
 
 <MobileContainer>
 	<div class="flex flex-col gap-2 overflow-y-auto p-4">
-		<h2 class="text-2xl text-white">Stats</h2>
+		<h2 class="text-2xl text-primary">Stats</h2>
 		<div class="grid grid-cols-2 gap-4">
 			{#each averages as average}
 				<Average
@@ -74,7 +74,7 @@
 				/>
 			{/each}
 		</div>
-		<h2 class="mt-2 text-2xl text-white">Solves</h2>
+		<h2 class="mt-2 text-2xl text-primary">Solves</h2>
 		<Solves mobile />
 		<Sessions mobile {changeCubeType} />
 	</div>

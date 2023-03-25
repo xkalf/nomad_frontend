@@ -1,4 +1,5 @@
 import db from '$lib/db'
+import type { Settings } from '@prisma/client'
 import type { RequestHandler } from './$types'
 
 export const GET: RequestHandler = async ({ locals }) => {
@@ -22,7 +23,7 @@ export const GET: RequestHandler = async ({ locals }) => {
 }
 
 export const PUT: RequestHandler = async ({ locals, request }) => {
-	const formData = await request.json()
+	const formData = (await request.json()) as Partial<Settings>
 
 	const settings = await db.settings.update({
 		where: {

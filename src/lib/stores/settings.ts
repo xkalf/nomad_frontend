@@ -1,8 +1,8 @@
-import type { MySettings } from '$lib/utils/types'
+import type { Settings } from '@prisma/client'
 import { writable } from 'svelte/store'
 
-export const settings = writable<MySettings>()
+export const settings = writable<Settings>()
 
-export const setSettings = (s: MySettings) => {
+export const setSettings = (s: Settings) => {
 	settings.set(s)
 }
