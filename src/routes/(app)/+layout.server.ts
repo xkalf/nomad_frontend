@@ -52,7 +52,8 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 		if (session) {
 			cookies.set('sessionId', session.id.toString(), {
 				path: '/',
-				secure: process.env.NODE_ENV === 'production'
+				secure: process.env.NODE_ENV === 'production',
+				maxAge: 60 * 60 * 24 * 30 * 12 * 10
 			})
 
 			sessions = await db.session.findMany({
@@ -60,9 +61,14 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 					cube: session?.cube,
 					userId: locals.user.id
 				},
-				orderBy: {
-					name: 'desc'
-				},
+				orderBy: [
+					{
+						main: 'desc'
+					},
+					{
+						name: 'desc'
+					}
+				],
 				include: {
 					_count: {
 						select: { solves: true }

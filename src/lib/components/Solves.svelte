@@ -109,16 +109,21 @@
 	} flex flex-col overflow-y-auto rounded-xl bg-secondary`}
 >
 	<div class="grid w-full grid-cols-3 items-center rounded-t-xl bg-primary py-2 text-lg text-white">
-		<button class="col-span-1 h-5 translate-x-4" on:click={changeSortMode}>
-			{#if $sortMode === 'none'}
-				<Icon icon="ri:arrow-up-down-fill" width="22" />
-			{:else if $sortMode === 'asc'}
-				<Icon icon="ri:arrow-up-fill" width="22" />
-			{:else if $sortMode === 'desc'}
-				<Icon icon="ri:arrow-down-fill" width="22" />
-			{/if}
-		</button>
-		<span class="col-span-2">Mean {getMean($solves)}</span>
+		<div class="flex items-center">
+			<button class="h-5 translate-x-4" on:click={changeSortMode}>
+				{#if $sortMode === 'none'}
+					<Icon icon="ri:arrow-up-down-fill" width="22" />
+				{:else if $sortMode === 'asc'}
+					<Icon icon="ri:arrow-up-fill" width="22" />
+				{:else if $sortMode === 'desc'}
+					<Icon icon="ri:arrow-down-fill" width="22" />
+				{/if}
+			</button>
+		</div>
+		<div>
+			<span>Mean {getMean($solves)}</span>
+		</div>
+		<div />
 	</div>
 	<!-- Solves -->
 	<ul class="mr-2 flex-grow overflow-y-auto p-4">

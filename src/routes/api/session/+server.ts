@@ -12,9 +12,14 @@ export const GET: RequestHandler = async ({ locals, url, cookies }) => {
 			userId: locals.user.id,
 			cube
 		},
-		orderBy: {
-			name: 'asc'
-		},
+		orderBy: [
+			{
+				main: 'desc'
+			},
+			{
+				name: 'asc'
+			}
+		],
 		include: {
 			_count: {
 				select: {
