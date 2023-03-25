@@ -120,10 +120,9 @@
 				{/if}
 			</button>
 		</div>
-		<div>
+		<div class="col-span-2 flex justify-start">
 			<span>Mean {getMean($solves)}</span>
 		</div>
-		<div />
 	</div>
 	<!-- Solves -->
 	<ul class="mr-2 flex-grow overflow-y-auto p-4">
