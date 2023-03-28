@@ -31,10 +31,18 @@
 	let deleteLastModalOpen = false
 	let deleteCount = 1
 	let timeOutRef: NodeJS.Timeout
+	let inspectionWaitRef: NodeJS.Timeout
 	let timerText: string = displayTime(0)
 	let inspectionRef: NodeJS.Timer
 	let inspectionSeconds: number
 	let nextStatus: SolveStatus | '8sec' = 'Ok'
+
+	$: textColor =
+		state === 'ready' || state === 'inspectionReady'
+			? 'text-green-500'
+			: state === 'waiting' || state === 'inspectionWaiting'
+			? 'text-red-500'
+			: 'text-primary'
 
 	function startTime() {
 		if (!$session) {
@@ -60,7 +68,7 @@
 			if (inspectionSeconds <= -2) {
 				nextStatus = 'Dnf'
 				timerText = 'Dnf'
-			} else if (inspectionSeconds <= 3) {
+			} else if (inspectionSeconds <= 0) {
 				nextStatus = 'Plus2'
 				timerText = '+2'
 			} else if (inspectionSeconds < 8) {
@@ -94,7 +102,7 @@
 	}
 
 	async function removeSolves() {
-		const response = await fetch(`api/session/${$session.id}/reset`, {
+		const response = await fetch(`/api/session/${$session.id}/reset`, {
 			method: 'DELETE'
 		})
 		const data = await response.json()
@@ -183,7 +191,7 @@
 		if (data.success === true) changeSolveStats(data.solve)
 	}
 
-	session.subscribe(async value => {
+	session.subscribe(value => {
 		if (value?.cube && browser) {
 			scramble = generateScramble(value.cube)
 		}
@@ -191,6 +199,7 @@
 
 	function eventUp() {
 		clearTimeout(timeOutRef)
+		clearTimeout(inspectionWaitRef)
 
 		if (state === 'ready') {
 			startTime()
@@ -202,7 +211,7 @@
 			setTimeout(() => {
 				updateState('stopped')
 			}, 300)
-		} else if ($settings.useWcaInspection !== 'Never' && state === 'stopped') {
+		} else if ($settings.useWcaInspection !== 'Never' && state === 'inspectionReady') {
 			startInspection()
 			updateState('inspection')
 		} else {
@@ -225,7 +234,16 @@
 				}, freezeTime)
 			}
 		} else {
-			if (state === 'inspection') {
+			if (state === 'stopped') {
+				if (isTouch) {
+					updateState('inspectionWaiting')
+					inspectionWaitRef = setTimeout(() => {
+						updateState('inspectionReady')
+					}, 300)
+				} else {
+					updateState('inspectionReady')
+				}
+			} else if (state === 'inspection') {
 				updateState('waiting')
 				timeOutRef = setTimeout(() => {
 					updateState('ready')
@@ -338,7 +356,8 @@
 	$: props = {
 		timerText,
 		scramble,
-		state
+		state,
+		textColor
 	}
 </script>
 

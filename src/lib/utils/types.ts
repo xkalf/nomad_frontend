@@ -66,7 +66,15 @@ export const shortcutMapper: { [key: string]: CubeType } = {
 	KeyS: 'Skewb'
 }
 
-export type StateType = 'stopped' | 'running' | 'ready' | 'stopping' | 'waiting' | 'inspection'
+export type StateType =
+	| 'stopped'
+	| 'running'
+	| 'ready'
+	| 'stopping'
+	| 'waiting'
+	| 'inspection'
+	| 'inspectionWaiting'
+	| 'inspectionReady'
 
 export type SessionWithSolves = Session & {
 	solves: Solve[]

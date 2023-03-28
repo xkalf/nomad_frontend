@@ -1,8 +1,7 @@
 <script lang="ts">
 	import timerLogo from '$lib/assets/timer-logo.webp'
 	import Sidebar from './Sidebar.svelte'
-	import { displayTime, formatMegaminxScramble } from '$lib/utils/timer-utils'
-	import type { StateType } from '$lib/utils/types'
+	import { formatMegaminxScramble } from '$lib/utils/timer-utils'
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
 	import type { CubeType } from '@prisma/client'
@@ -11,20 +10,13 @@
 	import { settings } from '$lib/stores/settings'
 
 	export let timerText: string
-	export let state: StateType
 	export let scramble: string
 	export let changeCubeType: (type: CubeType) => Promise<void>
 	export let eventUp: () => void
 	export let eventDown: (s: boolean) => void
+	export let textColor: string
 
 	let timerEl: HTMLDivElement
-
-	$: textColor =
-		state === 'ready'
-			? 'text-green-500'
-			: state === 'waiting' || state === 'inspection'
-			? 'text-red-500'
-			: 'text-primary'
 
 	const scrambleSizeMapper: Record<CubeType, string> = {
 		N2: 'text-5xl',

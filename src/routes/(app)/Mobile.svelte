@@ -21,6 +21,7 @@
 	export let timerText: string
 	export let scramble: string
 	export let state: StateType
+	export let textColor: string
 	export let changeCubeType: (type: CubeType) => Promise<void>
 	export let newScramble: () => void
 	export let getLastScramble: () => void
@@ -43,13 +44,6 @@
 		Promise.all([createSolve(formatTimeInput(customTime)), newScramble()])
 		isCustomTimeModalOpen = false
 	}
-
-	$: textColor =
-		state === 'ready'
-			? 'text-green-500'
-			: state === 'waiting' || state === 'inspection'
-			? 'text-red-500'
-			: 'text-primary'
 
 	const scrambleSizeMapper: Record<CubeType, string> = {
 		N2: 'text-2xl',
