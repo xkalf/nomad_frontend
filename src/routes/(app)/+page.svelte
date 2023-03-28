@@ -37,12 +37,17 @@
 	let inspectionSeconds: number
 	let nextStatus: SolveStatus | '8sec' = 'Ok'
 
-	$: textColor =
-		state === 'ready' || state === 'inspectionReady'
-			? 'text-green-500'
-			: state === 'waiting' || state === 'inspectionWaiting'
-			? 'text-red-500'
-			: 'text-primary'
+	function setTextColor(state: StateType) {
+		if (state === 'ready' || state === 'inspectionReady') {
+			return 'text-green-500'
+		} else if (state === 'waiting' || state === 'inspectionWaiting') {
+			return 'text-red-500'
+		} else {
+			return 'text-primary'
+		}
+	}
+
+	$: textColor = setTextColor(state)
 
 	function startTime() {
 		if (!$session) {
@@ -67,7 +72,7 @@
 
 			if (inspectionSeconds <= -2) {
 				nextStatus = 'Dnf'
-				timerText = 'Dnf'
+				timerText = 'DNF'
 			} else if (inspectionSeconds <= 0) {
 				nextStatus = 'Plus2'
 				timerText = '+2'
@@ -82,7 +87,8 @@
 
 	async function stopTime() {
 		clearInterval(interval)
-		await Promise.all([newScramble(), createSolve(time, nextStatus === '8sec' ? 'Ok' : nextStatus)])
+		newScramble()
+		await createSolve(time, nextStatus === '8sec' ? 'Ok' : nextStatus)
 	}
 
 	async function createSolve(time: number, nState: SolveStatus = 'Ok') {
@@ -258,8 +264,6 @@
 			setReady()
 		}
 	}
-
-	$: console.log(state)
 
 	onMount(async () => {
 		if (browser) {
