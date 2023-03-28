@@ -36,16 +36,14 @@
 	}
 
 	onMount(() => {
-		if (browser) {
-			if ($settings.useMouseTimer) {
-				timerEl.addEventListener('mousedown', e => {
-					eventDown(true)
-				})
+		if (browser && $settings.useMouseTimer) {
+			timerEl.addEventListener('mousedown', e => {
+				eventDown(true)
+			})
 
-				timerEl.addEventListener('mouseup', async e => {
-					eventUp()
-				})
-			}
+			timerEl.addEventListener('mouseup', async e => {
+				eventUp()
+			})
 		}
 	})
 </script>

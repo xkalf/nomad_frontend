@@ -81,7 +81,8 @@
 			sHammer.add(new Hammer.Swipe({ event: 'swipeRight', direction: Hammer.DIRECTION_RIGHT }))
 
 			function isReady() {
-				return state === 'stopped' || state === 'waiting'
+				const states: StateType[] = ['stopped', 'waiting', 'inspectionWaiting']
+				return states.includes(state)
 			}
 
 			hammer.on('doubleTap', () => {
