@@ -197,6 +197,8 @@
 		}
 	})
 
+	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
+
 	function eventUp() {
 		clearTimeout(timeOutRef)
 		clearTimeout(inspectionWaitRef)
@@ -220,37 +222,44 @@
 	}
 
 	function eventDown(isTouch: boolean = false) {
-		const freezeTime = isTouch
-			? $settings.freezeTime === 0
-				? 300
-				: $settings.freezeTime
-			: $settings.freezeTime
+		const freezeTime = isTouch && $settings.freezeTime === 0 ? 300 : $settings.freezeTime
 
-		if ($settings.useWcaInspection === 'Never') {
-			if (state === 'stopped' && scramble) {
-				updateState('waiting')
-				timeOutRef = setTimeout(() => {
-					updateState('ready')
-				}, freezeTime)
-			}
-		} else {
-			if (state === 'stopped') {
-				if (isTouch) {
-					updateState('inspectionWaiting')
-					inspectionWaitRef = setTimeout(() => {
-						updateState('inspectionReady')
-					}, 300)
-				} else {
+		function setReady() {
+			updateState('waiting')
+			timeOutRef = setTimeout(() => {
+				updateState('ready')
+			}, freezeTime)
+		}
+
+		function setInspectionReady() {
+			if (isTouch) {
+				updateState('inspectionWaiting')
+				inspectionWaitRef = setTimeout(() => {
 					updateState('inspectionReady')
-				}
-			} else if (state === 'inspection') {
-				updateState('waiting')
-				timeOutRef = setTimeout(() => {
-					updateState('ready')
-				}, freezeTime)
+				}, 300)
+			} else {
+				updateState('inspectionReady')
 			}
 		}
+
+		if (state === 'stopped') {
+			if (
+				$settings.useWcaInspection === 'Never' ||
+				($settings.useWcaInspection === 'ExceptBLD' && bldTypes.includes($cubeType))
+			) {
+				setReady()
+			} else if (
+				$settings.useWcaInspection === 'Always' ||
+				($settings.useWcaInspection === 'ExceptBLD' && !bldTypes.includes($cubeType))
+			) {
+				setInspectionReady()
+			}
+		} else if (state === 'inspection') {
+			setReady()
+		}
 	}
+
+	$: console.log(state)
 
 	onMount(async () => {
 		if (browser) {
