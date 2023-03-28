@@ -2,7 +2,6 @@
 	import { cubeTypeMapper, cubeTypes, type StateType } from '$lib/utils/types'
 	import {
 		checkBestAverage,
-		displayTime,
 		formatMegaminxScramble,
 		formatTimeInput,
 		getAvg,
@@ -19,26 +18,24 @@
 	import ScrambleLogo from '$lib/components/ScrambleLogo.svelte'
 	import { bestSolve } from '$lib/stores/bestSolve'
 
-	export let time: number
+	export let timerText: string
 	export let scramble: string
 	export let state: StateType
-	export let startTime: () => void
-	export let stopTime: () => Promise<void>
-	export let updateState: (input: StateType) => void
 	export let changeCubeType: (type: CubeType) => Promise<void>
 	export let newScramble: () => void
-	export let getLastScramble: () => Promise<void>
+	export let getLastScramble: () => void
 	export let updateLastSolve: (status: SolveStatus) => Promise<void>
 	export let openDeleteLastModal: () => void
 	export let openDeleteAllModal: () => void
 	export let createSolve: (time: number) => Promise<void>
+	export let eventDown: (s: boolean) => void
+	export let eventUp: () => void
 
 	let timerEl: HTMLDivElement
 	let scrambleEl: HTMLDivElement
 	let isCubeTypeOpen = false
 	let isScrambleDisplayOpen = false
 	let isStateOpen = false
-	let timeOutRef: NodeJS.Timeout
 	let customTime: number
 	let isCustomTimeModalOpen = false
 
@@ -48,7 +45,11 @@
 	}
 
 	$: textColor =
-		state === 'ready' ? 'text-green-500' : state === 'waiting' ? 'text-red-400' : 'text-primary'
+		state === 'ready'
+			? 'text-green-500'
+			: state === 'waiting' || state === 'inspection'
+			? 'text-red-500'
+			: 'text-primary'
 
 	const scrambleSizeMapper: Record<CubeType, string> = {
 		N2: 'text-2xl',
@@ -125,30 +126,11 @@
 			})
 
 			timerEl.addEventListener('touchstart', e => {
-				if (state === 'stopped') {
-					updateState('waiting')
-					timeOutRef = setTimeout(() => {
-						updateState('ready')
-					}, 300)
-				}
+				eventDown(true)
 			})
 
 			timerEl.addEventListener('touchend', async () => {
-				clearTimeout(timeOutRef)
-
-				if (state === 'ready' && isCubeTypeOpen === false) {
-					startTime()
-					updateState('running')
-				} else if (state === 'running') {
-					stopTime()
-					updateState('stopping')
-
-					setTimeout(() => {
-						updateState('stopped')
-					}, 300)
-				} else {
-					updateState('stopped')
-				}
+				eventUp()
 			})
 		}
 	})
@@ -172,7 +154,7 @@
 		</div>
 		<div bind:this={timerEl} class="flex flex-grow select-none flex-col">
 			<div class="flex h-[40vh] items-center justify-center">
-				<p class={`font-mono text-7xl ${textColor}`}>{displayTime(time)}</p>
+				<p class={`font-mono text-7xl ${textColor}`}>{timerText}</p>
 			</div>
 			<div class="flex flex-grow items-end justify-between">
 				<div class="space-y-2 text-primary">

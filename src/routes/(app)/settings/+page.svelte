@@ -1,13 +1,32 @@
 <script lang="ts">
+	import { browser } from '$app/environment'
 	import SidebarContainer from '$lib/components/SidebarContainer.svelte'
-	import { settings } from '$lib/stores/settings'
+	import { setSettings, settings } from '$lib/stores/settings'
+	import { throttleBeta } from '$lib/utils/common'
 	import type { Settings } from '@prisma/client'
 	import InputNumber from './InputNumber.svelte'
 	import ItemContainer from './ItemContainer.svelte'
 
-	let settingsForm: Omit<Settings, 'id' | 'createdAt' | 'updatedAt' | 'userId'> = {
-		...$settings
-	}
+	type SettingsForm = Omit<Settings, 'id' | 'createdAt' | 'updatedAt' | 'userId'>
+
+	let settingsForm: SettingsForm = $settings
+
+	const updateSettings = throttleBeta(async (args: SettingsForm) => {
+		if (!browser) return
+
+		const response = await fetch('/api/settings', {
+			method: 'PUT',
+			body: JSON.stringify(args)
+		})
+
+		const data = await response.json()
+
+		if (data) {
+			setSettings(data.settings)
+		}
+	}, 1000)
+
+	$: updateSettings(settingsForm)
 </script>
 
 <div class="h-screen md:grid md:grid-cols-[minmax(350px,_1fr)_4fr]">
@@ -71,7 +90,7 @@
 		<div class="page">
 			<ItemContainer label="Хулганаар хугацаа хэмжигчийг эхлүүлэх">
 				<div class="mx-auto flex w-1/2 justify-center">
-					<input class="h-6 w-6" type="checkbox" bind:value={settingsForm.useMouseTimer} />
+					<input class="h-6 w-6" type="checkbox" bind:checked={settingsForm.useMouseTimer} />
 				</div>
 			</ItemContainer>
 			<ItemContainer label="Ажиглалтын хугацаа">
@@ -110,9 +129,9 @@
 				<div class="mx-auto w-1/2">
 					<select class="select" bind:value={settingsForm.freezeTime}>
 						<option value={0}>0</option>
-						<option value={0.3}>0.3</option>
-						<option value={0.55}>0.55</option>
-						<option value={1}>1</option>
+						<option value={300}>0.3</option>
+						<option value={550}>0.55</option>
+						<option value={1000}>1</option>
 					</select>
 				</div>
 			</ItemContainer>

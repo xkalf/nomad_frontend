@@ -18,6 +18,8 @@
 	import { sortMode } from '$lib/stores/sortMode'
 	import Desktop from './Desktop.svelte'
 	import Mobile from './Mobile.svelte'
+	import { settings } from '$lib/stores/settings'
+	import { displayTime } from '$lib/utils/timer-utils'
 
 	let scramble: string = generateScramble($cubeType)
 	let currentScramble: string | null = null
@@ -28,31 +30,61 @@
 	let deleteAllModalOpen = false
 	let deleteLastModalOpen = false
 	let deleteCount = 1
+	let timeOutRef: NodeJS.Timeout
+	let timerText: string = displayTime(0)
+	let inspectionRef: NodeJS.Timer
+	let inspectionSeconds: number
+	let nextStatus: SolveStatus | '8sec' = 'Ok'
 
 	function startTime() {
 		if (!$session) {
 			return
 		}
 
+		clearInterval(inspectionRef)
+
 		const startedTime = Date.now()
 		interval = setInterval(() => {
 			const current = Date.now()
 			time = current - startedTime
+			timerText = displayTime(time)
 		}, 10)
+	}
+
+	function startInspection() {
+		inspectionSeconds = 15
+		timerText = '15'
+		inspectionRef = setInterval(() => {
+			inspectionSeconds -= 1
+
+			if (inspectionSeconds <= -2) {
+				nextStatus = 'Dnf'
+				timerText = 'Dnf'
+			} else if (inspectionSeconds <= 3) {
+				nextStatus = 'Plus2'
+				timerText = '+2'
+			} else if (inspectionSeconds < 8) {
+				nextStatus = '8sec'
+				timerText = inspectionSeconds.toString()
+			} else {
+				timerText = inspectionSeconds.toString()
+			}
+		}, 1000)
 	}
 
 	async function stopTime() {
 		clearInterval(interval)
-		await Promise.all([newScramble(), createSolve(time)])
+		await Promise.all([newScramble(), createSolve(time, nextStatus === '8sec' ? 'Ok' : nextStatus)])
 	}
 
-	async function createSolve(time: number) {
+	async function createSolve(time: number, nState: SolveStatus = 'Ok') {
 		const response = await fetch('/api/solve', {
 			method: 'POST',
 			body: JSON.stringify({
 				time,
 				scramble,
-				sessionId: $session.id
+				sessionId: $session.id,
+				status: nState
 			})
 		})
 
@@ -129,7 +161,7 @@
 		currentScramble = null
 	}
 
-	async function getLastScramble() {
+	function getLastScramble() {
 		if (!lastScramble) return
 
 		currentScramble = scramble
@@ -157,6 +189,49 @@
 		}
 	})
 
+	function eventUp() {
+		clearTimeout(timeOutRef)
+
+		if (state === 'ready') {
+			startTime()
+			updateState('running')
+		} else if (state === 'running') {
+			stopTime()
+			updateState('stopping')
+
+			setTimeout(() => {
+				updateState('stopped')
+			}, 300)
+		} else if ($settings.useWcaInspection !== 'Never' && state === 'stopped') {
+			startInspection()
+			updateState('inspection')
+		}
+	}
+
+	function eventDown(isTouch: boolean = false) {
+		const freezeTime = isTouch
+			? $settings.freezeTime === 0
+				? 300
+				: $settings.freezeTime
+			: $settings.freezeTime
+
+		if ($settings.useWcaInspection === 'Never') {
+			if (state === 'stopped' && scramble) {
+				updateState('waiting')
+				timeOutRef = setTimeout(() => {
+					updateState('ready')
+				}, freezeTime)
+			}
+		} else {
+			if (state === 'inspection') {
+				updateState('waiting')
+				timeOutRef = setTimeout(() => {
+					updateState('ready')
+				}, freezeTime)
+			}
+		}
+	}
+
 	onMount(async () => {
 		if (browser) {
 			const exceptTags = ['INPUT', 'BUTTON', 'TEXTAREA']
@@ -167,10 +242,7 @@
 				}
 
 				if (e.key === ' ') {
-					if (state === 'ready') {
-						startTime()
-						state = 'running'
-					}
+					eventUp()
 				}
 			})
 
@@ -180,18 +252,16 @@
 				}
 
 				if (e.key === ' ') {
-					if (state === 'stopped' && scramble) {
-						state = 'ready'
-					}
+					eventDown()
 				} else if (e.altKey) {
 					switch (e.code) {
 						case 'ArrowLeft':
 							e.preventDefault()
-							await getLastScramble()
+							getLastScramble()
 							return
 						case 'ArrowRight':
 							e.preventDefault()
-							await newScramble()
+							newScramble()
 							return
 						case 'KeyD':
 							e.preventDefault()
@@ -229,10 +299,10 @@
 					e.preventDefault()
 
 					stopTime()
-					state = 'stopping'
+					updateState('stopping')
 
 					setTimeout(() => {
-						state = 'stopped'
+						updateState('stopped')
 					}, 300)
 				}
 			})
@@ -252,20 +322,19 @@
 	}
 
 	const functions = {
-		startTime,
-		stopTime,
-		updateState,
 		changeCubeType,
 		newScramble,
 		getLastScramble,
 		openDeleteLastModal,
 		openDeleteAllModal,
 		updateLastSolve,
-		createSolve
+		createSolve,
+		eventDown,
+		eventUp
 	}
 
 	$: props = {
-		time,
+		timerText,
 		scramble,
 		state
 	}
@@ -276,7 +345,7 @@
 </svelte:head>
 
 <div class="hidden md:block">
-	<Desktop {...props} {changeCubeType} />
+	<Desktop {...props} {changeCubeType} {eventUp} {eventDown} />
 </div>
 <div class="block md:hidden">
 	<Mobile {...props} {...functions} />

@@ -6,13 +6,25 @@
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
 	import type { CubeType } from '@prisma/client'
+	import { onMount } from 'svelte'
+	import { browser } from '$app/environment'
+	import { settings } from '$lib/stores/settings'
 
-	export let time: number
+	export let timerText: string
 	export let state: StateType
 	export let scramble: string
 	export let changeCubeType: (type: CubeType) => Promise<void>
+	export let eventUp: () => void
+	export let eventDown: (s: boolean) => void
 
-	$: textColor = state === 'ready' ? 'text-green-500' : 'text-primary'
+	let timerEl: HTMLDivElement
+
+	$: textColor =
+		state === 'ready'
+			? 'text-green-500'
+			: state === 'waiting' || state === 'inspection'
+			? 'text-red-500'
+			: 'text-primary'
 
 	const scrambleSizeMapper: Record<CubeType, string> = {
 		N2: 'text-5xl',
@@ -30,11 +42,28 @@
 		Clock: 'text-5xl',
 		Skewb: 'text-5xl'
 	}
+
+	onMount(() => {
+		if (browser) {
+			if ($settings.useMouseTimer) {
+				timerEl.addEventListener('mousedown', e => {
+					eventDown(true)
+				})
+
+				timerEl.addEventListener('mouseup', async e => {
+					eventUp()
+				})
+			}
+		}
+	})
 </script>
 
 <div class="grid h-screen w-full grid-cols-[minmax(350px,_1fr)_4fr]">
 	<Sidebar {changeCubeType} />
-	<div class="relative flex flex-col justify-between overflow-hidden bg-background p-4">
+	<div
+		bind:this={timerEl}
+		class="relative flex flex-col justify-between overflow-hidden bg-background p-4"
+	>
 		<!-- Scramble -->
 		<div class="h-1/6 mt-[3vh] flex items-center justify-center p-20 pt-5 text-center text-primary">
 			<p class={`${scrambleSizeMapper[$cubeType]}`}>
@@ -47,7 +76,7 @@
 		</div>
 		<!-- Time -->
 		<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-			<p class={`${textColor} font-mono text-[200px] leading-6`}>{displayTime(time)}</p>
+			<p class={`${textColor} font-mono text-[200px] leading-6`}>{timerText}</p>
 		</div>
 		<div class="grid grid-cols-[3fr,_minmax(70px,_1fr)]">
 			<div class="col-span-3 mb-10 flex items-end justify-center">

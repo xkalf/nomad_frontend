@@ -32,5 +32,5 @@ export const PUT: RequestHandler = async ({ locals, request }) => {
 		data: { ...formData }
 	})
 
-	return new Response()
+	return new Response(JSON.stringify({ settings }))
 }

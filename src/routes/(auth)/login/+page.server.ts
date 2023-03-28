@@ -55,7 +55,7 @@ export const actions: Actions = {
 					})
 				} else if (err.status === 429) {
 					return fail(400, {
-						error: 'Нэврэх линкийг и-мэйл хаяг руу илгээсэн байна.'
+						error: 'Нэвтрэх линкийг и-мэйл хаяг руу илгээсэн байна.'
 					})
 				}
 			}
