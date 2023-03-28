@@ -205,6 +205,8 @@
 		} else if ($settings.useWcaInspection !== 'Never' && state === 'stopped') {
 			startInspection()
 			updateState('inspection')
+		} else {
+			updateState('stopped')
 		}
 	}
 

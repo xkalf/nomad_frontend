@@ -16,7 +16,7 @@
 	<button class="py-2 px-4" on:click={decrease}>-</button>
 	<input
 		type="number"
-		class="col-start-2 appearance-none p-2 text-center focus:outline-none"
+		class="w-2/5 appearance-none text-center focus:outline-none md:p-2"
 		bind:value
 	/>
 	<button class="rounded-tr-md rounded-br-md bg-white py-2 px-4" on:click={increase}>+</button>

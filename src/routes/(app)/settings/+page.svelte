@@ -29,14 +29,14 @@
 	$: updateSettings(settingsForm)
 </script>
 
-<div class="h-screen md:grid md:grid-cols-[minmax(350px,_1fr)_4fr]">
+<div class="min-h-screen md:grid md:grid-cols-[minmax(350px,_1fr)_4fr]">
 	<SidebarContainer />
-	<div class="h-full bg-background p-14">
+	<div class="h-full bg-background p-4 pb-8 md:p-14">
 		<!-- Display -->
 		<p class="mb-4 text-4xl text-primary">Дэлгэц</p>
 		<div class="page">
 			<ItemContainer label="Ойртуулж холдуулах">
-				<div class="mx-auto grid w-1/2 grid-cols-3 items-center">
+				<div class="mx-auto grid grid-cols-3 items-center px-4 md:w-1/2 md:px-0">
 					<span class="text-lg text-white">{settingsForm.zoom}%</span>
 					<input
 						bind:value={settingsForm.zoom}
@@ -58,7 +58,7 @@
 					</select>
 				</div>
 			</ItemContainer>
-			<ItemContainer label="Хугацааны хэмжээ">
+			<ItemContainer label="Хугацааны хэмжээ" mobileSize="lg">
 				<InputNumber value={settingsForm.timerSize} min={25} max={35} />
 			</ItemContainer>
 			<ItemContainer label="Дэлгэцний арын зураг" size="md">
@@ -73,7 +73,7 @@
 				</div>
 			</ItemContainer>
 			<ItemContainer label="Дэлгэцний арын зурагний тодруулж бүдгэрүүлэх" size="md">
-				<div class="mx-auto grid w-1/2 grid-cols-3 items-center">
+				<div class="mx-auto grid grid-cols-3 items-center px-4 md:w-1/2 md:px-0">
 					<span class="text-lg text-white">{settingsForm.backgroundImageOpacity}%</span>
 					<input
 						type="range"
@@ -103,7 +103,7 @@
 				</div>
 			</ItemContainer>
 			<ItemContainer label="Дуут дохиог чангалах">
-				<div class="mx-auto grid w-1/2 grid-cols-3 items-center">
+				<div class="mx-auto grid grid-cols-3 items-center px-4 md:w-1/2 md:px-0">
 					<span class="text-lg text-white">{settingsForm.voiceVolume}%</span>
 					<input
 						type="range"
@@ -125,7 +125,11 @@
 					</select>
 				</div>
 			</ItemContainer>
-			<ItemContainer label="Хугацаа хэмжигчийг эхлүүлэхдээ SPACE -ыг дарах хугацаа" size="md">
+			<ItemContainer
+				label="Хугацаа хэмжигчийг эхлүүлэхдээ SPACE -ыг дарах хугацаа"
+				size="md"
+				mobileSize="lg"
+			>
 				<div class="mx-auto w-1/2">
 					<select class="select" bind:value={settingsForm.freezeTime}>
 						<option value={0}>0</option>
@@ -146,7 +150,7 @@
 					</select>
 				</div>
 			</ItemContainer>
-			<ItemContainer label="Эвлүүлт дундаа цагаа тэмдэглэх">
+			<ItemContainer label="Эвлүүлт дундаа цагаа тэмдэглэх" mobileSize="lg">
 				<InputNumber value={settingsForm.multiPhase} min={0} max={10} />
 			</ItemContainer>
 			<ItemContainer label="Хугацаа хэмжигчийн холбох">
