@@ -222,6 +222,12 @@
 		} else if ($settings.useWcaInspection !== 'Never' && state === 'inspectionReady') {
 			startInspection()
 			updateState('inspection')
+		} else if (
+			state === 'waiting' &&
+			($settings.useWcaInspection === 'Always' ||
+				($settings.useWcaInspection === 'ExceptBLD' && !bldTypes.includes($cubeType)))
+		) {
+			updateState('inspection')
 		} else {
 			updateState('stopped')
 		}
@@ -370,7 +376,8 @@
 		timerText,
 		scramble,
 		state,
-		textColor
+		textColor,
+		nextStatus
 	}
 </script>
 

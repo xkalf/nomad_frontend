@@ -31,6 +31,7 @@
 	export let createSolve: (time: number) => Promise<void>
 	export let eventDown: (s: boolean) => void
 	export let eventUp: () => void
+	export let nextStatus: SolveStatus | '8sec'
 
 	let timerEl: HTMLDivElement
 	let scrambleEl: HTMLDivElement
@@ -85,7 +86,8 @@
 				return states.includes(state)
 			}
 
-			hammer.on('doubleTap', () => {
+			hammer.on('doubleTap', e => {
+				e.preventDefault()
 				if (isReady()) isStateOpen = true
 			})
 
@@ -148,8 +150,17 @@
 			</div>
 		</div>
 		<div bind:this={timerEl} class="flex flex-grow select-none flex-col">
-			<div class="flex h-[40vh] items-center justify-center">
-				<p class={`font-mono text-7xl ${textColor}`}>{timerText}</p>
+			<div class="relative h-[40vh]">
+				<p
+					class={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono text-7xl ${textColor}`}
+				>
+					{timerText}
+				</p>
+				<p class="absolute top-1/2 right-2 -translate-y-1/2 text-5xl text-primary">
+					{#if nextStatus === '8sec'}
+						8 sec
+					{/if}
+				</p>
 			</div>
 			<div class="flex flex-grow items-end justify-between">
 				<div class="space-y-2 text-primary">
