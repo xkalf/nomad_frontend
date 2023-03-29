@@ -110,7 +110,13 @@
 >
 	<div class="grid w-full grid-cols-3 items-center rounded-t-xl bg-primary py-2 text-lg text-white">
 		<div class="flex items-center">
-			<button class="h-5 translate-x-4" on:click={changeSortMode}>
+			<button
+				class="h-5 translate-x-4"
+				on:click={e => {
+					e.currentTarget.blur()
+					changeSortMode()
+				}}
+			>
 				{#if $sortMode === 'none'}
 					<Icon icon="ri:arrow-up-down-fill" width="22" />
 				{:else if $sortMode === 'asc'}

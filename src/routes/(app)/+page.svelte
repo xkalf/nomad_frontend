@@ -89,6 +89,7 @@
 		clearInterval(interval)
 		newScramble()
 		await createSolve(time, nextStatus === '8sec' ? 'Ok' : nextStatus)
+		nextStatus = 'Ok'
 	}
 
 	async function createSolve(time: number, nState: SolveStatus = 'Ok') {
@@ -119,7 +120,7 @@
 		}
 	}
 
-	async function deleteLastSolve(count: number = 1) {
+	function getSortedLastSolve(count = 1) {
 		let sortedSolves: Solve[] = []
 
 		switch ($sortMode) {
@@ -139,6 +140,12 @@
 					.slice(0, count)
 				break
 		}
+
+		return sortedSolves
+	}
+
+	async function deleteLastSolve(count: number = 1) {
+		const sortedSolves = getSortedLastSolve(count)
 
 		const ids = sortedSolves.map(i => i.id)
 
@@ -183,7 +190,8 @@
 	}
 
 	async function updateLastSolve(status: SolveStatus) {
-		const last = $solves[$solves.length - 1]
+		const last = getSortedLastSolve(1)[0]
+
 		if (last.status === status) {
 			return
 		}
