@@ -6,7 +6,7 @@
 	const sizeMapper = {
 		sm: 'md:col-span-2',
 		md: 'md:col-span-3',
-		lg: 'col-span-6'
+		lg: 'md:col-span-6'
 	}
 
 	const mobileSizeMapper = {

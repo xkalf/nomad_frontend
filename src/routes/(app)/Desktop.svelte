@@ -4,7 +4,7 @@
 	import { formatMegaminxScramble } from '$lib/utils/timer-utils'
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
-	import type { CubeType, SolveStatus } from '@prisma/client'
+	import type { CubeType } from '@prisma/client'
 	import { onMount } from 'svelte'
 	import { browser } from '$app/environment'
 	import { settings } from '$lib/stores/settings'
@@ -15,7 +15,7 @@
 	export let eventUp: () => void
 	export let eventDown: (s: boolean) => void
 	export let textColor: string
-	export let nextStatus: SolveStatus | '8sec'
+	export let nextStatus: string
 
 	let timerEl: HTMLDivElement
 
@@ -63,12 +63,14 @@
 			</p>
 		</div>
 		<!-- Time -->
-		<div class="grid grid-cols-3 items-center">
-			<p class={`${textColor} col-start-2 text-center font-mono text-[200px]`}>{timerText}</p>
-			<p class="col-start-3 text-right text-7xl text-primary">
-				{#if nextStatus === '8sec'}
-					8 sec
-				{/if}
+		<div class="relative">
+			<p
+				class={`${textColor} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono text-[150px]`}
+			>
+				{timerText}
+			</p>
+			<p class="absolute top-1/2 right-2 -translate-y-1/2 text-7xl text-primary">
+				{nextStatus}
 			</p>
 		</div>
 		<!-- Bottom -->

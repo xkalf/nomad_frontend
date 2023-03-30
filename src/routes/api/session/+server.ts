@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({ locals, url, cookies }) => {
 				main: 'desc'
 			},
 			{
-				name: 'asc'
+				name: 'desc'
 			}
 		],
 		include: {

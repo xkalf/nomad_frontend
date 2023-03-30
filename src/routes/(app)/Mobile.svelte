@@ -31,7 +31,7 @@
 	export let createSolve: (time: number) => Promise<void>
 	export let eventDown: (s: boolean) => void
 	export let eventUp: () => void
-	export let nextStatus: SolveStatus | '8sec'
+	export let nextStatus: string
 
 	let timerEl: HTMLDivElement
 	let scrambleEl: HTMLDivElement
@@ -157,9 +157,7 @@
 					{timerText}
 				</p>
 				<p class="absolute top-1/2 right-2 -translate-y-1/2 text-5xl text-primary">
-					{#if nextStatus === '8sec'}
-						8 sec
-					{/if}
+					{nextStatus}
 				</p>
 			</div>
 			<div class="flex flex-grow items-end justify-between">

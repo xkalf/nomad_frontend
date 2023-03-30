@@ -36,6 +36,7 @@
 	let inspectionRef: NodeJS.Timer
 	let inspectionSeconds: number
 	let nextStatus: SolveStatus | '8sec' = 'Ok'
+	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
 
 	function setTextColor(state: StateType) {
 		if (state === 'ready' || state === 'inspectionReady') {
@@ -60,13 +61,39 @@
 		interval = setInterval(() => {
 			const current = Date.now()
 			time = current - startedTime
-			timerText = displayTime(time)
-		}, 10)
+
+			switch ($settings.timerUpdate) {
+				case 'None':
+					timerText = 'Solving'
+					break
+				case 'Seconds':
+					timerText = displayTime(time).slice(0, -3)
+					break
+				case 'Point':
+					timerText = displayTime(time).slice(0, -1)
+					break
+				case 'Update':
+					timerText = displayTime(time)
+					break
+				case 'Inspection':
+					timerText = 'Solving'
+					break
+				default:
+					timerText = displayTime(time)
+					break
+			}
+		}, 1)
 	}
 
 	function startInspection() {
 		inspectionSeconds = 15
-		timerText = '15'
+
+		if ($settings.timerUpdate === 'None') {
+			timerText = 'inspection'
+		} else {
+			timerText = '15'
+		}
+
 		inspectionRef = setInterval(() => {
 			inspectionSeconds -= 1
 
@@ -79,6 +106,8 @@
 			} else if (inspectionSeconds < 8) {
 				nextStatus = '8sec'
 				timerText = inspectionSeconds.toString()
+			} else if ($settings.timerUpdate === 'None') {
+				timerText = 'inspection'
 			} else {
 				timerText = inspectionSeconds.toString()
 			}
@@ -87,6 +116,7 @@
 
 	async function stopTime() {
 		clearInterval(interval)
+		timerText = displayTime(time)
 		newScramble()
 		await createSolve(time, nextStatus === '8sec' ? 'Ok' : nextStatus)
 		nextStatus = 'Ok'
@@ -210,8 +240,6 @@
 			scramble = generateScramble(value.cube)
 		}
 	})
-
-	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
 
 	function eventUp() {
 		clearTimeout(timeOutRef)
@@ -383,9 +411,8 @@
 	$: props = {
 		timerText,
 		scramble,
-		state,
 		textColor,
-		nextStatus
+		nextStatus: nextStatus === '8sec' && state === 'inspection' ? '8 sec' : ''
 	}
 </script>
 
@@ -397,7 +424,7 @@
 	<Desktop {...props} {changeCubeType} {eventUp} {eventDown} />
 </div>
 <div class="block md:hidden">
-	<Mobile {...props} {...functions} />
+	<Mobile {...props} {...functions} {state} />
 </div>
 
 <Modal
