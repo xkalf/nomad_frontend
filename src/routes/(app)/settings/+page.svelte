@@ -29,9 +29,9 @@
 	$: updateSettings(settingsForm)
 </script>
 
-<div class="min-h-screen md:grid md:grid-cols-[minmax(350px,_1fr)_4fr]">
+<div class="h-screen md:grid md:grid-cols-[minmax(350px,_1fr)_4fr]">
 	<SidebarContainer />
-	<div class="h-full bg-background p-4 pb-8 md:p-14">
+	<div class="min-h-screen overflow-y-auto bg-background p-4 pb-8 md:p-14">
 		<!-- Display -->
 		<p class="mb-4 text-4xl text-primary">Дэлгэц</p>
 		<div class="page">

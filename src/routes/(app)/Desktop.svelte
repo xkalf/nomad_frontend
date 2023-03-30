@@ -1,13 +1,13 @@
 <script lang="ts">
 	import timerLogo from '$lib/assets/timer-logo.webp'
 	import Sidebar from './Sidebar.svelte'
-	import { formatMegaminxScramble } from '$lib/utils/timer-utils'
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
 	import type { CubeType } from '@prisma/client'
 	import { onMount } from 'svelte'
 	import { browser } from '$app/environment'
 	import { settings } from '$lib/stores/settings'
+	import { scrambleSizeMapper } from '$lib/utils/types'
 
 	export let timerText: string
 	export let scramble: string
@@ -18,23 +18,6 @@
 	export let nextStatus: string
 
 	let timerEl: HTMLDivElement
-
-	const scrambleSizeMapper: Record<CubeType, string> = {
-		N2: 'text-5xl',
-		N3: 'text-5xl',
-		N4: 'text-5xl',
-		N5: 'text-5xl',
-		N6: 'text-2xl lg:text-3xl',
-		N7: 'text-2xl lg:text-3xl',
-		Bld3: 'text-5xl',
-		Bld4: 'text-5xl',
-		Bld5: 'text-5xl',
-		Sq1: 'text-5xl',
-		Pyraminx: 'text-5xl',
-		Megaminx: 'text-2xl md:text-3xl text-justify font-mono',
-		Clock: 'text-5xl',
-		Skewb: 'text-5xl'
-	}
 
 	onMount(() => {
 		if (browser && $settings.useMouseTimer) {
@@ -55,11 +38,7 @@
 		<!-- Scramble -->
 		<div class="flex justify-center pt-20 text-center text-primary">
 			<p class={`${scrambleSizeMapper[$cubeType]}`}>
-				{#if $cubeType === 'Megaminx'}
-					{@html formatMegaminxScramble(scramble)}
-				{:else}
-					{scramble}
-				{/if}
+				{@html scramble}
 			</p>
 		</div>
 		<!-- Time -->

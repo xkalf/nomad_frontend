@@ -1,12 +1,6 @@
 <script lang="ts">
-	import { cubeTypeMapper, cubeTypes, type StateType } from '$lib/utils/types'
-	import {
-		checkBestAverage,
-		formatMegaminxScramble,
-		formatTimeInput,
-		getAvg,
-		getBest
-	} from '$lib/utils/timer-utils'
+	import { cubeTypeMapper, cubeTypes, scrambleSizeMapper, type StateType } from '$lib/utils/types'
+	import { checkBestAverage, formatTimeInput, getAvg, getBest } from '$lib/utils/timer-utils'
 	import { solves } from '$lib/stores/solves'
 	import { browser } from '$app/environment'
 	import { onMount } from 'svelte'
@@ -44,23 +38,6 @@
 	async function createCustomSolve() {
 		Promise.all([createSolve(formatTimeInput(customTime)), newScramble()])
 		isCustomTimeModalOpen = false
-	}
-
-	const scrambleSizeMapper: Record<CubeType, string> = {
-		N2: 'text-2xl',
-		N3: 'text-2xl',
-		N4: 'text-base',
-		N5: 'text-sm',
-		N6: 'text-xs',
-		N7: 'text-xs',
-		Bld3: 'text-2xl',
-		Bld4: 'text-base',
-		Bld5: 'text-sm',
-		Sq1: 'text-2xl',
-		Pyraminx: 'text-2xl',
-		Megaminx: 'text-xs text-justify font-mono',
-		Clock: 'text-2xl',
-		Skewb: 'text-2xl'
 	}
 
 	onMount(async () => {
@@ -138,14 +115,10 @@
 		<div>
 			<div
 				bind:this={scrambleEl}
-				class={`mt-8 flex items-center justify-center text-center text-primary`}
+				class="mt-8 flex items-center justify-center text-center text-primary"
 			>
 				<p class={`${scrambleSizeMapper[$cubeType]}`}>
-					{#if $cubeType === 'Megaminx'}
-						{@html formatMegaminxScramble(scramble)}
-					{:else}
-						{scramble}
-					{/if}
+					{@html scramble}
 				</p>
 			</div>
 		</div>

@@ -19,7 +19,7 @@
 	import Desktop from './Desktop.svelte'
 	import Mobile from './Mobile.svelte'
 	import { settings } from '$lib/stores/settings'
-	import { displayTime } from '$lib/utils/timer-utils'
+	import { displayTime, formatMegaminxScramble } from '$lib/utils/timer-utils'
 
 	let scramble: string = generateScramble($cubeType)
 	let currentScramble: string | null = null
@@ -410,7 +410,7 @@
 
 	$: props = {
 		timerText,
-		scramble,
+		scramble: $cubeType === 'Megaminx' ? formatMegaminxScramble(scramble) : scramble,
 		textColor,
 		nextStatus: nextStatus === '8sec' && state === 'inspection' ? '8 sec' : ''
 	}

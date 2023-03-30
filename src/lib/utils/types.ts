@@ -17,6 +17,23 @@ export const scrambleMappper: Record<CubeType, string> = {
 	Skewb: 'skewb'
 }
 
+export const scrambleSizeMapper: Record<CubeType, string> = {
+	N2: 'text-2xl md:text-5xl',
+	N3: 'text-2xl md:text-5xl',
+	N4: 'text-base md:text-5xl',
+	N5: 'text-sm md:text-5xl',
+	N6: 'text-xs md:text-2xl lg:text-3xl',
+	N7: 'text-xs md:text-2xl lg:text-3xl',
+	Bld3: 'text-2xl md:text-5xl',
+	Bld4: 'text-base md:text-5xl',
+	Bld5: 'text-sm md:text-5xl',
+	Sq1: 'text-2xl md:text-5xl',
+	Pyraminx: 'text-2xl md:text-5xl',
+	Megaminx: 'text-xs md:text-2xl lg:text-3xl text-justify font-mono',
+	Clock: 'text-2xl md:text-5xl',
+	Skewb: 'text-2xl md:text-5xl'
+}
+
 export const cubeTypes: CubeType[] = [
 	'N2',
 	'N3',
