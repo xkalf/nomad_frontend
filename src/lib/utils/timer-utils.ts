@@ -173,7 +173,3 @@ export function checkBestAverage(solves: Solve[], length: number) {
 		return ''
 	}
 }
-
-export function formatMegaminxScramble(scramble: string) {
-	return scramble.replace(/\n/g, '<br />')
-}

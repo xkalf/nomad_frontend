@@ -19,7 +19,7 @@
 	import Desktop from './Desktop.svelte'
 	import Mobile from './Mobile.svelte'
 	import { settings } from '$lib/stores/settings'
-	import { displayTime, formatMegaminxScramble } from '$lib/utils/timer-utils'
+	import { displayTime } from '$lib/utils/timer-utils'
 
 	let scramble: string = generateScramble($cubeType)
 	let currentScramble: string | null = null
@@ -35,7 +35,7 @@
 	let timerText: string = displayTime(0)
 	let inspectionRef: NodeJS.Timer
 	let inspectionSeconds: number
-	let nextStatus: SolveStatus | '8sec' = 'Ok'
+	let nextStatus: SolveStatus | '8sec' | '12sec' = 'Ok'
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
 
 	function setTextColor(state: StateType) {
@@ -78,7 +78,7 @@
 				case 'Inspection':
 					timerText = 'Solving'
 					break
-				default:
+				case 'Default':
 					timerText = displayTime(time)
 					break
 			}
@@ -103,6 +103,9 @@
 			} else if (inspectionSeconds <= 0) {
 				nextStatus = 'Plus2'
 				timerText = '+2'
+			} else if (inspectionSeconds < 4) {
+				nextStatus = '12sec'
+				timerText = inspectionSeconds.toString()
 			} else if (inspectionSeconds < 8) {
 				nextStatus = '8sec'
 				timerText = inspectionSeconds.toString()
@@ -118,7 +121,7 @@
 		clearInterval(interval)
 		timerText = displayTime(time)
 		newScramble()
-		await createSolve(time, nextStatus === '8sec' ? 'Ok' : nextStatus)
+		await createSolve(time, nextStatus === '8sec' || nextStatus === '12sec' ? 'Ok' : nextStatus)
 		nextStatus = 'Ok'
 	}
 
@@ -312,23 +315,17 @@
 			const exceptTags = ['INPUT', 'BUTTON', 'TEXTAREA']
 
 			window.addEventListener('keyup', e => {
-				if (e.target instanceof HTMLElement && exceptTags.includes(e.target.tagName)) {
-					return
-				}
+				if (e.key === ' ' && $settings.enteringTimes === 'Timer') {
+					if (e.target instanceof HTMLElement && exceptTags.includes(e.target.tagName)) {
+						return
+					}
 
-				if (e.key === ' ') {
 					eventUp()
 				}
 			})
 
 			window.addEventListener('keydown', async e => {
-				if (e.target instanceof HTMLElement && exceptTags.includes(e.target.tagName)) {
-					return
-				}
-
-				if (e.key === ' ') {
-					eventDown()
-				} else if (e.altKey) {
+				if (e.altKey) {
 					switch (e.code) {
 						case 'ArrowLeft':
 							e.preventDefault()
@@ -368,6 +365,12 @@
 							await updateLastSolve('Dnf')
 							return
 					}
+				} else if (e.key === ' ' && $settings.enteringTimes === 'Timer') {
+					if (e.target instanceof HTMLElement && exceptTags.includes(e.target.tagName)) {
+						return
+					}
+
+					eventDown()
 				}
 
 				if (state === 'running') {
@@ -410,9 +413,14 @@
 
 	$: props = {
 		timerText,
-		scramble: $cubeType === 'Megaminx' ? formatMegaminxScramble(scramble) : scramble,
+		scramble,
 		textColor,
-		nextStatus: nextStatus === '8sec' && state === 'inspection' ? '8 sec' : ''
+		nextStatus:
+			nextStatus === '8sec' && state === 'inspection'
+				? '8 sec'
+				: nextStatus === '12sec' && state === 'inspection'
+				? '12sec'
+				: ''
 	}
 </script>
 
@@ -421,7 +429,7 @@
 </svelte:head>
 
 <div class="hidden md:block">
-	<Desktop {...props} {changeCubeType} {eventUp} {eventDown} />
+	<Desktop {...props} {changeCubeType} {eventUp} {eventDown} {newScramble} />
 </div>
 <div class="block md:hidden">
 	<Mobile {...props} {...functions} {state} />

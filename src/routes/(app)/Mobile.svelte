@@ -117,8 +117,8 @@
 				bind:this={scrambleEl}
 				class="mt-8 flex items-center justify-center text-center text-primary"
 			>
-				<p class={`${scrambleSizeMapper[$cubeType]}`}>
-					{@html scramble}
+				<p class={`${scrambleSizeMapper[$cubeType]} whitespace-pre-line`}>
+					{scramble}
 				</p>
 			</div>
 		</div>
@@ -179,6 +179,7 @@
 		bind:value={customTime}
 		class="mt-2 w-full rounded-lg bg-secondary p-2 pl-3 text-lg text-white"
 		type="number"
+		inputmode="numeric"
 	/>
 </Modal>
 

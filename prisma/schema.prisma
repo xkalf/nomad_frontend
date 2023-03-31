@@ -150,7 +150,7 @@ model Settings {
   enteringTimes           EnteringTimes           @default(Timer)
   unitWhenEnteringInteger UnitWhenEnteringInteger @default(Full)
   multiPhase              Int                     @default(1)
-  timerUpdate             TimerUpdate             @default(Point)
+  timerUpdate             TimerUpdate             @default(Default)
   limitHeight             Boolean                 @default(false)
   scrambleSize            Int                     @default(25)
   monospaced              Boolean                 @default(false)
@@ -218,6 +218,7 @@ enum EnteringTimes {
 }
 
 enum TimerUpdate {
+  Default
   Update
   Inspection
   Seconds

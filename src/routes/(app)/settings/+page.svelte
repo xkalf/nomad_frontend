@@ -141,7 +141,7 @@
 						</select>
 					</div>
 				</ItemContainer>
-				<ItemContainer label="Эвлүүлсэн хугацааг харуулах байдал" size="lg" mobileSize="lg">
+				<!-- <ItemContainer label="Эвлүүлсэн хугацааг харуулах байдал" size="lg" mobileSize="lg">
 					<div class="mx-auto w-1/2">
 						<select class="select" bind:value={settingsForm.unitWhenEnteringInteger}>
 							<option value="X">X</option>
@@ -151,7 +151,7 @@
 							<option value="Full">XX:XX:XX:XX</option>
 						</select>
 					</div>
-				</ItemContainer>
+				</ItemContainer> -->
 				<ItemContainer label="Эвлүүлт дундаа цагаа тэмдэглэх" mobileSize="lg">
 					<InputNumber value={settingsForm.multiPhase} min={0} max={10} />
 				</ItemContainer>
@@ -168,6 +168,7 @@
 				<ItemContainer label="Хугацаа хэмжигчийн цагийг харуулах">
 					<div class="mx-auto w-1/2">
 						<select class="select" bind:value={settingsForm.timerUpdate}>
+							<option value="Default">0.01</option>
 							<option value="Point">0.1</option>
 							<option value="Seconds">зөвхөн секундийг харуулна</option>
 							<option value="Inspection">ажиглалтийн хугацааг зөвхөн харуулна</option>
