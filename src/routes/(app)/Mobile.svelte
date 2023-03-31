@@ -117,7 +117,7 @@
 </script>
 
 <MobileContainer>
-	<div class="relative flex flex-grow flex-col p-4">
+	<div class="relative flex flex-grow touch-manipulation flex-col p-4">
 		<div>
 			<div
 				bind:this={scrambleEl}
@@ -253,9 +253,6 @@
 
 <style>
 	.modal {
-		top: 50%;
-		left: 50%;
-		position: absolute;
-		transform: translate(-50%, -50%);
+		@apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
 	}
 </style>

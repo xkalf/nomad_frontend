@@ -66,7 +66,7 @@
 	<Sidebar {changeCubeType} />
 	<div bind:this={timerEl} class="grid grid-rows-3 overflow-hidden bg-background p-4">
 		<!-- Scramble -->
-		<div class="flex justify-center pt-20 text-center text-primary">
+		<div class="flex justify-center pt-[3vh] text-center text-primary">
 			<p class={`${scrambleSizeMapper[$cubeType]} whitespace-pre-line`}>
 				{scramble}
 			</p>
@@ -101,9 +101,9 @@
 			<div class="col-start-3">
 				<div class="z-20 ml-auto flex w-3/4 flex-col justify-between rounded-xl bg-secondary">
 					<ScrambleDisplay {scramble} />
-					<div class="flex items-center justify-around p-3">
-						<span class="py-2 text-xl text-white">Function</span>
-						<select class="rounded-xl bg-background py-2 px-4 text-xl text-black">
+					<div class="flex items-center justify-around p-3 text-lg">
+						<span class="py-2 text-white">Function</span>
+						<select class="rounded-xl bg-background py-2 px-4 text-black">
 							<option>Draw Scramble</option>
 						</select>
 					</div>

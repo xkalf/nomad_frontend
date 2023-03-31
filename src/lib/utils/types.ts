@@ -29,7 +29,7 @@ export const scrambleSizeMapper: Record<CubeType, string> = {
 	Bld5: 'text-sm md:text-5xl',
 	Sq1: 'text-2xl md:text-5xl',
 	Pyraminx: 'text-2xl md:text-5xl',
-	Megaminx: 'text-xs md:text-2xl lg:text-3xl text-justify font-mono',
+	Megaminx: 'text-xs md:text-xl text-justify font-mono',
 	Clock: 'text-2xl md:text-5xl',
 	Skewb: 'text-2xl md:text-5xl'
 }

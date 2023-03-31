@@ -14,6 +14,7 @@
 		el.event = $cubeType
 		el.visualization = $cubeType === 'Pyraminx' ? '2D' : '3D'
 		el.style.width = '100%'
+		el.style.maxHeight = '180px'
 		el.scramble = scramble
 
 		container.appendChild(el)

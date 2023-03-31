@@ -1,4 +1,4 @@
-<script lang ts></script>
+<script lang="ts"></script>
 
 <div class="flex h-screen items-center justify-center gap-2">
 	<h1>Бүртгэлгүй хаяг байна.</h1>
