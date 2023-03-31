@@ -36,6 +36,7 @@
 	let inspectionRef: NodeJS.Timer
 	let inspectionSeconds: number
 	let nextStatus: SolveStatus | '8sec' | '12sec' = 'Ok'
+
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
 
 	function setTextColor(state: StateType) {

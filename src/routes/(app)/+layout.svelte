@@ -5,7 +5,7 @@
 	import { initialSessions } from '$lib/stores/sessions'
 	import { setSettings } from '$lib/stores/settings'
 	import { initialSolves } from '$lib/stores/solves'
-	import type { CubeType, Solve } from '@prisma/client'
+	import type { Solve } from '@prisma/client'
 	import { onMount } from 'svelte'
 	import type { LayoutServerData } from './$types'
 
@@ -17,7 +17,7 @@
 	if (data.getSessions) {
 		setSession(data.getSessions.session)
 		initialSessions(data.getSessions.sessions)
-		setCubeType(data.getSessions.session.cube as CubeType)
+		setCubeType(data.getSessions.session.cube)
 	}
 
 	async function getSolves(sessionId: number) {

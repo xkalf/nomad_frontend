@@ -5,8 +5,6 @@ import { redirect } from '@sveltejs/kit'
 import type { LayoutServerLoad } from './$types'
 
 export const load: LayoutServerLoad = async ({ locals, cookies }) => {
-	const sessionId = cookies.get('sessionId')
-
 	if (!locals.session) {
 		throw redirect(303, '/login')
 	}
@@ -16,6 +14,8 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 	}
 
 	const getSessions = async () => {
+		const sessionId = cookies.get('sessionId')
+
 		let session: Session | null = null
 		let sessions: SessionWithSolvesCount[]
 

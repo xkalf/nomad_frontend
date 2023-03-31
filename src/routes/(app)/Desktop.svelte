@@ -28,7 +28,10 @@
 		if (!browser || !customTime) return
 		const time = formatCustomTime(customTime)
 
-		if (!time) return
+		if (!time) {
+			customTime = undefined
+			return
+		}
 
 		const response = await fetch('/api/solve', {
 			method: 'POST',

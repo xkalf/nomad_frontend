@@ -101,15 +101,15 @@
 				if (isReady()) newScramble()
 			})
 
-			sHammer.on('swipeLeft', async () => {
-				if (isReady()) await getLastScramble()
+			sHammer.on('swipeLeft', () => {
+				if (isReady()) getLastScramble()
 			})
 
-			timerEl.addEventListener('touchstart', e => {
+			timerEl.addEventListener('touchstart', () => {
 				eventDown(true)
 			})
 
-			timerEl.addEventListener('touchend', async () => {
+			timerEl.addEventListener('touchend', () => {
 				eventUp()
 			})
 		}
