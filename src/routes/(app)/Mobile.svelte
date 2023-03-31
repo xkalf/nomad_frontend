@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { cubeTypeMapper, cubeTypes, scrambleSizeMapper, type StateType } from '$lib/utils/types'
-	import { checkBestAverage, formatTimeInput, getAvg, getBest } from '$lib/utils/timer-utils'
+	import { checkBestAverage, formatCustomTime, getAvg, getBest } from '$lib/utils/timer-utils'
 	import { solves } from '$lib/stores/solves'
 	import { browser } from '$app/environment'
 	import { onMount } from 'svelte'
@@ -32,11 +32,17 @@
 	let isCubeTypeOpen = false
 	let isScrambleDisplayOpen = false
 	let isStateOpen = false
-	let customTime: number
+	let customTime: string | undefined = undefined
 	let isCustomTimeModalOpen = false
 
 	async function createCustomSolve() {
-		Promise.all([createSolve(formatTimeInput(customTime)), newScramble()])
+		if (!customTime) return
+		const time = formatCustomTime(customTime)
+
+		if (!time) return
+
+		await createSolve(time)
+		newScramble()
 		isCustomTimeModalOpen = false
 	}
 
@@ -86,7 +92,7 @@
 
 			hammer.on('swipeDown', () => {
 				if (isReady()) {
-					customTime = 0
+					customTime = undefined
 					isCustomTimeModalOpen = true
 				}
 			})
@@ -178,7 +184,7 @@
 	<input
 		bind:value={customTime}
 		class="mt-2 w-full rounded-lg bg-secondary p-2 pl-3 text-lg text-white"
-		type="number"
+		type="string"
 		inputmode="numeric"
 	/>
 </Modal>

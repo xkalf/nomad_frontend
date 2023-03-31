@@ -10,7 +10,7 @@
 	import { scrambleSizeMapper } from '$lib/utils/types'
 	import { session } from '$lib/stores/session'
 	import { addSolves } from '$lib/stores/solves'
-	import { formatTimeInput } from '$lib/utils/timer-utils'
+	import { formatCustomTime } from '$lib/utils/timer-utils'
 
 	export let timerText: string
 	export let scramble: string
@@ -22,15 +22,18 @@
 	export let newScramble: () => void
 
 	let timerEl: HTMLDivElement
-	let customTime: number | undefined = undefined
+	let customTime: string | undefined = undefined
 
 	async function addCustomSolve() {
 		if (!browser || !customTime) return
+		const time = formatCustomTime(customTime)
+
+		if (!time) return
 
 		const response = await fetch('/api/solve', {
 			method: 'POST',
 			body: JSON.stringify({
-				time: formatTimeInput(customTime),
+				time,
 				scramble,
 				sessionId: $session.id
 			})
@@ -80,7 +83,7 @@
 				<form class="flex items-center justify-center" on:submit|preventDefault={addCustomSolve}>
 					<input
 						bind:value={customTime}
-						type="number"
+						type="text"
 						class="w-3/4 rounded-xl border border-primary px-4 py-2 text-[150px] text-primary focus:outline-none"
 					/>
 				</form>
@@ -106,10 +109,3 @@
 		</div>
 	</div>
 </div>
-
-<style>
-	input[type='number']::-webkit-inner-spin-button,
-	input[type='number']::-webkit-outer-spin-button {
-		appearance: none;
-	}
-</style>

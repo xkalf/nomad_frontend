@@ -149,18 +149,55 @@ export function getMean(solves: Solve[]): string {
 	return displayTime(sum / filtered.length)
 }
 
-export function formatTimeInput(time: number) {
-	if (Number.isInteger(time)) {
-		const hours = Math.floor(time / 1000000)
-		const minutes = Math.floor((time % 1000000) / 10000)
-		const seconds = Math.floor((time % 10000) / 100)
-		const milliSeconds = (time % 100) * 10
-		return hours * 3_600_000 + minutes * 60_000 + seconds * 1000 + milliSeconds
+export function formatCustomTime(timeString: string) {
+	const isNumber = /^\d+$/.test(timeString)
+
+	if (isNumber) {
+		return formatTimeInput(parseInt(timeString))
 	} else {
-		const seconds = Math.floor(time)
-		const milliSeconds = Math.floor((time % 1) * 1000)
-		return seconds * 1000 + milliSeconds
+		return formatStringToMilliSeconds(timeString)
 	}
+}
+
+export function formatStringToMilliSeconds(timeString: string) {
+	const regex = /^((\d{1,2}:)?\d{1,2}:)?\d{1,2}\.\d{1,2}$/gm
+
+	if (!regex.exec(timeString)) {
+		return
+	}
+
+	const parts = timeString.split(':').reverse()
+
+	if (parts.length > 3) {
+		return
+	}
+
+	const s = parts.shift()
+
+	if (!s) return
+
+	const [seconds, milliseconds] = s.split('.')
+
+	let totalMilliseconds = parseInt(seconds) * 1000 + parseInt(milliseconds) * 10
+
+	if (parts.length === 1) {
+		const [minutes] = parts
+		totalMilliseconds += parseInt(minutes) * 60 * 1000
+	} else if (parts.length === 2) {
+		const [minutes, hours] = parts
+		totalMilliseconds += parseInt(minutes) * 60 * 1000
+		totalMilliseconds += parseInt(hours) * 60 * 60 * 1000
+	}
+
+	return totalMilliseconds
+}
+
+export function formatTimeInput(time: number) {
+	const hours = Math.floor(time / 1000000)
+	const minutes = Math.floor((time % 1000000) / 10000)
+	const seconds = Math.floor((time % 10000) / 100)
+	const milliSeconds = (time % 100) * 10
+	return hours * 3_600_000 + minutes * 60_000 + seconds * 1000 + milliSeconds
 }
 
 export function checkBestAverage(solves: Solve[], length: number) {
