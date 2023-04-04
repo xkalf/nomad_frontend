@@ -42,7 +42,7 @@
 			})
 		})
 
-		const result: Solve = await response.json()
+		const result = (await response.json()) as Solve
 
 		addSolves(result)
 		newScramble()
@@ -51,11 +51,11 @@
 
 	onMount(() => {
 		if (browser && $settings.useMouseTimer && $settings.enteringTimes === 'Timer') {
-			timerEl.addEventListener('mousedown', e => {
+			timerEl.addEventListener('mousedown', () => {
 				eventDown(true)
 			})
 
-			timerEl.addEventListener('mouseup', async e => {
+			timerEl.addEventListener('mouseup', () => {
 				eventUp()
 			})
 		}
@@ -66,10 +66,10 @@
 	<Sidebar {changeCubeType} />
 	<div bind:this={timerEl} class="grid grid-rows-3 overflow-hidden bg-background p-4">
 		<!-- Scramble -->
-		<div class="flex justify-center pt-[3vh] text-center text-primary">
-			<p class={`${scrambleSizeMapper[$cubeType]} whitespace-pre-line`}>
+		<div class="flex items-center justify-center text-primary">
+			<span class={`${scrambleSizeMapper[$cubeType]} whitespace-pre-line text-center`}>
 				{scramble}
-			</p>
+			</span>
 		</div>
 		<!-- Time -->
 		<div class="relative">
@@ -101,9 +101,9 @@
 			<div class="col-start-3">
 				<div class="z-20 ml-auto flex w-3/4 flex-col justify-between rounded-xl bg-secondary">
 					<ScrambleDisplay {scramble} />
-					<div class="flex items-center justify-around p-3 text-lg">
-						<span class="py-2 text-white">Function</span>
-						<select class="rounded-xl bg-background py-2 px-4 text-black">
+					<div class="flex items-center justify-center gap-2 px-2 py-4 text-lg">
+						<span class="p-2 text-white">Function</span>
+						<select class="rounded-xl bg-background p-2 text-black">
 							<option>Draw Scramble</option>
 						</select>
 					</div>

@@ -10,7 +10,9 @@
 
 	type SettingsForm = Omit<Settings, 'id' | 'createdAt' | 'updatedAt' | 'userId'>
 
-	let settingsForm: SettingsForm = $settings
+	let settingsForm: SettingsForm = (({ id, createdAt, updatedAt, userId, ...rest }) => rest)(
+		$settings
+	)
 
 	const updateSettings = throttleBeta(async (args: SettingsForm) => {
 		if (!browser) return
@@ -22,8 +24,8 @@
 
 		const data = await response.json()
 
-		if (data) {
-			setSettings(data.settings)
+		if (data.settings) {
+			setSettings(data.settings as Settings)
 		}
 	}, 1000)
 
@@ -160,8 +162,8 @@
 						<select class="select" bind:value={settingsForm.enteringTimes}>
 							<option value="Timer">Хугацаа хэмжигч</option>
 							<option value="Typing">Бичих</option>
-							<option value="Stackmat">Хугацаа хэмжигчийг AUX холбох</option>
-							<option value="Bluetooth">Хугацаа хэмжигчийг BLUETOOTH холбох</option>
+							<!-- <option value="Stackmat">Хугацаа хэмжигчийг AUX холбох</option>
+							<option value="Bluetooth">Хугацаа хэмжигчийг BLUETOOTH холбох</option> -->
 						</select>
 					</div>
 				</ItemContainer>
