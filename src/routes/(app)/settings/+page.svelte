@@ -63,7 +63,10 @@
 					</div>
 				</ItemContainer>
 				<ItemContainer label="Хугацааны хэмжээ" mobileSize="lg">
-					<InputNumber value={settingsForm.timerSize} min={25} max={35} />
+					<InputNumber bind:value={settingsForm.timerSize} min={25} max={35} />
+				</ItemContainer>
+				<ItemContainer label="Холилтийн хэмжээ" mobileSize="lg" size="lg">
+					<InputNumber bind:value={settingsForm.scrambleSize} min={25} max={35} />
 				</ItemContainer>
 				<ItemContainer label="Дэлгэцний арын зураг" size="md">
 					<div class="mx-auto w-1/2">

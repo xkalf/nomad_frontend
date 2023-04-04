@@ -12,7 +12,7 @@
 	onMount(async () => {
 		const { ScrambleDisplay } = await import('scramble-display')
 		el = new ScrambleDisplay()
-		el.event = $cubeType
+		el.event = scrambleMappper[$cubeType]
 		el.visualization = $cubeType === 'Pyraminx' ? '2D' : '3D'
 		el.style.width = '100%'
 		el.style.maxHeight = '20vh'

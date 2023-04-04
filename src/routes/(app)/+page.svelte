@@ -349,6 +349,7 @@
 
 					if (Object.keys(shortcutMapper).includes(e.code)) {
 						e.preventDefault()
+						if (shortcutMapper[e.code] === $cubeType) return
 						await changeCubeType(shortcutMapper[e.code])
 					}
 				} else if (e.ctrlKey) {

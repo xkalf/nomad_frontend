@@ -21,8 +21,10 @@
 	export let eventDown: (s: boolean) => void
 	export let newScramble: () => void
 
-	let timerEl: HTMLDivElement
+	let timerContainer: HTMLDivElement
 	let customTime: string | undefined = undefined
+	let scrambleEl: HTMLSpanElement
+	let timerEl: HTMLParagraphElement
 
 	async function addCustomSolve() {
 		if (!browser || !customTime) return
@@ -50,24 +52,32 @@
 	}
 
 	onMount(() => {
-		if (browser && $settings.useMouseTimer && $settings.enteringTimes === 'Timer') {
-			timerEl.addEventListener('mousedown', () => {
-				eventDown(true)
-			})
+		if (browser) {
+			scrambleEl.style.fontSize = `${$settings.scrambleSize}px`
+			timerEl.style.fontSize = `${$settings.timerSize}px`
 
-			timerEl.addEventListener('mouseup', () => {
-				eventUp()
-			})
+			if ($settings.useMouseTimer && $settings.enteringTimes === 'Timer') {
+				timerContainer.addEventListener('mousedown', () => {
+					eventDown(true)
+				})
+
+				timerContainer.addEventListener('mouseup', () => {
+					eventUp()
+				})
+			}
 		}
 	})
 </script>
 
 <div class="grid h-screen w-full grid-cols-[minmax(350px,_1fr)_4fr]">
 	<Sidebar {changeCubeType} />
-	<div bind:this={timerEl} class="grid grid-rows-3 overflow-hidden bg-background p-4">
+	<div bind:this={timerContainer} class="grid grid-rows-3 overflow-hidden bg-background p-4">
 		<!-- Scramble -->
 		<div class="flex items-center justify-center text-primary">
-			<span class={`${scrambleSizeMapper[$cubeType]} whitespace-pre-line text-center`}>
+			<span
+				bind:this={scrambleEl}
+				class={`${scrambleSizeMapper[$cubeType]} whitespace-pre-line text-center`}
+			>
 				{scramble}
 			</span>
 		</div>
@@ -75,6 +85,7 @@
 		<div class="relative">
 			{#if $settings.enteringTimes !== 'Typing'}
 				<p
+					bind:this={timerEl}
 					class={`${textColor} absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono text-[150px]`}
 				>
 					{timerText}
