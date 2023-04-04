@@ -19,7 +19,7 @@ export const GET: RequestHandler = async ({ url }) => {
 			}
 		},
 		orderBy: {
-			createdAt: 'asc'
+			createdAt: 'desc'
 		}
 	})
 
