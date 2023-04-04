@@ -31,7 +31,7 @@
 		</div>
 		<div class="flex h-14 w-14 items-center justify-center rounded-lg">
 			<a href="/settings">
-				<SettingsIcon open={getIconColor('/(app)/settings/display')} isPrimary />
+				<SettingsIcon open={getIconColor('/(app)/settings')} isPrimary />
 			</a>
 		</div>
 	</div>
