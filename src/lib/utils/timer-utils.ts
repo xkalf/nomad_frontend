@@ -84,11 +84,11 @@ export function getAverageTime(arr: Solve[], length: number): number {
 	const array = arr.slice(-1 * length)
 	const dnfs = array.filter(i => i.status === 'Dnf')
 
-	if (dnfs.length >= 2 && length >= 5) {
+	if (dnfs.length >= Math.floor(length / 25) + 2 && length >= 25) {
 		return Number.MAX_SAFE_INTEGER
 	}
 
-	if (dnfs.length >= Math.floor(length / 25) + 2 && length >= 25) {
+	if (dnfs.length >= 2 && length >= 5) {
 		return Number.MAX_SAFE_INTEGER
 	}
 
