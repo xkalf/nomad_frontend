@@ -30,6 +30,73 @@
 	}, 1000)
 
 	$: updateSettings(settingsForm)
+
+	const shortCuts: {
+		base: 'Alt' | 'Ctrl'
+		key: string
+		label: string
+	}[] = [
+		{
+			base: 'Alt',
+			key: '1-7',
+			label: 'Төрөл солигдоно'
+		},
+		{
+			base: 'Alt',
+			key: 'Z',
+			label: 'Сүүлийн эвлүүлэлт устгана'
+		},
+		{
+			base: 'Alt',
+			key: 'C',
+			label: 'Clock'
+		},
+		{
+			base: 'Alt',
+			key: 'D',
+			label: 'Багцын эвлүүлэлтийг устгана'
+		},
+		{
+			base: 'Alt',
+			key: 'M',
+			label: 'Megaminx'
+		},
+		{
+			base: 'Alt',
+			key: 'N',
+			label: 'Шинэ хэсэг нээх'
+		},
+		{
+			base: 'Alt',
+			key: 'P',
+			label: 'Pyraminx'
+		},
+		{
+			base: 'Ctrl',
+			key: '1',
+			label: 'Сүүлийн эвлүүлэлтийн +2 болиулах'
+		},
+		{
+			base: 'Alt',
+			key: 'S',
+			label: 'Skewb'
+		},
+		{
+			base: 'Ctrl',
+			key: '2',
+			label: 'Сүүлийн эвлүүлэлтэнд +2 нэмэх'
+		},
+		{
+			base: 'Alt',
+			key: 'B',
+			label: 'Blind'
+		},
+		{
+			base: 'Ctrl',
+			key: '3',
+			label: 'Сүүлийн эвлүүлэлтэнд DNF нэмэх'
+		}
+	]
 </script>
 
 <div class="h-screen md:grid md:grid-cols-[minmax(350px,_1fr)_4fr]">
@@ -93,6 +160,18 @@
 					</div>
 				</ItemContainer>
 			</div>
+			<div
+				class="mt-8 hidden grid-cols-2 rounded-xl border-2 border-primary bg-white px-8 py-4 text-2xl text-primary md:grid"
+			>
+				{#each shortCuts as shortCut}
+					<div class="py-2">
+						<span class="rounded-xl bg-background p-2">{shortCut.base}</span>
+						<span class="rounded-xl bg-background p-2">{shortCut.key}</span>
+						<span>{shortCut.label}</span>
+					</div>
+				{/each}
+			</div>
+			<!-- Timer -->
 			<p class="mt-8 mb-4 text-4xl text-primary">Хугацаа хэмжигч</p>
 			<div class="page">
 				<ItemContainer label="Хулганаар хугацаа хэмжигчийг эхлүүлэх">

@@ -12,7 +12,7 @@
 <div
 	class={`${
 		isOpen ? 'block' : 'hidden'
-	} absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-white py-4 px-4 font-sans text-primary md:px-0`}
+	} absolute top-1/2 left-1/2 z-10 w-3/4 -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-xl bg-white py-4 px-4 font-sans text-primary md:w-auto md:px-0`}
 >
 	<div class="mx-auto w-full md:w-3/5">
 		<h2 class="text-center text-2xl md:text-3xl">Дундаж {getMean(solves)}</h2>
@@ -33,7 +33,7 @@
 		{/each}
 	</div>
 	<h3 class="mt-8 text-center text-3xl">Эвлүүлэлтийн жагсаалт</h3>
-	<div class="mx-8 mt-2 max-h-72 overflow-y-auto pr-4 text-2xl">
+	<div class="mx-8 mt-2 max-h-40 overflow-y-auto pr-4 text-2xl md:max-h-72">
 		{#each solves as solve, index}
 			<div class="flex gap-4 py-2">
 				<span>{index + 1}.</span>

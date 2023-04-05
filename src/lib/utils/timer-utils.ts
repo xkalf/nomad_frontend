@@ -85,11 +85,11 @@ export function getAverageTime(arr: Solve[], length: number): number {
 	const dnfs = array.filter(i => i.status === 'Dnf')
 
 	if (dnfs.length >= 2 && length >= 5) {
-		return -1
+		return Number.MAX_SAFE_INTEGER
 	}
 
 	if (dnfs.length >= Math.floor(length / 25) + 2 && length >= 25) {
-		return -1
+		return Number.MAX_SAFE_INTEGER
 	}
 
 	const adjustedSolves = array.slice().map(i => ({
@@ -105,6 +105,7 @@ export function getAverageTime(arr: Solve[], length: number): number {
 
 export function getAvg(arr: Solve[], length: number): string {
 	const time = getAverageTime(arr, length)
+	if (time === Number.MAX_SAFE_INTEGER) return 'DNF'
 	return time >= 0 ? displayTime(time) : 'DNF'
 }
 
