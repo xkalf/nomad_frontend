@@ -1,8 +1,8 @@
 <script lang="ts">
-	import Average from '$lib/components/Average.svelte'
-	import MobileContainer from '$lib/components/MobileContainer.svelte'
-	import Sessions from '$lib/components/Sessions.svelte'
-	import Solves from '$lib/components/Solves.svelte'
+	import Average from '$lib/components/solves/Average.svelte'
+	import MobileContainer from '$lib/components/pages/MobileContainer.svelte'
+	import Sessions from '$lib/components/solves/Sessions.svelte'
+	import Solves from '$lib/components/solves/Solves.svelte'
 	import { bestSolve } from '$lib/stores/bestSolve'
 	import { solves } from '$lib/stores/solves'
 	import { getBest, getBestAverage, getWorst } from '$lib/utils/timer-utils'

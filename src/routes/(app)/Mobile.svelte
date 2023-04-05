@@ -4,12 +4,12 @@
 	import { solves } from '$lib/stores/solves'
 	import { browser } from '$app/environment'
 	import { onMount } from 'svelte'
-	import MobileContainer from '$lib/components/MobileContainer.svelte'
+	import MobileContainer from '$lib/components/pages/MobileContainer.svelte'
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
 	import Modal from '$lib/components/Modal.svelte'
 	import type { CubeType, SolveStatus } from '@prisma/client'
-	import ScrambleLogo from '$lib/components/ScrambleLogo.svelte'
+	import ScrambleLogo from '$lib/icons/ScrambleLogo.svelte'
 	import { bestSolve } from '$lib/stores/bestSolve'
 
 	export let timerText: string

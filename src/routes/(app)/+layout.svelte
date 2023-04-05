@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Loading from '$lib/components/Loading.svelte'
+	import Loading from '$lib/components/pages/Loading.svelte'
 	import { setCubeType } from '$lib/stores/cubeType'
 	import { setSession } from '$lib/stores/session'
 	import { initialSessions } from '$lib/stores/sessions'

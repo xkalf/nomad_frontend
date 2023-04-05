@@ -1,10 +1,10 @@
 <script lang="ts">
-	import Average from '../../lib/components/Average.svelte'
+	import Average from '../../lib/components/solves/Average.svelte'
 	import { solves } from '../../lib/stores/solves'
 	import { getBest } from '../../lib/utils/timer-utils'
-	import Solves from '$lib/components/Solves.svelte'
-	import Sessions from '$lib/components/Sessions.svelte'
-	import SidebarContainer from '$lib/components/SidebarContainer.svelte'
+	import Solves from '$lib/components/solves/Solves.svelte'
+	import Sessions from '$lib/components/solves/Sessions.svelte'
+	import SidebarContainer from '$lib/components/pages/SidebarContainer.svelte'
 	import type { CubeType } from '@prisma/client'
 	import { bestSolve } from '$lib/stores/bestSolve'
 

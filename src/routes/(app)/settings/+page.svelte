@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment'
-	import MobileNavbar from '$lib/components/MobileNavbar.svelte'
-	import SidebarContainer from '$lib/components/SidebarContainer.svelte'
+	import MobileNavbar from '$lib/components/pages/MobileNavbar.svelte'
+	import SidebarContainer from '$lib/components/pages/SidebarContainer.svelte'
 	import { setSettings, settings } from '$lib/stores/settings'
 	import { throttleBeta } from '$lib/utils/common'
 	import type { Settings } from '@prisma/client'

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { SolveStatus, Solve } from '@prisma/client'
-	import { changeSolveStats } from '../stores/solves'
-	import { formatTime } from '../utils/timer-utils'
+	import { changeSolveStats } from '../../stores/solves'
+	import { formatTime } from '../../utils/timer-utils'
 
 	export let order: number
 	export let solve: Solve

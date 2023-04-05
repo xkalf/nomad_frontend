@@ -205,7 +205,7 @@ export function checkBestAverage(solves: Solve[], length: number) {
 		getAverageTime(solves, length) === getAverageTime(getBestAverage(solves, length), length) &&
 		getAverageTime(solves, length) > 0
 	) {
-		return 'text-green-500'
+		return 'text-green-400'
 	} else {
 		return ''
 	}

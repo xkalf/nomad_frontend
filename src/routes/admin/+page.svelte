@@ -2,8 +2,8 @@
 	import { CubeType, type Session, type Solve, type User } from '@prisma/client'
 	import type { LayoutServerData } from './$types'
 	import { cubeTypeMapper } from '$lib/utils/types'
-	import { displayTime } from '$lib/utils/timer-utils'
 	import { browser } from '$app/environment'
+	import Mean from '$lib/components/solves/Mean.svelte'
 
 	type UserWithSessions = User & { sessions: Session[] }
 
@@ -24,7 +24,6 @@
 	async function getSolves() {
 		if (!selected.session || !browser) return
 		const data = await (await fetch(`/api/session/${selected.session.id}?admin=true`)).json()
-		console.log(data)
 		solves = data.session.solves
 	}
 
@@ -32,7 +31,7 @@
 	$: selected.session, getSolves()
 </script>
 
-<div class="font-xl flex gap-4">
+<div class="flex items-center gap-4 p-4 text-xl">
 	<select bind:value={selected.user}>
 		{#each data.users as user}
 			<option value={user}>{user.firstname}</option>
@@ -52,39 +51,14 @@
 			{/each}
 		{/if}
 	</select>
-</div>
-<div class="relative">
-	<table>
-		<thead>
-			<th>ID</th>
-			<th>Scramble</th>
-			<th>Time</th>
-			<th>Status</th>
-		</thead>
-		<tbody>
-			{#each solves as solve}
-				<tr>
-					<td>{solve.id}</td>
-					<td>{solve.scramble}</td>
-					<td>{displayTime(solve.time)}</td>
-					<td>{solve.status}</td>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
+
+	<p>Count : {solves.length}</p>
+
+	<Mean {solves} isOpen isAdmin />
 </div>
 
 <style>
 	select {
 		@apply mb-2 block border py-2 px-4 text-sm font-medium text-gray-900;
-	}
-
-	table {
-		@apply w-full text-left text-sm text-gray-500;
-	}
-
-	th,
-	td {
-		@apply px-6 py-3;
 	}
 </style>

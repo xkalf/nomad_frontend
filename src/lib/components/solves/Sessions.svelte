@@ -7,7 +7,7 @@
 	import { cubeTypeMapper, cubeTypes } from '$lib/utils/types'
 	import Icon from '@iconify/svelte'
 	import type { CubeType, Session } from '@prisma/client'
-	import Modal from './Modal.svelte'
+	import Modal from '../Modal.svelte'
 
 	export let changeCubeType: (type: CubeType) => Promise<void>
 
@@ -17,7 +17,9 @@
 	let isSessionOpen = false
 	let isSessionCreate = false
 	let sessionName: string
-	$: isSessionDelete = $sessions.map(i => ({ id: i.id, isOpen: false }))
+	let selected: Session | undefined = undefined
+	let isOpen = false
+
 	$: formattedSessions = $sessions.map(i => {
 		if (i.id === $session?.id) {
 			return { ...i, _count: { solves: $solves.length } }
@@ -32,11 +34,6 @@
 			await getSessionById(id)
 			isSessionOpen = false
 		}
-	}
-
-	function updateIsSessionDelete(id: number, open: boolean) {
-		const index = isSessionDelete.findIndex(i => i.id === id)
-		isSessionDelete[index].isOpen = open
 	}
 
 	function showSessionCreate(e: MouseEvent & { currentTarget: HTMLButtonElement & EventTarget }) {
@@ -87,10 +84,11 @@
 
 		if (data.success) {
 			deleteSession(id)
-			updateIsSessionDelete(id, false)
 			if (id === $session.id) {
 				await getSessionByCube($cubeType)
 			}
+			selected = undefined
+			isOpen = false
 		}
 	}
 </script>
@@ -110,20 +108,10 @@
 							<button
 								class="text-lg text-red-500"
 								on:click={() => {
-									updateIsSessionDelete(s.id, true)
+									selected = s
+									isOpen = true
 								}}>X</button
 							>
-							<Modal
-								isOpen={isSessionDelete.find(i => i.id === s.id)?.isOpen}
-								okFunction={async () => {
-									await removeSession(s.id)
-								}}
-								cancelFunction={() => {
-									updateIsSessionDelete(s.id, false)
-								}}
-							>
-								<p class="text-lg text-primary">Уг session-ийг устгах уу?</p>
-							</Modal>
 						{/if}
 					</li>
 				{/each}
@@ -194,4 +182,18 @@
 		class="mt-2 w-full rounded-lg bg-secondary p-2 pl-3 text-lg text-white"
 		bind:value={sessionName}
 	/>
+</Modal>
+
+<Modal
+	{isOpen}
+	okFunction={async () => {
+		if (!selected) return
+		await removeSession(selected.id)
+	}}
+	cancelFunction={() => {
+		selected = undefined
+		isOpen = false
+	}}
+>
+	<p class="text-lg text-primary">Уг session-ийг устгах уу?</p>
 </Modal>

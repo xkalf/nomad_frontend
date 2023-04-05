@@ -41,7 +41,7 @@
 
 	function setTextColor(state: StateType) {
 		if (state === 'ready' || state === 'inspectionReady') {
-			return 'text-green-500'
+			return 'text-green-400'
 		} else if (state === 'waiting' || state === 'inspectionWaiting') {
 			return 'text-red-500'
 		} else {

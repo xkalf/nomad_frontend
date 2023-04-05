@@ -1,18 +1,20 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte'
 	import Solve from './Solve.svelte'
-	import { changeSolveStats, deleteSolves, solves } from '../stores/solves'
+	import { changeSolveStats, deleteSolves, solves } from '../../stores/solves'
 	import { changeSortMode, sortMode } from '$lib/stores/sortMode'
 	import type { Solve as SolveItem, SolveStatus } from '@prisma/client'
 	import { formatTime, getMean } from '$lib/utils/timer-utils'
-	import Modal from './Modal.svelte'
+	import Modal from '../Modal.svelte'
 	import { bestSolve } from '$lib/stores/bestSolve'
+	import Mean from './Mean.svelte'
 
 	export let mobile = false
 
 	let deleteModalOpen = false
 	let selected: SolveItem | undefined = undefined
 	let showModal: HTMLDialogElement
+	let isMeanOpen = false
 
 	function hideModal() {
 		deleteModalOpen = false
@@ -127,7 +129,7 @@
 			</button>
 		</div>
 		<div class="col-span-2 flex justify-start">
-			<span>Mean {getMean($solves)}</span>
+			<button on:click={() => (isMeanOpen = true)}>Mean {getMean($solves)}</button>
 		</div>
 	</div>
 	<!-- Solves -->
@@ -154,6 +156,8 @@
 <Modal okFunction={deleteSolve} isOpen={deleteModalOpen} cancelFunction={hideModal}>
 	<p class="text-lg text-primary">Уг эвлүүлэлтийг устгах уу?</p>
 </Modal>
+
+<Mean bind:isOpen={isMeanOpen} solves={$solves} />
 
 {#if selected}
 	<dialog
