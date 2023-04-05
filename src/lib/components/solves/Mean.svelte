@@ -26,7 +26,7 @@
 						{getAvg(solves, average)}
 					</div>
 					<div class="w-2/5 text-center text-green-400">
-						{getAvg(getBestAverage(solves, 5), 5)}
+						{getAvg(getBestAverage(solves, average), average)}
 					</div>
 				</div>
 			</div>
