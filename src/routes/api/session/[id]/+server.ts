@@ -2,7 +2,8 @@ import db from '$lib/db'
 import type { RequestHandler } from './$types'
 import { NODE_ENV } from '$env/static/private'
 
-export const GET: RequestHandler = async ({ params: { id }, cookies }) => {
+export const GET: RequestHandler = async ({ params: { id }, cookies, url }) => {
+	const admin = url.searchParams.get('admin')
 	const session = await db.session.findFirst({
 		where: {
 			id: +id
@@ -15,12 +16,13 @@ export const GET: RequestHandler = async ({ params: { id }, cookies }) => {
 			}
 		}
 	})
-
-	cookies.set('sessionId', id, {
-		path: '/',
-		secure: NODE_ENV === 'production',
-		maxAge: 60 * 60 * 24 * 30 * 12 * 10
-	})
+	if (!admin) {
+		cookies.set('sessionId', id, {
+			path: '/',
+			secure: NODE_ENV === 'production',
+			maxAge: 60 * 60 * 24 * 30 * 12 * 10
+		})
+	}
 	return new Response(JSON.stringify({ session }))
 }
 

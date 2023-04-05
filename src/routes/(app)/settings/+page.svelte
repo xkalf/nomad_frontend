@@ -63,10 +63,10 @@
 					</div>
 				</ItemContainer>
 				<ItemContainer label="Хугацааны хэмжээ" mobileSize="lg">
-					<InputNumber bind:value={settingsForm.timerSize} min={25} max={35} />
+					<InputNumber bind:value={settingsForm.timerSize} />
 				</ItemContainer>
 				<ItemContainer label="Холилтийн хэмжээ" mobileSize="lg" size="lg">
-					<InputNumber bind:value={settingsForm.scrambleSize} min={25} max={35} />
+					<InputNumber bind:value={settingsForm.scrambleSize} />
 				</ItemContainer>
 				<ItemContainer label="Дэлгэцний арын зураг" size="md">
 					<div class="mx-auto w-1/2">
@@ -158,7 +158,7 @@
 					</div>
 				</ItemContainer> -->
 				<ItemContainer label="Эвлүүлт дундаа цагаа тэмдэглэх" mobileSize="lg">
-					<InputNumber value={settingsForm.multiPhase} min={0} max={10} />
+					<InputNumber value={settingsForm.multiPhase} max={10} />
 				</ItemContainer>
 				<ItemContainer label="Хугацаа хэмжигчийн холбох">
 					<div class="mx-auto w-1/2">

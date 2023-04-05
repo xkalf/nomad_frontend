@@ -98,7 +98,7 @@
 					<input
 						bind:value={customTime}
 						type="text"
-						class="w-3/4 rounded-xl border border-primary px-4 py-2 text-[150px] text-primary focus:outline-none"
+						class="w-3/4 rounded-xl border border-primary px-4 py-2 text-center text-[150px] text-primary focus:outline-none"
 					/>
 				</form>
 			{/if}

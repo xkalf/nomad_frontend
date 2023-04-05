@@ -1,14 +1,15 @@
 <script lang="ts">
 	export let value: number
-	export let min = 0
-	export let max = 0
+	export let max: number | null = null
 
 	function decrease() {
-		if (value > min) value -= 1
+		if (value > 0) value -= 1
 	}
 
 	function increase() {
-		if (value < max) value += 1
+		if ((max && max >= value) || !max) {
+			value += 1
+		}
 	}
 </script>
 
