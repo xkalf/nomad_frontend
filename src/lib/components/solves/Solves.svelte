@@ -157,7 +157,7 @@
 	<p class="text-lg text-primary">Уг эвлүүлэлтийг устгах уу?</p>
 </Modal>
 
-<Mean bind:isOpen={isMeanOpen} solves={$solves} />
+<Mean bind:isOpen={isMeanOpen} />
 
 {#if selected}
 	<dialog

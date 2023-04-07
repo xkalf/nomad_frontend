@@ -4,6 +4,9 @@
 	import { cubeTypeMapper } from '$lib/utils/types'
 	import { browser } from '$app/environment'
 	import Mean from '$lib/components/solves/Mean.svelte'
+	import { initialSolves, resetSolves, solves } from '$lib/stores/solves'
+	import Solves from '$lib/components/solves/Solves.svelte'
+	import { onMount } from 'svelte'
 
 	type UserWithSessions = User & { sessions: Session[] }
 
@@ -18,17 +21,20 @@
 		cube: 'N3',
 		session: data.users[0].sessions[0]
 	}
-	let solves: Solve[] = []
 	let sessions: Session[] = []
 
 	async function getSolves() {
 		if (!selected.session || !browser) return
 		const data = await (await fetch(`/api/session/${selected.session.id}?admin=true`)).json()
-		solves = data.session.solves
+		initialSolves(data.session.solves)
 	}
 
 	$: selected.cube, (sessions = selected.user?.sessions.filter(i => i.cube === selected.cube) || [])
 	$: selected.session, getSolves()
+
+	onMount(() => {
+		resetSolves()
+	})
 </script>
 
 <div class="flex items-center gap-4 p-4 text-xl">
@@ -52,9 +58,11 @@
 		{/if}
 	</select>
 
-	<p>Count : {solves.length}</p>
-
-	<Mean {solves} isOpen isAdmin />
+	<p>Count : {$solves.length}</p>
+</div>
+<div class="grid max-h-72 md:grid-cols-2">
+	<Solves mobile />
+	<Mean isOpen isAdmin />
 </div>
 
 <style>

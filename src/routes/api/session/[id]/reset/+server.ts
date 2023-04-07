@@ -57,14 +57,13 @@ export const DELETE: RequestHandler = async ({ params: { id } }) => {
 				where: {
 					id: { in: twoLookSolves.map(i => i.id) }
 				}
+			}),
+			db.solve.deleteMany({
+				where: {
+					sessionId: +id
+				}
 			})
 		])
-
-		await db.solve.deleteMany({
-			where: {
-				sessionId: +id
-			}
-		})
 
 		return new Response(JSON.stringify({ success: true }))
 	} catch (e) {

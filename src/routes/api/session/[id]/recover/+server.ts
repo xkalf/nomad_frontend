@@ -1,5 +1,5 @@
 import db from '$lib/db'
-import type { Solve } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import type { RequestHandler } from './$types'
 
 export const GET: RequestHandler = async ({ params: { id } }) => {
@@ -9,8 +9,8 @@ export const GET: RequestHandler = async ({ params: { id } }) => {
 		}
 	})
 
-	const formatted: Solve[] = deletedSolves.map(i => {
-		const { deleted, solveId, ...rest } = i
+	const formatted = deletedSolves.map((i): Prisma.SolveCreateManyInput => {
+		const { solveId, ...rest } = i
 
 		return { ...rest, id: solveId }
 	})
