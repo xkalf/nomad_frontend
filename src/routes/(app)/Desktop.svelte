@@ -4,7 +4,7 @@
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
 	import type { CubeType, Solve } from '@prisma/client'
-	import { onMount } from 'svelte'
+	import { onDestroy, onMount } from 'svelte'
 	import { browser } from '$app/environment'
 	import { settings } from '$lib/stores/settings'
 	import { scrambleSizeMapper } from '$lib/utils/types'
@@ -44,20 +44,31 @@
 		}
 	}
 
+	function handleMouseDown() {
+		eventDown(true)
+	}
+
+	function handleMouseUp() {
+		eventUp()
+	}
+
 	onMount(() => {
 		if (browser) {
 			scrambleEl.style.fontSize = `${$settings.scrambleSize}px`
 			timerEl.style.fontSize = `${$settings.timerSize}px`
 
 			if ($settings.useMouseTimer && $settings.enteringTimes === 'Timer') {
-				timerContainer.addEventListener('mousedown', () => {
-					eventDown(true)
-				})
+				timerContainer.addEventListener('mousedown', handleMouseDown)
 
-				timerContainer.addEventListener('mouseup', () => {
-					eventUp()
-				})
+				timerContainer.addEventListener('mouseup', handleMouseUp)
 			}
+		}
+	})
+
+	onDestroy(() => {
+		if (browser) {
+			timerContainer.removeEventListener('mousedown', handleMouseDown)
+			timerContainer.removeEventListener('mouseup', handleMouseUp)
 		}
 	})
 </script>

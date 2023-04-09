@@ -13,7 +13,7 @@
 	import { shortcutMapper, type StateType } from '$lib/utils/types'
 	import { generateScramble } from '$lib/utils/scramble'
 	import type { CubeType, SolveStatus, Solve } from '@prisma/client'
-	import { onMount } from 'svelte'
+	import { onDestroy, onMount } from 'svelte'
 	import Modal from '$lib/components/Modal.svelte'
 	import { sortMode } from '$lib/stores/sortMode'
 	import Desktop from './Desktop.svelte'
@@ -37,6 +37,7 @@
 	let inspectionSeconds: number
 	let nextStatus: SolveStatus | '8sec' | '12sec' = 'Ok'
 	let isFetching = false
+	const exceptTags = ['INPUT', 'BUTTON', 'TEXTAREA']
 
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
 
@@ -269,13 +270,6 @@
 		if (state === 'ready') {
 			startTime()
 			updateState('running')
-		} else if (state === 'running') {
-			stopTime()
-			updateState('stopping')
-
-			setTimeout(() => {
-				updateState('stopped')
-			}, 300)
 		} else if ($settings.useWcaInspection !== 'Never' && state === 'inspectionReady') {
 			startInspection()
 			updateState('inspection')
@@ -285,6 +279,7 @@
 				($settings.useWcaInspection === 'ExceptBLD' && !bldTypes.includes($cubeType)))
 		) {
 			updateState('inspection')
+		} else if (state === 'stopping') {
 		} else {
 			updateState('stopped')
 		}
@@ -325,84 +320,100 @@
 			}
 		} else if (state === 'inspection') {
 			setReady()
+		} else if (state === 'running') {
+			stopTime()
+			updateState('stopping')
+
+			setTimeout(() => {
+				updateState('stopped')
+			}, 300)
+		}
+	}
+
+	function handleKeyUp(e: KeyboardEvent) {
+		if (e.key === ' ' && $settings.enteringTimes === 'Timer') {
+			if (e.target instanceof HTMLElement && exceptTags.includes(e.target.tagName)) {
+				return
+			}
+
+			eventUp()
+		}
+	}
+
+	async function handleKeyDown(e: KeyboardEvent) {
+		if (e.altKey) {
+			switch (e.code) {
+				case 'ArrowLeft':
+					e.preventDefault()
+					getLastScramble()
+					return
+				case 'ArrowRight':
+					e.preventDefault()
+					newScramble()
+					return
+				case 'KeyD':
+					e.preventDefault()
+					deleteAllModalOpen = true
+					return
+				case 'KeyZ':
+					e.preventDefault()
+					deleteLastModalOpen = true
+					deleteCount = 1
+					return
+			}
+
+			if (Object.keys(shortcutMapper).includes(e.code)) {
+				e.preventDefault()
+				if (shortcutMapper[e.code] === $cubeType) return
+				await changeCubeType(shortcutMapper[e.code])
+			}
+		} else if (e.ctrlKey) {
+			switch (e.code) {
+				case 'Digit1':
+					e.preventDefault()
+					await updateLastSolve('Ok')
+					return
+				case 'Digit2':
+					e.preventDefault()
+					await updateLastSolve('Plus2')
+					return
+				case 'Digit3':
+					e.preventDefault()
+					await updateLastSolve('Dnf')
+					return
+			}
+		} else if (e.key === ' ' && $settings.enteringTimes === 'Timer') {
+			if (e.target instanceof HTMLElement && exceptTags.includes(e.target.tagName)) {
+				return
+			}
+
+			eventDown()
+		}
+
+		if (state === 'running') {
+			e.preventDefault()
+
+			stopTime()
+			updateState('stopping')
+
+			setTimeout(() => {
+				updateState('stopped')
+			}, 300)
 		}
 	}
 
 	onMount(async () => {
 		if (browser) {
-			const exceptTags = ['INPUT', 'BUTTON', 'TEXTAREA']
+			window.addEventListener('keyup', handleKeyUp)
 
-			window.addEventListener('keyup', e => {
-				if (e.key === ' ' && $settings.enteringTimes === 'Timer') {
-					if (e.target instanceof HTMLElement && exceptTags.includes(e.target.tagName)) {
-						return
-					}
+			window.addEventListener('keydown', handleKeyDown)
+		}
+	})
 
-					eventUp()
-				}
-			})
-
-			window.addEventListener('keydown', async e => {
-				if (e.altKey) {
-					switch (e.code) {
-						case 'ArrowLeft':
-							e.preventDefault()
-							getLastScramble()
-							return
-						case 'ArrowRight':
-							e.preventDefault()
-							newScramble()
-							return
-						case 'KeyD':
-							e.preventDefault()
-							deleteAllModalOpen = true
-							return
-						case 'KeyZ':
-							e.preventDefault()
-							deleteLastModalOpen = true
-							deleteCount = 1
-							return
-					}
-
-					if (Object.keys(shortcutMapper).includes(e.code)) {
-						e.preventDefault()
-						if (shortcutMapper[e.code] === $cubeType) return
-						await changeCubeType(shortcutMapper[e.code])
-					}
-				} else if (e.ctrlKey) {
-					switch (e.code) {
-						case 'Digit1':
-							e.preventDefault()
-							await updateLastSolve('Ok')
-							return
-						case 'Digit2':
-							e.preventDefault()
-							await updateLastSolve('Plus2')
-							return
-						case 'Digit3':
-							e.preventDefault()
-							await updateLastSolve('Dnf')
-							return
-					}
-				} else if (e.key === ' ' && $settings.enteringTimes === 'Timer') {
-					if (e.target instanceof HTMLElement && exceptTags.includes(e.target.tagName)) {
-						return
-					}
-
-					eventDown()
-				}
-
-				if (state === 'running') {
-					e.preventDefault()
-
-					stopTime()
-					updateState('stopping')
-
-					setTimeout(() => {
-						updateState('stopped')
-					}, 300)
-				}
-			})
+	onDestroy(() => {
+		if (browser) {
+			window.removeEventListener('keyup', handleKeyUp)
+			window.removeEventListener('keydown', handleKeyDown)
 		}
 	})
 

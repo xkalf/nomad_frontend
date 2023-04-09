@@ -3,7 +3,7 @@
 	import { checkBestAverage, formatCustomTime, getAvg, getBest } from '$lib/utils/timer-utils'
 	import { solves } from '$lib/stores/solves'
 	import { browser } from '$app/environment'
-	import { onMount } from 'svelte'
+	import { onDestroy, onMount } from 'svelte'
 	import MobileContainer from '$lib/components/pages/MobileContainer.svelte'
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
@@ -51,6 +51,14 @@
 			customTime = undefined
 			isCustomTimeModalOpen = false
 		}
+	}
+
+	function handleTouchStart() {
+		eventDown(true)
+	}
+
+	function handleTouchEnd() {
+		eventUp()
 	}
 
 	onMount(async () => {
@@ -112,13 +120,16 @@
 				if (isReady()) getLastScramble()
 			})
 
-			timerEl.addEventListener('touchstart', () => {
-				eventDown(true)
-			})
+			timerEl.addEventListener('touchstart', handleTouchStart)
 
-			timerEl.addEventListener('touchend', () => {
-				eventUp()
-			})
+			timerEl.addEventListener('touchend', handleTouchEnd)
+		}
+	})
+
+	onDestroy(() => {
+		if (browser) {
+			timerEl.removeEventListener('touchstart', handleTouchStart)
+			timerEl.removeEventListener('touchend', handleTouchEnd)
 		}
 	})
 </script>

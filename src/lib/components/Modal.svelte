@@ -1,24 +1,32 @@
 <script lang="ts">
 	import { browser } from '$app/environment'
 	import image from '$lib/assets/ads.webp'
-	import { onMount } from 'svelte'
+	import { onDestroy, onMount } from 'svelte'
 
 	export let okFunction: () => Promise<void>
 	export let cancelFunction: () => void
 	export let isOpen = false
 	export let mode: 'create' | 'delete' = 'delete'
 
+	async function handleKeyDown(e: KeyboardEvent) {
+		if (isOpen === true) {
+			if (e.code === 'Enter') {
+				await okFunction()
+			} else if (e.code === 'Escape') {
+				cancelFunction()
+			}
+		}
+	}
+
 	onMount(() => {
 		if (browser) {
-			window.addEventListener('keydown', async e => {
-				if (isOpen === true) {
-					if (e.code === 'Enter') {
-						await okFunction()
-					} else if (e.code === 'Escape') {
-						cancelFunction()
-					}
-				}
-			})
+			window.addEventListener('keydown', handleKeyDown)
+		}
+	})
+
+	onDestroy(() => {
+		if (browser) {
+			window.removeEventListener('keydown', handleKeyDown)
 		}
 	})
 </script>
