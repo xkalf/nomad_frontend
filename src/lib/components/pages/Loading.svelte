@@ -3,6 +3,7 @@
 	import loadingLogo from '$lib/assets/loading-logo.webp'
 
 	export let loading = false
+	export let fix = false
 </script>
 
 <div
@@ -21,3 +22,11 @@
 		<img class={`z-0 animate-rotate`} src={arrow} alt="arrow" />
 	</div>
 </div>
+
+{#if fix}
+	<h1
+		class="absolute right-1/2 top-1/2 z-50 w-full translate-y-60 translate-x-1/2 text-4xl text-black"
+	>
+		Сервэрт засвар хийж байна
+	</h1>
+{/if}

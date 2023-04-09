@@ -36,6 +36,7 @@
 	let inspectionRef: NodeJS.Timer
 	let inspectionSeconds: number
 	let nextStatus: SolveStatus | '8sec' | '12sec' = 'Ok'
+	let isFetching = false
 
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
 
@@ -126,8 +127,12 @@
 		nextStatus = 'Ok'
 	}
 
-	async function createSolve(time: number, nState: SolveStatus = 'Ok') {
-		const response = await fetch('/api/solve', {
+	async function createSolve(time: number, nState: SolveStatus = 'Ok'): Promise<boolean> {
+		if (isFetching) return false
+
+		isFetching = true
+
+		const response: Solve = await fetch('/api/solve', {
 			method: 'POST',
 			body: JSON.stringify({
 				time,
@@ -135,18 +140,25 @@
 				sessionId: $session.id,
 				status: nState
 			})
-		})
+		}).then(res => res.json())
 
-		const result: Solve = await response.json()
+		isFetching = false
 
-		addSolves(result)
+		addSolves(response)
+
+		return true
 	}
 
 	async function removeSolves() {
+		if (isFetching) return
+
+		isFetching = true
 		const response = await fetch(`/api/session/${$session.id}/reset`, {
 			method: 'DELETE'
 		})
 		const data = await response.json()
+
+		isFetching = false
 
 		if (data.success === true) {
 			resetSolves()
@@ -179,13 +191,16 @@
 	}
 
 	async function deleteLastSolve(count: number = 1) {
+		if (isFetching) return
 		const sortedSolves = getSortedLastSolve(count)
 
 		const ids = sortedSolves.map(i => i.id)
 
+		isFetching = true
 		const response = await (
 			await fetch(`/api/solve`, { method: 'DELETE', body: JSON.stringify({ ids }) })
 		).json()
+		isFetching = false
 
 		if (response.success === true) {
 			deleteSolvesMany(ids)
@@ -226,15 +241,17 @@
 	async function updateLastSolve(status: SolveStatus) {
 		const last = getSortedLastSolve(1)[0]
 
-		if (last.status === status) {
-			return
-		}
+		if (last.status === status || isFetching) return
+
+		isFetching = true
 
 		const response = await fetch(`/api/solve/${last.id}`, {
 			method: 'PUT',
 			body: JSON.stringify({ status })
 		})
 		const data = await response.json()
+
+		isFetching = false
 
 		if (data.success === true) changeSolveStats(data.solve)
 	}
@@ -431,7 +448,7 @@
 </svelte:head>
 
 <div class="hidden md:block">
-	<Desktop {...props} {changeCubeType} {eventUp} {eventDown} {newScramble} />
+	<Desktop {...props} {changeCubeType} {eventUp} {eventDown} {newScramble} {createSolve} />
 </div>
 <div class="block md:hidden">
 	<Mobile {...props} {...functions} {state} />

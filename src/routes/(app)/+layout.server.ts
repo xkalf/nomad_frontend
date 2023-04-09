@@ -5,6 +5,18 @@ import { redirect } from '@sveltejs/kit'
 import type { LayoutServerLoad } from './$types'
 
 export const load: LayoutServerLoad = async ({ locals, cookies }) => {
+	let status = await db.serverStatus.findFirst()
+
+	if (!status) {
+		status = await db.serverStatus.create({
+			data: {}
+		})
+	}
+
+	if (status?.open === false) {
+		throw redirect(303, '/fix')
+	}
+
 	if (!locals.session) {
 		throw redirect(303, '/login')
 	}

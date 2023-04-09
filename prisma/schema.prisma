@@ -185,6 +185,11 @@ model SolveDeleted {
   status      SolveStatus @default(Ok)
 }
 
+model ServerStatus {
+  id          Int         @id @default(autoincrement())
+  open Boolean @default(true)
+}
+
 enum Font {
   Mono
   Montserat

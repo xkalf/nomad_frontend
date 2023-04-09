@@ -22,7 +22,7 @@
 	export let updateLastSolve: (status: SolveStatus) => Promise<void>
 	export let openDeleteLastModal: () => void
 	export let openDeleteAllModal: () => void
-	export let createSolve: (time: number) => Promise<void>
+	export let createSolve: (time: number) => Promise<boolean>
 	export let eventDown: (s: boolean) => void
 	export let eventUp: () => void
 	export let nextStatus: string
@@ -39,11 +39,18 @@
 		if (!customTime) return
 		const time = formatCustomTime(customTime)
 
-		if (!time) return
+		if (!time) {
+			customTime = undefined
+			return
+		}
 
-		await createSolve(time)
-		newScramble()
-		isCustomTimeModalOpen = false
+		const result = await createSolve(time)
+
+		if (result) {
+			newScramble()
+			customTime = undefined
+			isCustomTimeModalOpen = false
+		}
 	}
 
 	onMount(async () => {

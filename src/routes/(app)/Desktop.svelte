@@ -20,6 +20,7 @@
 	export let eventUp: () => void
 	export let eventDown: (s: boolean) => void
 	export let newScramble: () => void
+	export let createSolve: (time: number) => Promise<boolean>
 
 	let timerContainer: HTMLDivElement
 	let customTime: string | undefined = undefined
@@ -35,20 +36,12 @@
 			return
 		}
 
-		const response = await fetch('/api/solve', {
-			method: 'POST',
-			body: JSON.stringify({
-				time,
-				scramble,
-				sessionId: $session.id
-			})
-		})
+		const result = await createSolve(time)
 
-		const result = (await response.json()) as Solve
-
-		addSolves(result)
-		newScramble()
-		customTime = undefined
+		if (result) {
+			newScramble()
+			customTime = undefined
+		}
 	}
 
 	onMount(() => {
