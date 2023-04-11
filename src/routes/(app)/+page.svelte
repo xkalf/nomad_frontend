@@ -216,6 +216,9 @@
 			const id = localStorage.getItem(type)
 			if (id) {
 				await getSessionById(parseInt(id))
+				if ($session.cube !== type) {
+					await getSessionByCube(type)
+				}
 			} else {
 				await getSessionByCube(type)
 			}

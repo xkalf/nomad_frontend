@@ -140,9 +140,10 @@ model Settings {
   zoom                    Int                     @default(100)
   font                    Font                    @default(Mono)
   backgroundImageOpacity  Int                     @default(25)
-  timerSize               Int                     @default(25)
+  timerSize         Int                     @default(72)
+  scrambleSize      Int                     @default(24)
   backgroundImage         String?
-  freezeTime Int @default(0)
+  freezeTime              Int                     @default(0)
   useMouseTimer           Boolean                 @default(false)
   useWcaInspection        UseWcaInspection        @default(Never)
   voiceAlert              VoiceAlert              @default(None)
@@ -152,9 +153,9 @@ model Settings {
   multiPhase              Int                     @default(1)
   timerUpdate             TimerUpdate             @default(Default)
   limitHeight             Boolean                 @default(false)
-  scrambleSize            Int                     @default(25)
   monospaced              Boolean                 @default(false)
   alignArea               AlignArea               @default(Center)
+  defaultScrambleSize     Boolean                 @default(true)
   user                    User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
@@ -186,7 +187,7 @@ model SolveDeleted {
 }
 
 model ServerStatus {
-  id          Int         @id @default(autoincrement())
+  id   Int     @id @default(autoincrement())
   open Boolean @default(true)
 }
 

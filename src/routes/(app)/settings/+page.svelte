@@ -132,7 +132,16 @@
 				<ItemContainer label="Хугацааны хэмжээ" mobileSize="lg">
 					<InputNumber bind:value={settingsForm.timerSize} />
 				</ItemContainer>
-				<ItemContainer label="Холилтийн хэмжээ" mobileSize="lg" size="lg">
+				<ItemContainer label="Үндсэн холилтийн хэмжээ ашиглах" mobileSize="lg" size="md">
+					<div class="mx-auto flex w-1/2 justify-center">
+						<input
+							class="h-6 w-6"
+							type="checkbox"
+							bind:checked={settingsForm.defaultScrambleSize}
+						/>
+					</div>
+				</ItemContainer>
+				<ItemContainer label="Холилтийн хэмжээ" mobileSize="lg" size="md">
 					<InputNumber bind:value={settingsForm.scrambleSize} />
 				</ItemContainer>
 				<ItemContainer label="Дэлгэцний арын зураг" size="md">

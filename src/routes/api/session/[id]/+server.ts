@@ -4,7 +4,7 @@ import { NODE_ENV } from '$env/static/private'
 
 export const GET: RequestHandler = async ({ params: { id }, cookies, url }) => {
 	const admin = url.searchParams.get('admin')
-	const session = await db.session.findFirst({
+	const session = await db.session.findUnique({
 		where: {
 			id: +id
 		},

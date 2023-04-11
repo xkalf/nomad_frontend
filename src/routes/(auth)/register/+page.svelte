@@ -4,12 +4,10 @@
 	import horizontalLogo from '$lib/assets/horizontal-logo.webp'
 	import Icon from '@iconify/svelte'
 	import { z } from 'zod'
-	import type { ActionData } from './$types'
 
 	const input = 'w-full border-4 border-[#e7e7e7] p-4 pl-14 focus:outline-none'
 	const icon = 'absolute top-1/2 left-4 -translate-y-1/2 text-3xl'
 
-	export let formData: ActionData
 	let error: undefined | string
 
 	const registerSchema = z.object({
@@ -37,8 +35,6 @@
 			cancel()
 		}
 	}
-
-	$: console.log(formData)
 </script>
 
 <svelte:head>

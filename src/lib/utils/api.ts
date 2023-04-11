@@ -19,6 +19,7 @@ export async function getSessionByCube(type: CubeType): Promise<void> {
 		session: SessionWithSolves
 	}
 
+	setCubeType(type)
 	setSession(currentSession.session)
 	initialSolves(currentSession.session.solves)
 	if (browser) {

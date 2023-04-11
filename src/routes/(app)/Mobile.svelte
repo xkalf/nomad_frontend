@@ -11,6 +11,7 @@
 	import type { CubeType, SolveStatus } from '@prisma/client'
 	import ScrambleLogo from '$lib/icons/ScrambleLogo.svelte'
 	import { bestSolve } from '$lib/stores/bestSolve'
+	import { settings } from '$lib/stores/settings'
 
 	export let timerText: string
 	export let scramble: string
@@ -34,6 +35,8 @@
 	let isStateOpen = false
 	let customTime: string | undefined = undefined
 	let isCustomTimeModalOpen = false
+	let timerP: HTMLParagraphElement
+	let scrambleP: HTMLParagraphElement
 
 	async function createCustomSolve() {
 		if (!customTime) return
@@ -63,6 +66,11 @@
 
 	onMount(async () => {
 		if (browser) {
+			if (!$settings.defaultScrambleSize) {
+				scrambleP.style.fontSize = `${$settings.scrambleSize}px`
+			}
+			timerP.style.fontSize = `${$settings.timerSize}px`
+
 			const Hammer = await import('hammerjs')
 			const hammer = new Hammer.Manager(timerEl)
 			const sHammer = new Hammer.Manager(scrambleEl)
@@ -141,7 +149,7 @@
 				bind:this={scrambleEl}
 				class="mt-8 flex items-center justify-center text-center text-primary"
 			>
-				<p class={`${scrambleSizeMapper[$cubeType]} whitespace-pre-line`}>
+				<p bind:this={scrambleP} class={`${scrambleSizeMapper[$cubeType]} whitespace-pre-line`}>
 					{scramble}
 				</p>
 			</div>
@@ -149,6 +157,7 @@
 		<div bind:this={timerEl} class="flex flex-grow select-none flex-col">
 			<div class="relative h-[40vh]">
 				<p
+					bind:this={timerP}
 					class={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono text-7xl ${textColor}`}
 				>
 					{timerText}

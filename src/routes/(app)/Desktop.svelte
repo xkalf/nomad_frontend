@@ -3,13 +3,11 @@
 	import Sidebar from './Sidebar.svelte'
 	import { cubeType } from '$lib/stores/cubeType'
 	import ScrambleDisplay from '$lib/components/ScrambleDisplay.svelte'
-	import type { CubeType, Solve } from '@prisma/client'
+	import type { CubeType } from '@prisma/client'
 	import { onDestroy, onMount } from 'svelte'
 	import { browser } from '$app/environment'
 	import { settings } from '$lib/stores/settings'
 	import { scrambleSizeMapper } from '$lib/utils/types'
-	import { session } from '$lib/stores/session'
-	import { addSolves } from '$lib/stores/solves'
 	import { formatCustomTime } from '$lib/utils/timer-utils'
 
 	export let timerText: string
@@ -54,8 +52,10 @@
 
 	onMount(() => {
 		if (browser) {
-			scrambleEl.style.fontSize = `${$settings.scrambleSize}px`
-			timerEl.style.fontSize = `${$settings.timerSize}px`
+			if (!$settings.defaultScrambleSize) {
+				scrambleEl.style.fontSize = `${$settings.scrambleSize * 2}px`
+			}
+			timerEl.style.fontSize = `${$settings.timerSize * 2}px`
 
 			if ($settings.useMouseTimer && $settings.enteringTimes === 'Timer') {
 				timerContainer.addEventListener('mousedown', handleMouseDown)
