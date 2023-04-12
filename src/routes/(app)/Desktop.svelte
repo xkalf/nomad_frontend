@@ -55,7 +55,9 @@
 			if (!$settings.defaultScrambleSize) {
 				scrambleEl.style.fontSize = `${$settings.scrambleSize * 2}px`
 			}
-			timerEl.style.fontSize = `${$settings.timerSize * 2}px`
+			if ($settings.enteringTimes !== 'Typing') {
+				timerEl.style.fontSize = `${$settings.timerSize * 2}px`
+			}
 
 			if ($settings.useMouseTimer && $settings.enteringTimes === 'Timer') {
 				timerContainer.addEventListener('mousedown', handleMouseDown)
@@ -69,6 +71,8 @@
 		if (browser) {
 			timerContainer.removeEventListener('mousedown', handleMouseDown)
 			timerContainer.removeEventListener('mouseup', handleMouseUp)
+			const form = document.querySelector('form')
+			form?.removeEventListener('submit', addCustomSolve)
 		}
 	})
 </script>

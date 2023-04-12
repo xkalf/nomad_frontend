@@ -140,8 +140,8 @@ model Settings {
   zoom                    Int                     @default(100)
   font                    Font                    @default(Mono)
   backgroundImageOpacity  Int                     @default(25)
-  timerSize         Int                     @default(72)
-  scrambleSize      Int                     @default(24)
+  timerSize               Int                     @default(72)
+  scrambleSize            Int                     @default(24)
   backgroundImage         String?
   freezeTime              Int                     @default(0)
   useMouseTimer           Boolean                 @default(false)

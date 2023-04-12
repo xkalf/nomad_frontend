@@ -37,9 +37,14 @@
 	let isCustomTimeModalOpen = false
 	let timerP: HTMLParagraphElement
 	let scrambleP: HTMLParagraphElement
+	let isFetching = false
 
 	async function createCustomSolve() {
-		if (!customTime) return
+		if (!customTime || isFetching) {
+			customTime = undefined
+			isCustomTimeModalOpen = false
+			return
+		}
 		const time = formatCustomTime(customTime)
 
 		if (!time) {
@@ -47,7 +52,9 @@
 			return
 		}
 
+		isFetching = true
 		const result = await createSolve(time)
+		isFetching = false
 
 		if (result) {
 			newScramble()
