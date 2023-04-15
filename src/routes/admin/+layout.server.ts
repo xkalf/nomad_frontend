@@ -13,7 +13,16 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 				firstname: 'desc'
 			},
 			include: {
-				sessions: true
+				sessions: {
+					orderBy: [
+						{
+							main: 'desc'
+						},
+						{
+							name: 'desc'
+						}
+					]
+				}
 			}
 		})
 	}
