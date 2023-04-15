@@ -8,20 +8,36 @@
 	import Solves from '$lib/components/solves/Solves.svelte'
 	import { onMount } from 'svelte'
 
-	type UserWithSessions = User & { sessions: Session[] }
+	type UserWithSessions = User & {
+		sessions: (Session & {
+			_count: {
+				solves: number
+			}
+		})[]
+	}
 
 	export let data: LayoutServerData
 
 	let selected: {
 		user: UserWithSessions | undefined
 		cube: CubeType
-		session: Session | undefined
+		session:
+			| (Session & {
+					_count: {
+						solves: number
+					}
+			  })
+			| undefined
 	} = {
 		user: data.users[0],
 		cube: 'N3',
 		session: data.users[0].sessions[0]
 	}
-	let sessions: Session[] = []
+	let sessions: (Session & {
+		_count: {
+			solves: number
+		}
+	})[] = []
 
 	async function getSolves() {
 		if (!selected.session || !browser) return
@@ -53,7 +69,7 @@
 	<select bind:value={selected.session}>
 		{#if selected.user}
 			{#each sessions as session}
-				<option value={session}>{session.name}</option>
+				<option value={session}>{session.name} ({session._count.solves})</option>
 			{/each}
 		{/if}
 	</select>

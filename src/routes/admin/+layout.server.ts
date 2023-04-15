@@ -21,7 +21,12 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 						{
 							name: 'desc'
 						}
-					]
+					],
+					include: {
+						_count: {
+							select: { solves: true }
+						}
+					}
 				}
 			}
 		})
