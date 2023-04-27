@@ -169,12 +169,7 @@
 	</div>
 </div>
 
-<Modal
-	isOpen={isSessionCreate}
-	okFunction={createSession}
-	cancelFunction={() => (isSessionCreate = false)}
-	mode="create"
->
+<Modal bind:isOpen={isSessionCreate} okFunction={createSession} mode="create">
 	<label for="sessionName" class="text-xl text-primary">Session-ийн нэр</label>
 	<input
 		id="sessionName"
@@ -185,14 +180,10 @@
 </Modal>
 
 <Modal
-	{isOpen}
+	bind:isOpen
 	okFunction={async () => {
 		if (!selected) return
 		await removeSession(selected.id)
-	}}
-	cancelFunction={() => {
-		selected = undefined
-		isOpen = false
 	}}
 >
 	<p class="text-lg text-primary">Уг session-ийг устгах уу?</p>

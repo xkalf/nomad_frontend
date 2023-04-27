@@ -16,10 +16,6 @@
 	let showModal: HTMLDialogElement
 	let isMeanOpen = false
 
-	function hideModal() {
-		deleteModalOpen = false
-	}
-
 	async function deleteSolve() {
 		if (!selected) return
 
@@ -30,7 +26,7 @@
 
 		if (data.success === true) {
 			deleteSolves(selected.id)
-			hideModal()
+			deleteModalOpen = false
 		}
 	}
 
@@ -153,7 +149,7 @@
 	</ul>
 </div>
 
-<Modal okFunction={deleteSolve} isOpen={deleteModalOpen} cancelFunction={hideModal}>
+<Modal okFunction={deleteSolve} bind:isOpen={deleteModalOpen}>
 	<p class="text-lg text-primary">Уг эвлүүлэлтийг устгах уу?</p>
 </Modal>
 
@@ -197,22 +193,32 @@
 					>
 				</div>
 			</div>
-			<div class="mt-2">
-				<p class="text-xl">Холилт</p>
-				<input
-					type="text"
-					value={selected.scramble}
-					disabled
-					class="mt-2 w-full rounded-lg border border-primary p-2"
-				/>
-			</div>
-			<div class="mt-2">
-				<p class="text-xl">Тайлбар</p>
-				<input
-					type="text"
-					placeholder="Тайлбар бичнэ үү"
-					class="mt-2 w-full rounded-lg border border-primary p-2"
-				/>
+			<div class="flex flex-col gap-2 pt-2">
+				<div class="mt-2">
+					<p class="text-xl">Холилт</p>
+					<input
+						type="text"
+						value={selected.scramble}
+						disabled
+						class="mt-2 w-full rounded-lg border border-primary p-2"
+					/>
+				</div>
+				<div class="mt-2">
+					<p class="text-xl">Тайлбар</p>
+					<input
+						type="text"
+						placeholder="Тайлбар бичнэ үү"
+						class="mt-2 w-full rounded-lg border border-primary p-2"
+					/>
+				</div>
+				<form method="dialog" class="flex items-center justify-center gap-12 pt-4">
+					<button
+						value="cancel"
+						formmethod="dialog"
+						class="rounded-xl bg-primary py-2 px-4 text-xl text-white">Цуцлах</button
+					>
+					<button class="rounded-xl bg-primary py-2 px-4 text-xl text-white">Хадгалах</button>
+				</form>
 			</div>
 		</div>
 	</dialog>

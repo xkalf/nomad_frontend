@@ -14,8 +14,11 @@ const prismaIndexBrowser = path.normalize(path.relative(process.cwd(), prismaCli
 
 const config: UserConfig = {
 	plugins: [sveltekit()],
-	resolve: { alias: { '.prisma/client/index-browser': prismaIndexBrowser } },
-	ssr: {
+	resolve: { alias: { '.prisma/client/index-browser': prismaIndexBrowser } }
+}
+
+if (process.env.NODE_ENV !== 'dev') {
+	config.ssr = {
 		noExternal: ['scrambow']
 	}
 }

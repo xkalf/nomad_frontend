@@ -1,4 +1,5 @@
 <script lang="ts">
+	/* eslint-disable no-undef */
 	import { browser } from '$app/environment'
 	import { cubeType, setCubeType } from '$lib/stores/cubeType'
 	import { session } from '$lib/stores/session'
@@ -191,7 +192,7 @@
 		return sortedSolves
 	}
 
-	async function deleteLastSolve(count: number = 1) {
+	async function deleteLastSolve(count = 1) {
 		if (isFetching) return
 		const sortedSolves = getSortedLastSolve(count)
 
@@ -282,13 +283,12 @@
 				($settings.useWcaInspection === 'ExceptBLD' && !bldTypes.includes($cubeType)))
 		) {
 			updateState('inspection')
-		} else if (state === 'stopping') {
-		} else {
+		} else if (state !== 'stopping') {
 			updateState('stopped')
 		}
 	}
 
-	function eventDown(isTouch: boolean = false) {
+	function eventDown(isTouch = false) {
 		const freezeTime = isTouch && $settings.freezeTime === 0 ? 300 : $settings.freezeTime
 
 		function setReady() {
@@ -468,13 +468,7 @@
 	<Mobile {...props} {...functions} {state} />
 </div>
 
-<Modal
-	okFunction={() => deleteLastSolve(deleteCount)}
-	cancelFunction={() => {
-		deleteLastModalOpen = false
-	}}
-	isOpen={deleteLastModalOpen}
->
+<Modal okFunction={() => deleteLastSolve(deleteCount)} bind:isOpen={deleteLastModalOpen}>
 	<p class="text-lg text-primary">Сүүлийн хэдэн эвлүүлэлтийг устгах уу?</p>
 	<input
 		bind:value={deleteCount}
@@ -483,12 +477,6 @@
 	/>
 </Modal>
 
-<Modal
-	okFunction={removeSolves}
-	isOpen={deleteAllModalOpen}
-	cancelFunction={() => {
-		deleteAllModalOpen = false
-	}}
->
+<Modal okFunction={removeSolves} bind:isOpen={deleteAllModalOpen}>
 	<p class="text-lg text-primary">Энэ session-ийн эвлүүлэлтүүдийг устгах уу?</p>
 </Modal>

@@ -4,7 +4,6 @@
 	import { onDestroy, onMount } from 'svelte'
 
 	export let okFunction: () => Promise<void>
-	export let cancelFunction: () => void
 	export let isOpen = false
 	export let mode: 'create' | 'delete' = 'delete'
 
@@ -13,7 +12,7 @@
 			if (e.code === 'Enter') {
 				await okFunction()
 			} else if (e.code === 'Escape') {
-				cancelFunction()
+				isOpen = false
 			}
 		}
 	}
@@ -36,14 +35,15 @@
 		isOpen ? 'block' : 'hidden'
 	} z-50 bg-black bg-opacity-70`}
 >
-	<div class="w-4/5 rounded-xl bg-background p-8 pb-4 md:w-auto md:p-12 md:pb-4">
+	<div class="w-4/5 rounded-xl bg-background p-4 md:w-auto md:p-12 md:pb-4">
 		<img alt="ads" src={image} class="mx-auto aspect-square w-[250px] md:w-[500px]" />
 		<div class="my-4">
 			<slot />
 		</div>
 		<div class="flex items-center justify-center gap-12">
-			<button class="rounded-xl bg-primary py-2 px-4 text-xl text-white" on:click={cancelFunction}
-				>Болих</button
+			<button
+				class="rounded-xl bg-primary py-2 px-4 text-xl text-white"
+				on:click={() => (isOpen = false)}>Болих</button
 			>
 			<button class="rounded-xl bg-primary py-2 px-4 text-xl text-white" on:click={okFunction}>
 				{#if mode === 'create'}

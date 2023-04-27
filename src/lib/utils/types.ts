@@ -1,4 +1,4 @@
-import type { CfopSolve, CubeType, Session, Solve, TwoLookSolve } from '@prisma/client'
+import { Prisma, type CubeType } from '@prisma/client'
 
 export const scrambleMappper: Record<CubeType, string> = {
 	N2: '222',
@@ -93,17 +93,29 @@ export type StateType =
 	| 'inspectionWaiting'
 	| 'inspectionReady'
 
-export type SessionWithSolves = Session & {
-	solves: Solve[]
-}
-
-export type SessionWithSolvesCount = Session & {
-	_count: {
-		solves: number
+const sessionWithSolves = Prisma.validator<Prisma.SessionArgs>()({
+	include: {
+		solves: true
 	}
-}
+})
 
-export type SolveWithDetail = Solve & {
-	twoLookSolve: TwoLookSolve | null
-	cfopSolve: CfopSolve | null
-}
+export type SessionWithSolves = Prisma.SessionGetPayload<typeof sessionWithSolves>
+
+const sessionWithSolvesCount = Prisma.validator<Prisma.SessionArgs>()({
+	include: {
+		_count: {
+			select: { solves: true }
+		}
+	}
+})
+
+export type SessionWithSolvesCount = Prisma.SessionGetPayload<typeof sessionWithSolvesCount>
+
+const solveWithDetail = Prisma.validator<Prisma.SolveArgs>()({
+	include: {
+		twoLookSolve: true,
+		cfopSolve: true
+	}
+})
+
+export type SolveWithDetail = Prisma.SolveGetPayload<typeof solveWithDetail>

@@ -2,7 +2,7 @@
 	import { solves } from '$lib/stores/solves'
 	import { formatTime, getAvg, getBestAverage, getMean } from '$lib/utils/timer-utils'
 
-	export let isOpen: boolean = false
+	export let isOpen = false
 	export let isAdmin = false
 
 	const averages = [5, 12, 25, 50, 100, 200, 300, 500, 1000] as const
@@ -11,7 +11,7 @@
 <div
 	class={`${isOpen ? 'block' : 'hidden'} ${
 		isAdmin ? '' : 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
-	} z-10 w-3/4 overflow-y-auto rounded-xl bg-white py-4 px-4 font-sans text-primary md:w-auto md:px-0`}
+	} z-10 w-3/4 max-w-6xl overflow-y-auto rounded-xl bg-white py-4 px-4 font-sans text-primary md:w-auto md:px-0`}
 >
 	<div class="mx-auto w-full md:w-3/5">
 		<h2 class="text-center text-2xl md:text-3xl">Дундаж {getMean($solves)}</h2>

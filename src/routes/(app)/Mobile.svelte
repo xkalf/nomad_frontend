@@ -71,6 +71,11 @@
 		eventUp()
 	}
 
+	function isReady() {
+		const states: StateType[] = ['stopped', 'waiting', 'inspectionWaiting']
+		return states.includes(state)
+	}
+
 	onMount(async () => {
 		if (browser) {
 			if (!$settings.defaultScrambleSize) {
@@ -93,11 +98,6 @@
 
 			sHammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
 			sHammer.add(new Hammer.Swipe({ event: 'swipeRight', direction: Hammer.DIRECTION_RIGHT }))
-
-			function isReady() {
-				const states: StateType[] = ['stopped', 'waiting', 'inspectionWaiting']
-				return states.includes(state)
-			}
 
 			hammer.on('doubleTap', e => {
 				e.preventDefault()
@@ -208,12 +208,7 @@
 	</div>
 </MobileContainer>
 
-<Modal
-	okFunction={createCustomSolve}
-	isOpen={isCustomTimeModalOpen}
-	cancelFunction={() => (isCustomTimeModalOpen = false)}
-	mode="create"
->
+<Modal okFunction={createCustomSolve} bind:isOpen={isCustomTimeModalOpen} mode="create">
 	<p class="text-lg text-primary">Эвлүүлэлтийн хугацаа</p>
 	<input
 		bind:value={customTime}
