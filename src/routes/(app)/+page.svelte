@@ -211,8 +211,6 @@
 	}
 
 	async function changeCubeType(type: CubeType) {
-		setCubeType(type)
-
 		if (browser) {
 			const id = localStorage.getItem(type)
 			if (id) {
@@ -224,6 +222,7 @@
 				await getSessionByCube(type)
 			}
 		}
+		setCubeType(type)
 	}
 
 	function newScramble() {
