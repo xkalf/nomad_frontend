@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { cubeTypeMapper, cubeTypes, scrambleSizeMapper, type StateType } from '$lib/utils/types'
-	import { checkBestAverage, formatCustomTime, getAvg, getBest } from '$lib/utils/timer-utils'
+	import {
+		checkBestAverage,
+		displayTime,
+		formatCustomTime,
+		getAvg,
+		getBest
+	} from '$lib/utils/timer-utils'
 	import { solves } from '$lib/stores/solves'
 	import { browser } from '$app/environment'
 	import { onDestroy, onMount } from 'svelte'
@@ -38,6 +44,7 @@
 	let timerP: HTMLParagraphElement
 	let scrambleP: HTMLParagraphElement
 	let isFetching = false
+	let customTimeRef: HTMLInputElement
 
 	async function createCustomSolve() {
 		if (!customTime || isFetching) {
@@ -58,6 +65,7 @@
 
 		if (result) {
 			newScramble()
+			timerText = displayTime(formatCustomTime(customTime) || 0)
 			customTime = undefined
 			isCustomTimeModalOpen = false
 		}
@@ -123,6 +131,7 @@
 			hammer.on('swipeDown', () => {
 				if (isReady()) {
 					customTime = undefined
+					customTimeRef.focus()
 					isCustomTimeModalOpen = true
 				}
 			})
@@ -212,6 +221,7 @@
 	<p class="text-lg text-primary">Эвлүүлэлтийн хугацаа</p>
 	<input
 		bind:value={customTime}
+		bind:this={customTimeRef}
 		class="mt-2 w-full rounded-lg bg-secondary p-2 pl-3 text-lg text-white"
 		type="string"
 		inputmode="numeric"

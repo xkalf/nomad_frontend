@@ -444,7 +444,6 @@
 	}
 
 	$: props = {
-		timerText,
 		scramble,
 		textColor,
 		nextStatus:
@@ -461,10 +460,18 @@
 </svelte:head>
 
 <div class="hidden md:block">
-	<Desktop {...props} {changeCubeType} {eventUp} {eventDown} {newScramble} {createSolve} />
+	<Desktop
+		{...props}
+		{changeCubeType}
+		{eventUp}
+		{eventDown}
+		{newScramble}
+		{createSolve}
+		{timerText}
+	/>
 </div>
 <div class="block md:hidden">
-	<Mobile {...props} {...functions} {state} />
+	<Mobile {...props} {...functions} {state} bind:timerText />
 </div>
 
 <Modal okFunction={() => deleteLastSolve(deleteCount)} bind:isOpen={deleteLastModalOpen}>
