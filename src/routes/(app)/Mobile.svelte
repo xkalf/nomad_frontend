@@ -131,8 +131,9 @@
 			hammer.on('swipeDown', () => {
 				if (isReady()) {
 					customTime = undefined
-					customTimeRef.click()
 					isCustomTimeModalOpen = true
+					customTimeRef.click()
+					customTimeRef.focus()
 				}
 			})
 
