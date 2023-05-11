@@ -1,3 +1,4 @@
+import { OPEN } from '$env/static/private'
 import db from '$lib/db'
 import { cubeTypeMapper, type SessionWithSolvesCount } from '$lib/utils/types'
 import type { Session, Settings } from '@prisma/client'
@@ -5,15 +6,7 @@ import { redirect } from '@sveltejs/kit'
 import type { LayoutServerLoad } from './$types'
 
 export const load: LayoutServerLoad = async ({ locals, cookies }) => {
-	let status = await db.serverStatus.findFirst()
-
-	if (!status) {
-		status = await db.serverStatus.create({
-			data: {}
-		})
-	}
-
-	if (status?.open === false) {
+	if ((+OPEN || 1) === 0) {
 		throw redirect(303, '/fix')
 	}
 
