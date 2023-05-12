@@ -53,7 +53,7 @@
 				<div class="relative w-full px-4 text-[#cecfd5] md:w-4/5">
 					<input
 						type="submit"
-						class="w-full rounded-lg bg-primary p-2 text-white drop-shadow md:p-4"
+						class="w-full cursor-pointer rounded-lg bg-primary p-2 text-white drop-shadow md:p-4"
 						value="Нэвтрэх"
 					/>
 				</div>

@@ -170,7 +170,7 @@
 				</ItemContainer>
 			</div>
 			<div
-				class="mt-8 hidden grid-cols-2 rounded-xl border-2 border-primary bg-white px-8 py-4 text-2xl text-primary md:grid"
+				class="mt-8 hidden grid-cols-2 rounded-xl border-2 border-primary bg-white py-4 px-8 text-2xl text-primary md:grid"
 			>
 				{#each shortCuts as shortCut}
 					<div class="py-2">
@@ -270,6 +270,11 @@
 					</div>
 				</ItemContainer>
 			</div>
+			<form action="/logout" method="post">
+				<button class="mt-4 block w-full rounded-lg bg-primary p-4 text-white md:hidden"
+					>Гарах</button
+				>
+			</form>
 		</div>
 		<MobileNavbar />
 	</div>
