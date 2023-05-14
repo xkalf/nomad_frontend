@@ -6,7 +6,7 @@ module.exports = {
 			auto: 'auto',
 			...theme('spacing'),
 			full: '100%',
-			screen: '100svh'
+			screen: '100dvh'
 		}),
 		minHeight: theme => ({
 			0: '0',
