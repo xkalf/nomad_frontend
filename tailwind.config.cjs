@@ -6,13 +6,13 @@ module.exports = {
 			auto: 'auto',
 			...theme('spacing'),
 			full: '100%',
-			screen: '100dvh'
+			screen: ['100vh', '100dvh']
 		}),
 		minHeight: theme => ({
 			0: '0',
 			...theme('spacing'),
 			full: '100%',
-			screen: '100svh'
+			screen: ['100vh', '100dvh']
 		}),
 		extend: {
 			colors: {
