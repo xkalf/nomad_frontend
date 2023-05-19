@@ -1,0 +1,16 @@
+{
+	"short_name": "nomad timer",
+	"name": "Nomad team Timer",
+	"start_url": "/",
+	"icons": [
+		{
+			"src": "icon_192.png",
+			"type": "image/png",
+			"sizes": "192x192"
+		}
+	],
+	"background_color": "#fff",
+	"display": "standalone",
+	"scope": "/",
+	"theme_color": "#0b487e"
+}
