@@ -1,12 +1,13 @@
 {
-	"short_name": "nomad timer",
+	"short_name": "NoMAD Timer",
 	"name": "Nomad team Timer",
+	"description": "Нүүдэлчин рубик шооны клубээс хөгжүүлж байгаа рубик шооны хугацаа хэмжигч апп юм.",
 	"start_url": "/",
 	"icons": [
 		{
-			"src": "icon_192.png",
+			"src": "icon_512.png",
 			"type": "image/png",
-			"sizes": "192x192"
+			"sizes": "512x512"
 		}
 	],
 	"background_color": "#fff",
