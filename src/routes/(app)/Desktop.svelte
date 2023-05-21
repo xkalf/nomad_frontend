@@ -19,6 +19,7 @@
 	export let eventDown: (s: boolean) => void
 	export let newScramble: () => void
 	export let createSolve: (time: number) => Promise<boolean>
+	export let connectBluetoothTimer: () => Promise<void>
 
 	let timerContainer: HTMLDivElement
 	let customTime: string | undefined = undefined
@@ -98,7 +99,7 @@
 				>
 					{timerText}
 				</p>
-				<p class="absolute top-1/2 right-2 -translate-y-1/2 text-7xl text-primary">
+				<p class="absolute right-2 top-1/2 -translate-y-1/2 text-7xl text-primary">
 					{nextStatus}
 				</p>
 			{:else}
@@ -106,7 +107,7 @@
 					<input
 						bind:value={customTime}
 						type="text"
-						class="w-3/4 rounded-xl border border-primary px-4 py-2 text-center text-[150px] text-primary focus:outline-none"
+						class="w-3/4 rounded-xl border border-primary py-2 px-4 text-center text-[150px] text-primary focus:outline-none"
 					/>
 				</form>
 			{/if}
@@ -120,8 +121,13 @@
 			<div class="col-start-3">
 				<div class="z-20 ml-auto flex w-3/4 flex-col justify-between rounded-xl bg-secondary">
 					<ScrambleDisplay {scramble} />
-					<div class="flex items-center justify-center gap-2 px-2 py-4 text-lg">
-						<span class="p-2 text-white">Function</span>
+					{#if $settings.enteringTimes === 'Bluetooth'}
+						<button on:click={connectBluetoothTimer} class="mx-auto w-3/4 rounded-lg bg-white p-2"
+							>Gan Timer</button
+						>
+					{/if}
+					<div class="flex flex-wrap items-center justify-center gap-2 py-4 px-2 text-lg">
+						<span class="py-2 text-white">Function</span>
 						<select class="rounded-xl bg-background p-2 text-black">
 							<option>Draw Scramble</option>
 						</select>

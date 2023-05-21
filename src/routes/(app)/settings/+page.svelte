@@ -253,8 +253,8 @@
 						<select class="select" bind:value={settingsForm.enteringTimes}>
 							<option value="Timer">Хугацаа хэмжигч</option>
 							<option value="Typing">Бичих</option>
-							<!-- <option value="Stackmat">Хугацаа хэмжигчийг AUX холбох</option>
-							<option value="Bluetooth">Хугацаа хэмжигчийг BLUETOOTH холбох</option> -->
+							<!-- <option value="Stackmat">Хугацаа хэмжигчийг AUX холбох</option> -->
+							<option value="Bluetooth">Хугацаа хэмжигчийг BLUETOOTH холбох</option>
 						</select>
 					</div>
 				</ItemContainer>

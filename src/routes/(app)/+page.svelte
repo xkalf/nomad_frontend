@@ -21,6 +21,7 @@
 	import Mobile from './Mobile.svelte'
 	import { settings } from '$lib/stores/settings'
 	import { displayTime } from '$lib/utils/timer-utils'
+	import { type GanTimerConnection, GanTimerState } from 'gan-web-bluetooth'
 
 	let scramble: string = generateScramble($cubeType)
 	let currentScramble: string | null = null
@@ -38,6 +39,7 @@
 	let inspectionSeconds: number
 	let nextStatus: SolveStatus | '8sec' | '12sec' = 'Ok'
 	let isFetching = false
+	let ganTimerConnection: GanTimerConnection
 	const exceptTags = ['INPUT', 'BUTTON', 'TEXTAREA']
 
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
@@ -121,11 +123,15 @@
 		}, 1000)
 	}
 
-	async function stopTime() {
+	async function stopTime(customTime: number | undefined = undefined) {
+		const internalTime = customTime || time
 		clearInterval(interval)
-		timerText = displayTime(time)
 		newScramble()
-		await createSolve(time, nextStatus === '8sec' || nextStatus === '12sec' ? 'Ok' : nextStatus)
+		timerText = displayTime(internalTime)
+		await createSolve(
+			internalTime,
+			nextStatus === '8sec' || nextStatus === '12sec' ? 'Ok' : nextStatus
+		)
 		nextStatus = 'Ok'
 	}
 
@@ -276,15 +282,18 @@
 		} else if ($settings.useWcaInspection !== 'Never' && state === 'inspectionReady') {
 			startInspection()
 			updateState('inspection')
-		} else if (
-			state === 'waiting' &&
-			($settings.useWcaInspection === 'Always' ||
-				($settings.useWcaInspection === 'ExceptBLD' && !bldTypes.includes($cubeType)))
-		) {
+		} else if (state === 'waiting' && checkInspection()) {
 			updateState('inspection')
 		} else if (state !== 'stopping') {
 			updateState('stopped')
 		}
+	}
+
+	function checkInspection() {
+		return (
+			$settings.useWcaInspection === 'Always' ||
+			($settings.useWcaInspection === 'ExceptBLD' && !bldTypes.includes($cubeType))
+		)
 	}
 
 	function eventDown(isTouch = false) {
@@ -309,16 +318,10 @@
 		}
 
 		if (state === 'stopped') {
-			if (
-				$settings.useWcaInspection === 'Never' ||
-				($settings.useWcaInspection === 'ExceptBLD' && bldTypes.includes($cubeType))
-			) {
-				setReady()
-			} else if (
-				$settings.useWcaInspection === 'Always' ||
-				($settings.useWcaInspection === 'ExceptBLD' && !bldTypes.includes($cubeType))
-			) {
+			if (checkInspection()) {
 				setInspectionReady()
+			} else {
+				setReady()
 			}
 		} else if (state === 'inspection') {
 			setReady()
@@ -404,10 +407,45 @@
 		}
 	}
 
+	async function connectBluetoothTimer() {
+		const { connectGanTimer } = await import('gan-web-bluetooth')
+		ganTimerConnection = await connectGanTimer()
+		timerText = displayTime((await ganTimerConnection.getRecordedTimes()).displayTime.asTimestamp)
+	}
+
+	$: ganTimerConnection &&
+		ganTimerConnection.events$.subscribe(timerEvent => {
+			switch (timerEvent.state) {
+				case GanTimerState.HANDS_ON:
+					updateState('waiting')
+					break
+				case GanTimerState.HANDS_OFF:
+					if (checkInspection()) {
+						startInspection()
+						updateState('inspection')
+					} else {
+						updateState('stopped')
+					}
+					break
+				case GanTimerState.RUNNING:
+					startTime()
+					updateState('running')
+					break
+				case GanTimerState.STOPPED:
+					if (timerEvent.recordedTime) stopTime(timerEvent.recordedTime.asTimestamp)
+					break
+				case GanTimerState.IDLE:
+					updateState('stopped')
+					timerText = displayTime(0)
+					break
+				case GanTimerState.GET_SET:
+					updateState('ready')
+					break
+			}
+		})
 	onMount(async () => {
 		if (browser) {
 			window.addEventListener('keyup', handleKeyUp)
-
 			window.addEventListener('keydown', handleKeyDown)
 		}
 	})
@@ -416,6 +454,7 @@
 		if (browser) {
 			window.removeEventListener('keyup', handleKeyUp)
 			window.removeEventListener('keydown', handleKeyDown)
+			if (ganTimerConnection) ganTimerConnection.disconnect()
 		}
 	})
 
@@ -467,6 +506,7 @@
 		{eventDown}
 		{newScramble}
 		{createSolve}
+		{connectBluetoothTimer}
 		{timerText}
 	/>
 </div>
