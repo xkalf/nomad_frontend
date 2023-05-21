@@ -9,6 +9,7 @@
 	import { settings } from '$lib/stores/settings'
 	import { scrambleSizeMapper } from '$lib/utils/types'
 	import { formatCustomTime } from '$lib/utils/timer-utils'
+	import GanTimer from '$lib/components/GanTimer.svelte'
 
 	export let timerText: string
 	export let scramble: string
@@ -25,6 +26,8 @@
 	let customTime: string | undefined = undefined
 	let scrambleEl: HTMLSpanElement
 	let timerEl: HTMLParagraphElement
+	let component: typeof ScrambleDisplay | typeof GanTimer
+	let props: any
 
 	async function addCustomSolve() {
 		if (!browser || !customTime) return
@@ -50,6 +53,26 @@
 	function handleMouseUp() {
 		eventUp()
 	}
+
+	const options = [
+		{
+			label: 'Холилтийн зураг',
+			component: ScrambleDisplay,
+			props: { scramble }
+		},
+		{
+			label: 'Gan Timer',
+			component: GanTimer,
+			props: {
+				connectTimer: async () => {
+					await connectBluetoothTimer()
+					selectedValue = options[0]
+				}
+			}
+		}
+	]
+
+	let selectedValue: (typeof options)[number] = options[0]
 
 	onMount(() => {
 		if (browser) {
@@ -119,17 +142,14 @@
 			</div>
 			<!-- Tools -->
 			<div class="col-start-3">
-				<div class="z-20 ml-auto flex w-3/4 flex-col justify-between rounded-xl bg-secondary">
-					<ScrambleDisplay {scramble} />
-					{#if $settings.enteringTimes === 'Bluetooth'}
-						<button on:click={connectBluetoothTimer} class="mx-auto w-3/4 rounded-lg bg-white p-2"
-							>Gan Timer</button
-						>
-					{/if}
+				<div class="z-20 ml-auto flex w-3/4 flex-col justify-between rounded-xl bg-secondary pt-4">
+					<svelte:component this={selectedValue.component} {...selectedValue.props} />
 					<div class="flex flex-wrap items-center justify-center gap-2 py-4 px-2 text-lg">
 						<span class="py-2 text-white">Function</span>
-						<select class="rounded-xl bg-background p-2 text-black">
-							<option>Draw Scramble</option>
+						<select bind:value={selectedValue} class="rounded-xl bg-background p-2 text-black">
+							{#each options as o}
+								<option value={o}>{o.label}</option>
+							{/each}
 						</select>
 					</div>
 				</div>

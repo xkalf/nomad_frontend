@@ -487,9 +487,6 @@
 			window.addEventListener('keyup', handleKeyUp)
 			window.addEventListener('keydown', handleKeyDown)
 
-			mobileTimerEl.addEventListener('touchstart', () => eventDown(true))
-			mobileTimerEl.addEventListener('touchend', () => eventUp())
-
 			const elements = [mobileTimerEl, desktopTimerEL]
 			const Hammer = await import('hammerjs')
 			const sHammer = new Hammer.Manager(scrambleEl)
