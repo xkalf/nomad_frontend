@@ -33,6 +33,7 @@
 	export let eventDown: (s: boolean) => void
 	export let eventUp: () => void
 	export let nextStatus: string
+	export let connectBluetoothTimer: () => Promise<void>
 
 	let timerEl: HTMLDivElement
 	let scrambleEl: HTMLDivElement
@@ -179,7 +180,7 @@
 				>
 					{timerText}
 				</p>
-				<p class="absolute top-1/2 right-2 -translate-y-1/2 text-5xl text-primary">
+				<p class="absolute right-2 top-1/2 -translate-y-1/2 text-5xl text-primary">
 					{nextStatus}
 				</p>
 			</div>
@@ -209,7 +210,7 @@
 		>
 			<div class="relative">
 				<button
-					class="absolute right-0 top-0 z-20 p-4 text-2xl text-white"
+					class="absolute top-0 right-0 z-20 p-4 text-2xl text-white"
 					on:click={() => (isScrambleDisplayOpen = false)}>&#10005;</button
 				>
 				<ScrambleDisplay {scramble} />
@@ -272,13 +273,22 @@
 				}}>DNF</button
 			>
 		</li>
-		<li class="py-3">
+		<li class="border-b border-secondary py-3">
 			<button
 				class="w-full"
 				on:click={async () => {
 					await updateLastSolve('Ok')
 					isStateOpen = false
 				}}>OK</button
+			>
+		</li>
+		<li class="py-3">
+			<button
+				class="w-full"
+				on:click={async () => {
+					await connectBluetoothTimer()
+					isStateOpen = false
+				}}>Gan Timer</button
 			>
 		</li>
 	</ul>

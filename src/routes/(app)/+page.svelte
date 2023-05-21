@@ -470,16 +470,21 @@
 		deleteAllModalOpen = true
 	}
 
-	const functions = {
+	const desktopFunctions = {
 		changeCubeType,
 		newScramble,
+		eventDown,
+		eventUp,
+		connectBluetoothTimer,
+		createSolve
+	}
+
+	const functions = {
 		getLastScramble,
 		openDeleteLastModal,
 		openDeleteAllModal,
 		updateLastSolve,
-		createSolve,
-		eventDown,
-		eventUp
+		...desktopFunctions
 	}
 
 	$: props = {
@@ -499,16 +504,7 @@
 </svelte:head>
 
 <div class="hidden md:block">
-	<Desktop
-		{...props}
-		{changeCubeType}
-		{eventUp}
-		{eventDown}
-		{newScramble}
-		{createSolve}
-		{connectBluetoothTimer}
-		{timerText}
-	/>
+	<Desktop {...props} {...desktopFunctions} {timerText} />
 </div>
 <div class="block md:hidden">
 	<Mobile {...props} {...functions} {state} bind:timerText />
