@@ -36,15 +36,30 @@ export const actions: Actions = {
 
 		const formData = Object.fromEntries(await request.formData()) as {
 			email: string
+			password: string
 		}
+
+		const recovery = url.searchParams.get('recovery') as string
 
 		const email = formData.email.trim().toLocaleLowerCase()
 
-		const { error: err } = await locals.sb.auth.signInWithOtp({
-			email,
-			options: {
-				emailRedirectTo: redirectUrl
+		if (recovery) {
+			const { error } = await locals.sb.auth.resetPasswordForEmail(email)
+
+			if (error) {
+				return fail(400, {
+					error: 'Нууц үг сэргээхэд алдаа гарлаа.'
+				})
 			}
+
+			return {
+				success: true
+			}
+		}
+
+		const { error: err } = await locals.sb.auth.signInWithPassword({
+			email,
+			password: formData.password
 		})
 
 		if (err) {

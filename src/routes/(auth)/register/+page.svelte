@@ -45,13 +45,18 @@
 	<div class="flex h-full flex-col p-4 md:p-3">
 		<img src={horizontalLogo} alt="logo" width="200" class="mx-auto mt-8" />
 		<div class="mx-auto mt-8 w-4/5">
-			<form use:enhance={submit} method="POST" class="flex flex-col gap-2 text-2xl text-primary">
+			<form
+				action="?/register"
+				use:enhance={submit}
+				method="POST"
+				class="flex flex-col gap-2 text-2xl text-primary"
+			>
 				<label for="firstname">Нэр</label>
 				<div class="relative">
 					<input name="firstname" id="firstname" type="text" class={input} required />
 					<Icon class={icon} icon="fa-solid:id-card" />
 					<!-- <Icon
-						class="absolute right-1 top-1 translate-x-1/2 -translate-y-1/2 text-3xl"
+						class="absolute top-1 right-1 text-3xl translate-x-1/2 -translate-y-1/2"
 						icon="material-symbols:check-circle-rounded"
 					/> -->
 				</div>
@@ -67,10 +72,12 @@
 						type="email"
 						id="email"
 						class={input}
-						value={$page.data.session?.user.email}
+						value={$page.data.session?.user.email || ''}
 					/>
 					<Icon class={icon} icon="clarity:email-solid" />
 				</div>
+				<label for="password">Нууц үг</label>
+				<input class={input} name="password" id="password" />
 				<label for="phone">Утас</label>
 				<div class="relative">
 					<input name="phone" type="text" id="phone" required class={input} />
