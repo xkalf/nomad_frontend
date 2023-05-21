@@ -21,7 +21,7 @@
 	export let createSolve: (time: number) => Promise<boolean>
 	export let connectBluetoothTimer: () => Promise<void>
 
-	let timerContainer: HTMLDivElement
+	export let timerContainer: HTMLDivElement
 	let customTime: string | undefined = undefined
 	let scrambleEl: HTMLSpanElement
 	let timerEl: HTMLParagraphElement

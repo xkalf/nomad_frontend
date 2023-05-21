@@ -11,7 +11,7 @@
 		solves
 	} from '$lib/stores/solves'
 	import { getSessionByCube, getSessionById } from '$lib/utils/api'
-	import { shortcutMapper, type StateType } from '$lib/utils/types'
+	import { cubeTypeMapper, cubeTypes, shortcutMapper, type StateType } from '$lib/utils/types'
 	import { generateScramble } from '$lib/utils/scramble'
 	import type { CubeType, SolveStatus, Solve } from '@prisma/client'
 	import { onDestroy, onMount } from 'svelte'
@@ -20,7 +20,7 @@
 	import Desktop from './Desktop.svelte'
 	import Mobile from './Mobile.svelte'
 	import { settings } from '$lib/stores/settings'
-	import { displayTime } from '$lib/utils/timer-utils'
+	import { displayTime, formatCustomTime } from '$lib/utils/timer-utils'
 	import { type GanTimerConnection, GanTimerState } from 'gan-web-bluetooth'
 
 	let scramble: string = generateScramble($cubeType)
@@ -41,6 +41,14 @@
 	let isFetching = false
 	let ganTimerConnection: GanTimerConnection
 	const exceptTags = ['INPUT', 'BUTTON', 'TEXTAREA']
+	let mobileTimerEl: HTMLDivElement
+	let scrambleEl: HTMLDivElement
+	let desktopTimerEL: HTMLDivElement
+	let isStateOpen = false
+	let isCubeTypeOpen = false
+	let customTimeRef: HTMLInputElement
+	let customTime: string | undefined = undefined
+	let isCustomTimeModalOpen = false
 
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
 
@@ -248,6 +256,31 @@
 		scramble = lastScramble
 	}
 
+	async function createCustomSolve() {
+		if (!customTime || isFetching) {
+			customTime = undefined
+			isCustomTimeModalOpen = false
+			return
+		}
+		const time = formatCustomTime(customTime)
+
+		if (!time) {
+			customTime = undefined
+			return
+		}
+
+		isFetching = true
+		const result = await createSolve(time)
+		isFetching = false
+
+		if (result) {
+			newScramble()
+			timerText = displayTime(formatCustomTime(customTime) || 0)
+			customTime = undefined
+			isCustomTimeModalOpen = false
+		}
+	}
+
 	async function updateLastSolve(status: SolveStatus) {
 		const last = getSortedLastSolve(1)[0]
 
@@ -443,10 +476,79 @@
 					break
 			}
 		})
+
+	function isReady() {
+		const states: StateType[] = ['stopped', 'waiting', 'inspectionWaiting']
+		return states.includes(state)
+	}
+
 	onMount(async () => {
 		if (browser) {
 			window.addEventListener('keyup', handleKeyUp)
 			window.addEventListener('keydown', handleKeyDown)
+
+			mobileTimerEl.addEventListener('touchstart', () => eventDown(true))
+			mobileTimerEl.addEventListener('touchend', () => eventUp())
+
+			const elements = [mobileTimerEl, desktopTimerEL]
+			const Hammer = await import('hammerjs')
+			const sHammer = new Hammer.Manager(scrambleEl)
+			sHammer.on('swipeRight', () => {
+				if (isReady()) newScramble()
+			})
+
+			sHammer.on('swipeLeft', () => {
+				if (isReady()) getLastScramble()
+			})
+
+			elements.forEach(i => {
+				i.addEventListener('touchstart', () => eventDown(true))
+				i.addEventListener('touchend', () => eventUp())
+
+				const hammer = new Hammer.Manager(i)
+
+				hammer.add(new Hammer.Tap({ event: 'doubleTap', taps: 2, interval: 700 }))
+				hammer.add(new Hammer.Tap({ event: 'doubleMultiTap', pointers: 2, taps: 2, interval: 700 }))
+				hammer.add(new Hammer.Swipe({ event: 'swipeRight', direction: Hammer.DIRECTION_RIGHT }))
+				hammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
+				hammer.add(
+					new Hammer.Swipe({ event: 'multiSwipeUp', direction: Hammer.DIRECTION_UP, pointers: 2 })
+				)
+				hammer.add(new Hammer.Swipe({ event: 'swipeDown', direction: Hammer.DIRECTION_DOWN }))
+
+				sHammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
+				sHammer.add(new Hammer.Swipe({ event: 'swipeRight', direction: Hammer.DIRECTION_RIGHT }))
+
+				hammer.on('doubleTap', e => {
+					e.preventDefault()
+					if (isReady()) isStateOpen = true
+				})
+
+				hammer.on('doubleMultiTap', () => {
+					if (isReady()) openDeleteAllModal()
+				})
+
+				hammer.on('swipeRight', () => {
+					if (isReady()) newScramble()
+				})
+
+				hammer.on('swipeLeft', () => {
+					if (isReady()) openDeleteLastModal()
+				})
+
+				hammer.on('multiSwipeUp', () => {
+					if (isReady()) isCubeTypeOpen = true
+				})
+
+				hammer.on('swipeDown', () => {
+					if (isReady()) {
+						customTime = undefined
+						isCustomTimeModalOpen = true
+						customTimeRef.click()
+						customTimeRef.focus()
+					}
+				})
+			})
 		}
 	})
 
@@ -454,6 +556,11 @@
 		if (browser) {
 			window.removeEventListener('keyup', handleKeyUp)
 			window.removeEventListener('keydown', handleKeyDown)
+			const elements = [mobileTimerEl, desktopTimerEL]
+			elements.forEach(i => {
+				i.removeEventListener('touchstart', () => eventDown(true))
+				i.removeEventListener('touchend', () => eventUp())
+			})
 			if (ganTimerConnection) ganTimerConnection.disconnect()
 		}
 	})
@@ -504,10 +611,10 @@
 </svelte:head>
 
 <div class="hidden md:block">
-	<Desktop {...props} {...desktopFunctions} {timerText} />
+	<Desktop {...props} {...desktopFunctions} {timerText} bind:timerContainer={desktopTimerEL} />
 </div>
 <div class="block md:hidden">
-	<Mobile {...props} {...functions} {state} bind:timerText />
+	<Mobile {...props} {...functions} bind:timerText bind:timerEl={mobileTimerEl} bind:scrambleEl />
 </div>
 
 <Modal okFunction={() => deleteLastSolve(deleteCount)} bind:isOpen={deleteLastModalOpen}>
@@ -522,3 +629,89 @@
 <Modal okFunction={removeSolves} bind:isOpen={deleteAllModalOpen}>
 	<p class="text-lg text-primary">Энэ session-ийн эвлүүлэлтүүдийг устгах уу?</p>
 </Modal>
+
+<Modal okFunction={createCustomSolve} bind:isOpen={isCustomTimeModalOpen} mode="create">
+	<p class="text-lg text-primary">Эвлүүлэлтийн хугацаа</p>
+	<input
+		bind:value={customTime}
+		bind:this={customTimeRef}
+		class="mt-2 w-full rounded-lg bg-secondary p-2 pl-3 text-lg text-white"
+		type="string"
+		inputmode="numeric"
+	/>
+</Modal>
+
+<div class={`${isCubeTypeOpen ? 'block' : 'hidden'} modal w-64 text-center text-2xl text-primary`}>
+	<ul class="max-h-64 overflow-y-auto rounded-xl bg-white">
+		{#each cubeTypes as type}
+			<li class="border-b border-secondary py-3 last:border-none">
+				<button
+					class="w-full"
+					on:click={() => {
+						changeCubeType(type)
+						isCubeTypeOpen = false
+					}}>{cubeTypeMapper[type]}</button
+				>
+			</li>
+		{/each}
+	</ul>
+
+	<button
+		class="mt-2 w-full rounded-xl bg-white py-3"
+		on:click={() => {
+			isCubeTypeOpen = false
+		}}>Cancel</button
+	>
+</div>
+
+<div
+	class={`${
+		isStateOpen ? 'block' : 'hidden'
+	} absolute top-1/2 left-1/2 w-64 -translate-x-1/2 -translate-y-1/2 text-center text-2xl text-primary`}
+>
+	<ul class="max-h-64 overflow-y-auto rounded-xl bg-white">
+		<li class="border-b border-secondary py-3">
+			<button
+				class="w-full"
+				on:click={async () => {
+					await updateLastSolve('Plus2')
+					isStateOpen = false
+				}}>+2</button
+			>
+		</li>
+		<li class="border-b border-secondary py-3">
+			<button
+				class="w-full"
+				on:click={async () => {
+					await updateLastSolve('Dnf')
+					isStateOpen = false
+				}}>DNF</button
+			>
+		</li>
+		<li class="border-b border-secondary py-3">
+			<button
+				class="w-full"
+				on:click={async () => {
+					await updateLastSolve('Ok')
+					isStateOpen = false
+				}}>OK</button
+			>
+		</li>
+		<li class="py-3">
+			<button
+				class="w-full"
+				on:click={async () => {
+					await connectBluetoothTimer()
+					isStateOpen = false
+				}}>Gan Timer</button
+			>
+		</li>
+	</ul>
+
+	<button
+		class="mt-2 w-full rounded-xl bg-white py-3"
+		on:click={() => {
+			isStateOpen = false
+		}}>Cancel</button
+	>
+</div>
