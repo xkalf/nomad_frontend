@@ -17,7 +17,7 @@ const registerSchema = z.object({
 		.trim()
 		.transform(i => i.toLocaleLowerCase()),
 	password: z.string().min(8, { message: 'Нууц үг 8-аас дээш урттай байна.' }),
-	email: z.string().email({ message: 'Буруу мэйл хаяг байна.' }),
+	email: z.string().email({ message: 'Буруу и-мэйл хаяг байна.' }),
 	phone: z
 		.string()
 		.refine(value => value.length === 8 || value.length === 12, {
