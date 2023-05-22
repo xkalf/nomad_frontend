@@ -635,7 +635,7 @@
 <div
 	class={`${
 		isCubeTypeOpen ? 'block' : 'hidden'
-	} absolute top-0 left-0 w-64 -translate-x-1/2 -translate-y-1/2 text-center text-2xl text-primary`}
+	} absolute top-1/2 left-1/2 w-64 -translate-x-1/2 -translate-y-1/2 text-center text-2xl text-primary`}
 >
 	<ul class="max-h-64 overflow-y-auto rounded-xl bg-white">
 		{#each cubeTypes as type}
