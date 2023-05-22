@@ -26,8 +26,6 @@
 	let customTime: string | undefined = undefined
 	let scrambleEl: HTMLSpanElement
 	let timerEl: HTMLParagraphElement
-	let component: typeof ScrambleDisplay | typeof GanTimer
-	let props: any
 
 	async function addCustomSolve() {
 		if (!browser || !customTime) return
@@ -143,6 +141,7 @@
 			<!-- Tools -->
 			<div class="col-start-3">
 				<div class="z-20 ml-auto flex w-3/4 flex-col justify-between rounded-xl bg-secondary pt-4">
+					<!-- @ts-ignore -->
 					<svelte:component this={selectedValue.component} {...selectedValue.props} />
 					<div class="flex flex-wrap items-center justify-center gap-2 py-4 px-2 text-lg">
 						<span class="py-2 text-white">Function</span>

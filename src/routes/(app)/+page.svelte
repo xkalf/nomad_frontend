@@ -499,8 +499,10 @@
 			})
 
 			elements.forEach(i => {
-				i.addEventListener('touchstart', () => eventDown(true))
-				i.addEventListener('touchend', () => eventUp())
+				if ($settings.enteringTimes === 'Timer') {
+					i.addEventListener('touchstart', () => eventDown(true))
+					i.addEventListener('touchend', () => eventUp())
+				}
 
 				const hammer = new Hammer.Manager(i)
 
@@ -583,14 +585,6 @@
 		createSolve
 	}
 
-	const functions = {
-		getLastScramble,
-		openDeleteLastModal,
-		openDeleteAllModal,
-		updateLastSolve,
-		...desktopFunctions
-	}
-
 	$: props = {
 		scramble,
 		textColor,
@@ -611,7 +605,7 @@
 	<Desktop {...props} {...desktopFunctions} {timerText} bind:timerContainer={desktopTimerEL} />
 </div>
 <div class="block md:hidden">
-	<Mobile {...props} {...functions} bind:timerText bind:timerEl={mobileTimerEl} bind:scrambleEl />
+	<Mobile {...props} bind:timerText bind:timerEl={mobileTimerEl} bind:scrambleEl />
 </div>
 
 <Modal okFunction={() => deleteLastSolve(deleteCount)} bind:isOpen={deleteLastModalOpen}>
@@ -638,7 +632,11 @@
 	/>
 </Modal>
 
-<div class={`${isCubeTypeOpen ? 'block' : 'hidden'} modal w-64 text-center text-2xl text-primary`}>
+<div
+	class={`${
+		isCubeTypeOpen ? 'block' : 'hidden'
+	} absolute top-0 left-0 w-64 -translate-x-1/2 -translate-y-1/2 text-center text-2xl text-primary`}
+>
 	<ul class="max-h-64 overflow-y-auto rounded-xl bg-white">
 		{#each cubeTypes as type}
 			<li class="border-b border-secondary py-3 last:border-none">

@@ -48,7 +48,7 @@
 						autocomplete="current-password"
 					/>
 					<div class="mt-2 flex justify-between text-sm text-primary">
-						<button formaction="?/login&recovery=true">Нууц үг мартсан?</button>
+						<button type="button" formaction="?/login&recovery=true">Нууц үг мартсан?</button>
 						<p class="text-red-500">
 							{#if form?.error}
 								{form.error}
@@ -57,11 +57,10 @@
 					</div>
 				</div>
 				<div class="relative w-full px-4 text-[#cecfd5] md:w-4/5">
-					<input
+					<button
 						type="submit"
-						class="w-full cursor-pointer rounded-lg bg-primary p-2 text-white drop-shadow md:p-4"
-						value="Нэвтрэх"
-					/>
+						class="w-full rounded-lg bg-primary p-2 text-white drop-shadow md:p-4">Нэвтрэх</button
+					>
 				</div>
 			</form>
 			<form method="POST" class="mt-4 flex w-full flex-col items-center gap-4 md:gap-6">

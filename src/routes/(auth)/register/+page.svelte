@@ -21,6 +21,7 @@
 			.min(2, { message: 'Овог 2-оос дээш урттай байх ёстой.' })
 			.trim()
 			.transform(i => i.toLocaleLowerCase()),
+		password: z.string().min(8, { message: 'Нууц үг 8-аас дээш урттай байна.' }),
 		email: z.string().email({ message: 'Буруу мэйл хаяг байна.' }),
 		phone: z.string().length(8, { message: 'Утасны дугаар буруу байна.' }),
 		birthdate: z.string().transform(i => new Date(i)),
@@ -55,10 +56,6 @@
 				<div class="relative">
 					<input name="firstname" id="firstname" type="text" class={input} required />
 					<Icon class={icon} icon="fa-solid:id-card" />
-					<!-- <Icon
-						class="absolute top-1 right-1 text-3xl translate-x-1/2 -translate-y-1/2"
-						icon="material-symbols:check-circle-rounded"
-					/> -->
 				</div>
 				<label for="lastname">Овог</label>
 				<div class="relative">
@@ -77,7 +74,10 @@
 					<Icon class={icon} icon="clarity:email-solid" />
 				</div>
 				<label for="password">Нууц үг</label>
-				<input class={input} name="password" id="password" />
+				<div class="relative">
+					<input class={input} name="password" id="password" required type="password" />
+					<Icon class={icon} icon="fa-solid:lock" />
+				</div>
 				<label for="phone">Утас</label>
 				<div class="relative">
 					<input name="phone" type="text" id="phone" required class={input} />

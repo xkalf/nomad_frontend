@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { scrambleSizeMapper, type StateType } from '$lib/utils/types'
+	import { scrambleSizeMapper } from '$lib/utils/types'
 	import { checkBestAverage, getAvg, getBest } from '$lib/utils/timer-utils'
 	import { solves } from '$lib/stores/solves'
 	import { browser } from '$app/environment'
