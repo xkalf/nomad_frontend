@@ -160,7 +160,6 @@
 			<button class="z-10 px-1" on:click={toggleCubeTypes}>{cubeTypeMapper[$cubeType]}</button>
 		</div>
 		<!-- Session -->
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<div
 			class="z-10 flex flex-grow items-center justify-center rounded-xl bg-primary py-1 text-xl text-green-400"
 		>

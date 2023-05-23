@@ -23,6 +23,7 @@
 	export let connectBluetoothTimer: () => Promise<void>
 
 	export let timerContainer: HTMLDivElement
+	export let scrambleContainer: HTMLDivElement
 	let customTime: string | undefined = undefined
 	let scrambleEl: HTMLSpanElement
 	let timerEl: HTMLParagraphElement
@@ -93,17 +94,17 @@
 		if (browser) {
 			timerContainer.removeEventListener('mousedown', handleMouseDown)
 			timerContainer.removeEventListener('mouseup', handleMouseUp)
-			const form = document.querySelector('form')
-			form?.removeEventListener('submit', addCustomSolve)
 		}
 	})
 </script>
 
-<div class="grid h-screen w-full grid-cols-[minmax(350px,_1fr)_4fr]">
+<div
+	class="grid h-screen w-full grid-cols-[minmax(320px,_1fr)_3fr] xl:grid-cols-[minmax(350px,_1fr)_4fr]"
+>
 	<Sidebar {changeCubeType} />
-	<div bind:this={timerContainer} class="grid grid-rows-3 overflow-hidden bg-background p-4">
+	<div class="grid overflow-hidden grid-rows-3 p-4 bg-background">
 		<!-- Scramble -->
-		<div class="flex items-center justify-center text-primary">
+		<div bind:this={scrambleContainer} class="flex justify-center items-center text-primary">
 			<span
 				bind:this={scrambleEl}
 				class={`${scrambleSizeMapper[$cubeType]} whitespace-pre-line text-center`}
@@ -112,7 +113,7 @@
 			</span>
 		</div>
 		<!-- Time -->
-		<div class="relative">
+		<div bind:this={timerContainer} class="relative">
 			{#if $settings.enteringTimes !== 'Typing'}
 				<p
 					bind:this={timerEl}
@@ -120,32 +121,40 @@
 				>
 					{timerText}
 				</p>
-				<p class="absolute right-2 top-1/2 -translate-y-1/2 text-7xl text-primary">
+				<p class="absolute right-2 top-1/2 text-7xl -translate-y-1/2 text-primary">
 					{nextStatus}
 				</p>
 			{:else}
-				<form class="flex items-center justify-center" on:submit|preventDefault={addCustomSolve}>
+				<form class="flex justify-center items-center" on:submit|preventDefault={addCustomSolve}>
 					<input
 						bind:value={customTime}
 						type="text"
-						class="w-3/4 rounded-xl border border-primary py-2 px-4 text-center text-[150px] text-primary focus:outline-none"
+						class="py-2 px-4 w-3/4 text-center rounded-xl border focus:outline-none border-primary text-[150px] text-primary"
 					/>
 				</form>
 			{/if}
 		</div>
 		<!-- Bottom -->
-		<div class="grid grid-cols-3 items-end justify-center gap-4">
-			<div class="col-start-2 flex items-center justify-center pb-10">
+		<div
+			bind:this={timerContainer}
+			class="grid grid-cols-[1fr,_4fr,_3fr] items-end justify-center gap-4 xl:grid-cols-3"
+		>
+			<div class="flex col-start-2 justify-center items-center pb-10">
 				<img src={timerLogo} alt="Nomad Team" />
 			</div>
 			<!-- Tools -->
 			<div class="col-start-3">
-				<div class="z-20 ml-auto flex w-3/4 flex-col justify-between rounded-xl bg-secondary pt-4">
+				<div
+					class="flex z-20 flex-col justify-between pt-2 ml-auto max-w-xs rounded-xl xl:pt-4 xl:w-3/4 bg-secondary"
+				>
 					<!-- @ts-ignore -->
 					<svelte:component this={selectedValue.component} {...selectedValue.props} />
-					<div class="flex flex-wrap items-center justify-center gap-2 py-4 px-2 text-lg">
-						<span class="py-2 text-white">Function</span>
-						<select bind:value={selectedValue} class="rounded-xl bg-background p-2 text-black">
+					<div class="flex flex-wrap gap-2 justify-center items-center py-2 px-2 text-lg md:py-4">
+						<span class="py-1 text-white xl:py-2">Function</span>
+						<select
+							bind:value={selectedValue}
+							class="py-1 px-2 w-4/5 text-black rounded-xl xl:py-2 xl:w-auto bg-background"
+						>
 							{#each options as o}
 								<option value={o}>{o.label}</option>
 							{/each}

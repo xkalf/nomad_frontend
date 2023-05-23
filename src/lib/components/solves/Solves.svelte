@@ -106,7 +106,7 @@
 		mobile ? 'max-h-96 min-h-[200px]' : 'mx-4 flex-grow'
 	} flex flex-col overflow-y-auto rounded-xl bg-secondary`}
 >
-	<div class="grid w-full grid-cols-3 items-center rounded-t-xl bg-primary py-2 text-lg text-white">
+	<div class="grid grid-cols-3 items-center py-2 w-full text-lg text-white rounded-t-xl bg-primary">
 		<div class="flex items-center">
 			<button
 				class="h-5 translate-x-4"
@@ -124,12 +124,12 @@
 				{/if}
 			</button>
 		</div>
-		<div class="col-span-2 flex justify-start">
+		<div class="flex col-span-2 justify-start">
 			<button on:click={() => (isMeanOpen = true)}>Mean {getMean($solves)}</button>
 		</div>
 	</div>
 	<!-- Solves -->
-	<ul class="mr-2 flex-grow overflow-y-auto p-4">
+	<ul class="overflow-y-auto flex-grow p-4 mr-2 scrollbar">
 		{#each formattedSolves as solve, index}
 			<li>
 				<Solve
@@ -158,15 +158,15 @@
 {#if selected}
 	<dialog
 		bind:this={showModal}
-		class="w-full rounded-xl bg-background p-4 font-sans text-primary md:w-3/5 md:px-0"
+		class="p-4 w-full font-sans rounded-xl md:px-0 md:w-3/5 bg-background text-primary"
 	>
 		<div class="mx-auto w-full md:w-3/5">
-			<h2 class="text-center text-2xl md:text-3xl">
+			<h2 class="text-2xl text-center md:text-3xl">
 				Эвлүүлэлт №{$sortMode === 'none'
 					? formattedSolves.length - formattedSolves.findIndex(i => i === selected)
 					: formattedSolves.findIndex(i => i === selected) + 1}
 			</h2>
-			<div class="flex w-full items-center justify-between p-2 text-2xl text-primary">
+			<div class="flex justify-between items-center p-2 w-full text-2xl text-primary">
 				<span>{formatTime(selected)}</span>
 				<div class="flex gap-4">
 					<button
@@ -200,7 +200,7 @@
 						type="text"
 						value={selected.scramble}
 						disabled
-						class="mt-2 w-full rounded-lg border border-primary p-2"
+						class="p-2 mt-2 w-full rounded-lg border border-primary"
 					/>
 				</div>
 				<div class="mt-2">
@@ -208,16 +208,16 @@
 					<input
 						type="text"
 						placeholder="Тайлбар бичнэ үү"
-						class="mt-2 w-full rounded-lg border border-primary p-2"
+						class="p-2 mt-2 w-full rounded-lg border border-primary"
 					/>
 				</div>
-				<form method="dialog" class="flex items-center justify-center gap-12 pt-4">
+				<form method="dialog" class="flex gap-12 justify-center items-center pt-4">
 					<button
 						value="cancel"
 						formmethod="dialog"
-						class="rounded-xl bg-primary py-2 px-4 text-xl text-white">Цуцлах</button
+						class="py-2 px-4 text-xl text-white rounded-xl bg-primary">Цуцлах</button
 					>
-					<button class="rounded-xl bg-primary py-2 px-4 text-xl text-white">Хадгалах</button>
+					<button class="py-2 px-4 text-xl text-white rounded-xl bg-primary">Хадгалах</button>
 				</form>
 			</div>
 		</div>
