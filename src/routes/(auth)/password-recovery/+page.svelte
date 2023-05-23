@@ -18,7 +18,7 @@
 		<div class="flex flex-col flex-grow justify-center mx-auto md:w-4/5">
 			<div class="flex flex-col justify-center mx-auto w-4/5 md:w-full">
 				<div class="mx-auto h-auto w-[30%]"><img src={horizontalLogo} alt="rubik logo" /></div>
-				<p class="text-center text-black md:text-xs text-[8px]">
+				<p class="mt-2 text-center text-black md:text-xs text-[8px]">
 					Илүү олууллаа болцгооё. Тэмцээнд хэрхэн бүртгүүлэх талаар аль болох дэлгэрэнгүй заавар
 					бичлэг бэлтгэлээ. Анх оролцох гэж байгаа тамирчидад маш их хэрэг болон гэдэгт итгэлтэй
 					байна

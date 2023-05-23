@@ -2,14 +2,15 @@ import { AuthApiError, type Provider } from '@supabase/supabase-js'
 import { fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 import { z } from 'zod'
-import { setError, superValidate } from 'sveltekit-superforms/server'
+import { setError, superValidate, setMessage } from 'sveltekit-superforms/server'
 
 const loginSchema = z.object({
 	email: z
 		.string()
+		.min(1)
 		.email({ message: 'Буруу и-мэйл хаяг байна.' })
-		.transform(value => value.trim().toLocaleLowerCase()),
-	password: z.string()
+		.transform(value => value.toLocaleLowerCase()),
+	password: z.string().min(1, { message: 'Нууц үг оруулна уу.' })
 })
 
 export const load: PageServerLoad = async event => {
@@ -51,7 +52,7 @@ export const actions: Actions = {
 		}
 	},
 	login: async event => {
-		const { url, locals } = event
+		const { locals } = event
 
 		const formData = await superValidate(event, loginSchema)
 
@@ -59,18 +60,6 @@ export const actions: Actions = {
 			return {
 				form: formData
 			}
-		}
-
-		const recovery = url.searchParams.get('recovery') as string
-
-		if (recovery) {
-			const { error } = await locals.sb.auth.resetPasswordForEmail(formData.data.email)
-
-			if (error) {
-				return setError(formData, 'password', 'Нууц үг сэргээхэд алдаа гарлаа.')
-			}
-
-			throw redirect(307, '/')
 		}
 
 		const { error: err } = await locals.sb.auth.signInWithPassword({
@@ -87,5 +76,29 @@ export const actions: Actions = {
 		}
 
 		throw redirect(307, '/')
+	},
+	recovery: async event => {
+		const { locals } = event
+
+		const form = await superValidate(event, loginSchema)
+
+		console.log(form)
+
+		if (form.errors.email) {
+			return {
+				form
+			}
+		}
+
+		const { error } = await locals.sb.auth.resetPasswordForEmail(form.data.email)
+
+		if (error) {
+			if (error.status === 429) {
+				return setError(form, 'password', 'Нууц үг сэргээх и-мэйлийг илгээсэн байна.')
+			}
+			return setError(form, 'password', 'Нууц үг сэргээхэд алдаа гарлаа.')
+		}
+
+		return setMessage(form, 'Нууц үг сэргээх и-мэйлийг илгээлээ.')
 	}
 }
