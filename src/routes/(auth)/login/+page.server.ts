@@ -75,14 +75,12 @@ export const actions: Actions = {
 			return setError(formData, 'password', 'Сервер алдаа гарлаа.')
 		}
 
-		throw redirect(307, '/')
+		throw redirect(303, '/')
 	},
 	recovery: async event => {
 		const { locals } = event
 
 		const form = await superValidate(event, loginSchema)
-
-		console.log(form)
 
 		if (form.errors.email) {
 			return {

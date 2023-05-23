@@ -22,7 +22,7 @@
 	import { settings } from '$lib/stores/settings'
 	import { displayTime, formatCustomTime } from '$lib/utils/timer-utils'
 	import { type GanTimerConnection, GanTimerState } from 'gan-web-bluetooth'
-	// import StackmatSignalProcessor from 'stackmat-signal-processor'
+	import StackmatSignalProcessor from 'stackmat-signal-processor'
 
 	let scramble: string = generateScramble($cubeType)
 	let currentScramble: string | null = null
@@ -484,42 +484,42 @@
 		return states.includes(state)
 	}
 
-	// async function connectStackmat() {
-	// 	// Connect to media device
-	// 	let stream = await navigator.mediaDevices.getUserMedia({
-	// 		audio: {
-	// 			echoCancellation: false
-	// 		}
-	// 	})
-	//
-	// 	// Get the Audio Context
-	// 	const audioContext = new AudioContext()
-	//
-	// 	// Create relevant Audio Nodes
-	// 	const microphone = audioContext.createMediaStreamSource(stream)
-	//
-	// 	// Connecting the StackmatSignalProcessor
-	// 	await audioContext.audioWorklet.addModule(StackmatSignalProcessor)
-	//
-	// 	// Create an Audio Node for the Stackmat Signal Processor
-	// 	const stackmatSignal = new AudioWorkletNode(audioContext, 'StackmatSignalProcessor')
-	//
-	// 	microphone.connect(stackmatSignal)
-	// 	stackmatSignal.connect(audioContext.destination)
-	//
-	// 	stackmatSignal.port.onmessage = event => {
-	// 		console.log(event.data)
-	// 	}
-	// }
+	async function connectStackmat() {
+		// Connect to media device
+		let stream = await navigator.mediaDevices.getUserMedia({
+			audio: {
+				echoCancellation: false
+			}
+		})
+
+		// Get the Audio Context
+		const audioContext = new AudioContext()
+
+		// Create relevant Audio Nodes
+		const microphone = audioContext.createMediaStreamSource(stream)
+
+		// Connecting the StackmatSignalProcessor
+		await audioContext.audioWorklet.addModule(StackmatSignalProcessor)
+
+		// Create an Audio Node for the Stackmat Signal Processor
+		const stackmatSignal = new AudioWorkletNode(audioContext, 'StackmatSignalProcessor')
+
+		microphone.connect(stackmatSignal)
+		stackmatSignal.connect(audioContext.destination)
+
+		stackmatSignal.port.onmessage = event => {
+			console.log(event.data)
+		}
+	}
 
 	onMount(async () => {
 		if (browser) {
 			window.addEventListener('keyup', handleKeyUp)
 			window.addEventListener('keydown', handleKeyDown)
 
-			// if ($settings.enteringTimes === 'Stackmat') {
-			// 	connectStackmat()
-			// }
+			if ($settings.enteringTimes === 'Stackmat') {
+				connectStackmat()
+			}
 
 			const elements = [mobileTimerEl, desktopTimerEL]
 			const scrambleElements = [mobileScrambleEl, desktopScrambleEl]
@@ -660,7 +660,7 @@
 	<p class="text-lg text-primary">Сүүлийн хэдэн эвлүүлэлтийг устгах уу?</p>
 	<input
 		bind:value={deleteCount}
-		class="p-2 pl-3 mt-2 w-full text-lg text-white rounded-lg bg-secondary"
+		class="mt-2 w-full rounded-lg bg-secondary p-2 pl-3 text-lg text-white"
 		type="text"
 	/>
 </Modal>
@@ -674,7 +674,7 @@
 	<input
 		bind:value={customTime}
 		bind:this={customTimeRef}
-		class="p-2 pl-3 mt-2 w-full text-lg text-white rounded-lg bg-secondary"
+		class="mt-2 w-full rounded-lg bg-secondary p-2 pl-3 text-lg text-white"
 		type="string"
 		inputmode="numeric"
 	/>
@@ -685,9 +685,9 @@
 		isCubeTypeOpen ? 'block' : 'hidden'
 	} absolute top-1/2 left-1/2 w-64 -translate-x-1/2 -translate-y-1/2 text-center text-2xl text-primary`}
 >
-	<ul class="overflow-y-auto max-h-64 bg-white rounded-xl">
+	<ul class="max-h-64 overflow-y-auto rounded-xl bg-white">
 		{#each cubeTypes as type}
-			<li class="py-3 border-b last:border-none border-secondary">
+			<li class="border-b border-secondary py-3 last:border-none">
 				<button
 					class="w-full"
 					on:click={() => {
@@ -700,7 +700,7 @@
 	</ul>
 
 	<button
-		class="py-3 mt-2 w-full bg-white rounded-xl"
+		class="mt-2 w-full rounded-xl bg-white py-3"
 		on:click={() => {
 			isCubeTypeOpen = false
 		}}>Cancel</button
@@ -712,8 +712,8 @@
 		isStateOpen ? 'block' : 'hidden'
 	} absolute top-1/2 left-1/2 w-64 -translate-x-1/2 -translate-y-1/2 text-center text-2xl text-primary`}
 >
-	<ul class="overflow-y-auto max-h-64 bg-white rounded-xl">
-		<li class="py-3 border-b border-secondary">
+	<ul class="max-h-64 overflow-y-auto rounded-xl bg-white">
+		<li class="border-b border-secondary py-3">
 			<button
 				class="w-full"
 				on:click={async () => {
@@ -722,7 +722,7 @@
 				}}>+2</button
 			>
 		</li>
-		<li class="py-3 border-b border-secondary">
+		<li class="border-b border-secondary py-3">
 			<button
 				class="w-full"
 				on:click={async () => {
@@ -731,7 +731,7 @@
 				}}>DNF</button
 			>
 		</li>
-		<li class="py-3 border-b border-secondary">
+		<li class="border-b border-secondary py-3">
 			<button
 				class="w-full"
 				on:click={async () => {
@@ -752,7 +752,7 @@
 	</ul>
 
 	<button
-		class="py-3 mt-2 w-full bg-white rounded-xl"
+		class="mt-2 w-full rounded-xl bg-white py-3"
 		on:click={() => {
 			isStateOpen = false
 		}}>Cancel</button
