@@ -22,7 +22,7 @@
 	import { settings } from '$lib/stores/settings'
 	import { displayTime, formatCustomTime } from '$lib/utils/timer-utils'
 	import { type GanTimerConnection, GanTimerState } from 'gan-web-bluetooth'
-	import StackmatSignalProcessor from 'stackmat-signal-processor'
+	import { Stackmat } from '$lib/stackmat'
 
 	let scramble: string = generateScramble($cubeType)
 	let currentScramble: string | null = null
@@ -50,6 +50,7 @@
 	let customTimeRef: HTMLInputElement
 	let customTime: string | undefined = undefined
 	let isCustomTimeModalOpen = false
+	let stackmatTimer: Stackmat
 
 	const exceptTags = ['INPUT', 'BUTTON', 'TEXTAREA']
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
@@ -486,30 +487,6 @@
 
 	async function connectStackmat() {
 		// Connect to media device
-		let stream = await navigator.mediaDevices.getUserMedia({
-			audio: {
-				echoCancellation: false
-			}
-		})
-
-		// Get the Audio Context
-		const audioContext = new AudioContext()
-
-		// Create relevant Audio Nodes
-		const microphone = audioContext.createMediaStreamSource(stream)
-
-		// Connecting the StackmatSignalProcessor
-		await audioContext.audioWorklet.addModule(StackmatSignalProcessor)
-
-		// Create an Audio Node for the Stackmat Signal Processor
-		const stackmatSignal = new AudioWorkletNode(audioContext, 'StackmatSignalProcessor')
-
-		microphone.connect(stackmatSignal)
-		stackmatSignal.connect(audioContext.destination)
-
-		stackmatSignal.port.onmessage = event => {
-			console.log(event.data)
-		}
 	}
 
 	onMount(async () => {
@@ -518,7 +495,15 @@
 			window.addEventListener('keydown', handleKeyDown)
 
 			if ($settings.enteringTimes === 'Stackmat') {
-				connectStackmat()
+				stackmatTimer = new Stackmat()
+
+				stackmatTimer.on('timerConnected', () => {
+					console.log('timer connected')
+				})
+
+				stackmatTimer.on('leftHandDown', () => {
+					console.log('left hand down')
+				})
 			}
 
 			const elements = [mobileTimerEl, desktopTimerEL]
@@ -660,7 +645,7 @@
 	<p class="text-lg text-primary">Сүүлийн хэдэн эвлүүлэлтийг устгах уу?</p>
 	<input
 		bind:value={deleteCount}
-		class="mt-2 w-full rounded-lg bg-secondary p-2 pl-3 text-lg text-white"
+		class="p-2 pl-3 mt-2 w-full text-lg text-white rounded-lg bg-secondary"
 		type="text"
 	/>
 </Modal>
@@ -674,7 +659,7 @@
 	<input
 		bind:value={customTime}
 		bind:this={customTimeRef}
-		class="mt-2 w-full rounded-lg bg-secondary p-2 pl-3 text-lg text-white"
+		class="p-2 pl-3 mt-2 w-full text-lg text-white rounded-lg bg-secondary"
 		type="string"
 		inputmode="numeric"
 	/>
@@ -685,9 +670,9 @@
 		isCubeTypeOpen ? 'block' : 'hidden'
 	} absolute top-1/2 left-1/2 w-64 -translate-x-1/2 -translate-y-1/2 text-center text-2xl text-primary`}
 >
-	<ul class="max-h-64 overflow-y-auto rounded-xl bg-white">
+	<ul class="overflow-y-auto max-h-64 bg-white rounded-xl">
 		{#each cubeTypes as type}
-			<li class="border-b border-secondary py-3 last:border-none">
+			<li class="py-3 border-b last:border-none border-secondary">
 				<button
 					class="w-full"
 					on:click={() => {
@@ -700,7 +685,7 @@
 	</ul>
 
 	<button
-		class="mt-2 w-full rounded-xl bg-white py-3"
+		class="py-3 mt-2 w-full bg-white rounded-xl"
 		on:click={() => {
 			isCubeTypeOpen = false
 		}}>Cancel</button
@@ -712,8 +697,8 @@
 		isStateOpen ? 'block' : 'hidden'
 	} absolute top-1/2 left-1/2 w-64 -translate-x-1/2 -translate-y-1/2 text-center text-2xl text-primary`}
 >
-	<ul class="max-h-64 overflow-y-auto rounded-xl bg-white">
-		<li class="border-b border-secondary py-3">
+	<ul class="overflow-y-auto max-h-64 bg-white rounded-xl">
+		<li class="py-3 border-b border-secondary">
 			<button
 				class="w-full"
 				on:click={async () => {
@@ -722,7 +707,7 @@
 				}}>+2</button
 			>
 		</li>
-		<li class="border-b border-secondary py-3">
+		<li class="py-3 border-b border-secondary">
 			<button
 				class="w-full"
 				on:click={async () => {
@@ -731,7 +716,7 @@
 				}}>DNF</button
 			>
 		</li>
-		<li class="border-b border-secondary py-3">
+		<li class="py-3 border-b border-secondary">
 			<button
 				class="w-full"
 				on:click={async () => {
@@ -752,7 +737,7 @@
 	</ul>
 
 	<button
-		class="mt-2 w-full rounded-xl bg-white py-3"
+		class="py-3 mt-2 w-full bg-white rounded-xl"
 		on:click={() => {
 			isStateOpen = false
 		}}>Cancel</button
