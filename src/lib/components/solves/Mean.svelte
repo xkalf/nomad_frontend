@@ -12,7 +12,7 @@
 <div
 	class={`${isOpen ? 'block' : 'hidden'} ${
 		isAdmin ? '' : 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
-	} z-20 w-5/6 max-w-6xl rounded-xl bg-white p-4 font-sans text-primary md:w-auto md:px-0`}
+	} z-20 w-5/6 max-w-6xl rounded-xl bg-white p-4 font-sans text-primary md:px-0 xl:w-auto`}
 >
 	<div class="mx-auto w-full md:w-3/5">
 		<h2 class="text-2xl text-center md:text-3xl">Дундаж {getMean($solves)}</h2>

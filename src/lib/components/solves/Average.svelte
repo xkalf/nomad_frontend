@@ -45,9 +45,8 @@
 	}
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div
-	class={`flex cursor-pointer rounded-xl bg-primary py-4 px-3 text-white md:px-4 ${
+<button
+	class={`flex gap-2 rounded-xl bg-primary py-4 px-3 text-white md:px-4 ${
 		best ? 'w-full' : 'w-1/2'
 	} ${mobile ? 'justify-evenly' : 'justify-between'}`}
 	on:click={openModal}
@@ -64,12 +63,12 @@
 			{value}
 		{/if}
 	</span>
-</div>
+</button>
 
 {#if solves && solves.length === count}
 	<dialog
 		bind:this={modal}
-		class="p-4 w-5/6 max-w-6xl font-sans rounded-xl md:px-0 md:w-auto text-primary"
+		class="p-4 w-5/6 max-w-6xl font-sans rounded-xl md:px-0 xl:w-auto text-primary"
 	>
 		<div class="mx-auto w-full md:w-3/5">
 			<h2 class="text-2xl text-center md:text-3xl">Avg status</h2>
