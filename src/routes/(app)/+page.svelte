@@ -22,7 +22,6 @@
 	import { settings } from '$lib/stores/settings'
 	import { displayTime, formatCustomTime } from '$lib/utils/timer-utils'
 	import { type GanTimerConnection, GanTimerState } from 'gan-web-bluetooth'
-	import { Stackmat } from '$lib/stackmat'
 
 	let scramble: string = generateScramble($cubeType)
 	let currentScramble: string | null = null
@@ -50,7 +49,6 @@
 	let customTimeRef: HTMLInputElement
 	let customTime: string | undefined = undefined
 	let isCustomTimeModalOpen = false
-	let stackmatTimer: Stackmat
 
 	const exceptTags = ['INPUT', 'BUTTON', 'TEXTAREA']
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
@@ -485,17 +483,14 @@
 		return states.includes(state)
 	}
 
-	async function connectStackmat() {
-		// Connect to media device
-	}
-
 	onMount(async () => {
 		if (browser) {
 			window.addEventListener('keyup', handleKeyUp)
 			window.addEventListener('keydown', handleKeyDown)
 
 			if ($settings.enteringTimes === 'Stackmat') {
-				stackmatTimer = new Stackmat()
+				const { Stackmat } = await import('$lib/stackmat')
+				const stackmatTimer = new Stackmat()
 				stackmatTimer.start()
 
 				stackmatTimer.on('timerConnected', () => {
@@ -584,7 +579,6 @@
 				i.removeEventListener('touchend', () => eventUp())
 			})
 			if (ganTimerConnection) ganTimerConnection.disconnect()
-			stackmatTimer.stop()
 		}
 	})
 
