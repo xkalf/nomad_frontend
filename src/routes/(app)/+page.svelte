@@ -55,6 +55,53 @@
 	const exceptTags = ['INPUT', 'BUTTON', 'TEXTAREA']
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
 
+	$: textColor = setTextColor(state)
+	session.subscribe(value => {
+		if (value?.cube && browser) {
+			scramble = generateScramble(value.cube)
+		}
+	})
+	$: ganTimerConnection &&
+		ganTimerConnection.events$.subscribe(timerEvent => {
+			switch (timerEvent.state) {
+				case GanTimerState.HANDS_ON:
+					updateState('waiting')
+					break
+				case GanTimerState.HANDS_OFF:
+					if (checkInspection()) {
+						startInspection()
+						updateState('inspection')
+					} else {
+						updateState('stopped')
+					}
+					break
+				case GanTimerState.RUNNING:
+					startTime()
+					updateState('running')
+					break
+				case GanTimerState.STOPPED:
+					if (timerEvent.recordedTime) stopTime(timerEvent.recordedTime.asTimestamp)
+					break
+				case GanTimerState.IDLE:
+					updateState('stopped')
+					timerText = displayTime(0)
+					break
+				case GanTimerState.GET_SET:
+					updateState('ready')
+					break
+			}
+		})
+	$: props = {
+		scramble,
+		textColor,
+		nextStatus:
+			nextStatus === '8sec' && state === 'inspection'
+				? '8 sec'
+				: nextStatus === '12sec' && state === 'inspection'
+				? '12sec'
+				: ''
+	}
+
 	function setTextColor(state: StateType) {
 		if (state === 'ready' || state === 'inspectionReady') {
 			return 'text-green-400'
@@ -64,8 +111,6 @@
 			return 'text-primary'
 		}
 	}
-
-	$: textColor = setTextColor(state)
 
 	function startTime() {
 		if (!$session) {
@@ -302,12 +347,6 @@
 		if (data.success === true) changeSolveStats(data.solve)
 	}
 
-	session.subscribe(value => {
-		if (value?.cube && browser) {
-			scramble = generateScramble(value.cube)
-		}
-	})
-
 	function eventUp() {
 		clearTimeout(timeOutRef)
 		clearTimeout(inspectionWaitRef)
@@ -449,37 +488,6 @@
 		timerText = displayTime((await ganTimerConnection.getRecordedTimes()).displayTime.asTimestamp)
 	}
 
-	$: ganTimerConnection &&
-		ganTimerConnection.events$.subscribe(timerEvent => {
-			switch (timerEvent.state) {
-				case GanTimerState.HANDS_ON:
-					updateState('waiting')
-					break
-				case GanTimerState.HANDS_OFF:
-					if (checkInspection()) {
-						startInspection()
-						updateState('inspection')
-					} else {
-						updateState('stopped')
-					}
-					break
-				case GanTimerState.RUNNING:
-					startTime()
-					updateState('running')
-					break
-				case GanTimerState.STOPPED:
-					if (timerEvent.recordedTime) stopTime(timerEvent.recordedTime.asTimestamp)
-					break
-				case GanTimerState.IDLE:
-					updateState('stopped')
-					timerText = displayTime(0)
-					break
-				case GanTimerState.GET_SET:
-					updateState('ready')
-					break
-			}
-		})
-
 	function isReady() {
 		const states: StateType[] = ['stopped', 'waiting', 'inspectionWaiting']
 		return states.includes(state)
@@ -567,6 +575,18 @@
 		})
 	}
 
+	function updateState(input: StateType) {
+		state = input
+	}
+
+	function openDeleteLastModal() {
+		deleteLastModalOpen = true
+	}
+
+	function openDeleteAllModal() {
+		deleteAllModalOpen = true
+	}
+
 	onMount(async () => {
 		if (browser) {
 			window.addEventListener('keyup', handleKeyUp)
@@ -593,38 +613,6 @@
 			if (stackmatTimer) stackmatTimer.stop()
 		}
 	})
-
-	function updateState(input: StateType) {
-		state = input
-	}
-
-	function openDeleteLastModal() {
-		deleteLastModalOpen = true
-	}
-
-	function openDeleteAllModal() {
-		deleteAllModalOpen = true
-	}
-
-	const desktopFunctions = {
-		changeCubeType,
-		newScramble,
-		eventDown,
-		eventUp,
-		connectBluetoothTimer,
-		createSolve
-	}
-
-	$: props = {
-		scramble,
-		textColor,
-		nextStatus:
-			nextStatus === '8sec' && state === 'inspection'
-				? '8 sec'
-				: nextStatus === '12sec' && state === 'inspection'
-				? '12sec'
-				: ''
-	}
 </script>
 
 <svelte:head>
@@ -634,10 +622,15 @@
 <div class="hidden md:block">
 	<Desktop
 		{...props}
-		{...desktopFunctions}
 		{timerText}
 		bind:timerContainer={desktopTimerEL}
 		bind:scrambleContainer={desktopScrambleEl}
+		{changeCubeType}
+		{newScramble}
+		{eventDown}
+		{eventUp}
+		{connectBluetoothTimer}
+		{createSolve}
 	/>
 </div>
 <div class="block md:hidden">
