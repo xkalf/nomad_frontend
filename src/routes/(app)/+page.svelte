@@ -22,6 +22,7 @@
 	import { settings } from '$lib/stores/settings'
 	import { displayTime, formatCustomTime } from '$lib/utils/timer-utils'
 	import { type GanTimerConnection, GanTimerState } from 'gan-web-bluetooth'
+	import type { Stackmat } from '$lib/stackmat'
 
 	let scramble: string = generateScramble($cubeType)
 	let currentScramble: string | null = null
@@ -49,6 +50,7 @@
 	let customTimeRef: HTMLInputElement
 	let customTime: string | undefined = undefined
 	let isCustomTimeModalOpen = false
+	let stackmatTimer: Stackmat
 
 	const exceptTags = ['INPUT', 'BUTTON', 'TEXTAREA']
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
@@ -483,89 +485,98 @@
 		return states.includes(state)
 	}
 
+	async function connectStackmat() {
+		const { Stackmat } = await import('$lib/stackmat')
+		stackmatTimer = new Stackmat()
+
+		stackmatTimer.start()
+
+		stackmatTimer.on('timerConnected', () => {
+			console.log('timer connected')
+		})
+
+		stackmatTimer.on('leftHandDown', () => {
+			console.log('left hand down')
+		})
+	}
+
+	async function addGestures() {
+		const elements = [mobileTimerEl, desktopTimerEL]
+		const scrambleElements = [mobileScrambleEl, desktopScrambleEl]
+		const Hammer = await import('hammerjs')
+
+		scrambleElements.forEach(i => {
+			const sHammer = new Hammer.Manager(i)
+
+			sHammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
+			sHammer.add(new Hammer.Swipe({ event: 'swipeRight', direction: Hammer.DIRECTION_RIGHT }))
+
+			sHammer.on('swipeRight', () => {
+				if (isReady()) newScramble()
+			})
+			sHammer.on('swipeLeft', () => {
+				if (isReady()) getLastScramble()
+			})
+		})
+
+		elements.forEach(i => {
+			if ($settings.enteringTimes === 'Timer') {
+				i.addEventListener('touchstart', () => eventDown(true))
+				i.addEventListener('touchend', () => eventUp())
+			}
+
+			const hammer = new Hammer.Manager(i)
+			hammer.add(new Hammer.Tap({ event: 'doubleTap', taps: 2, interval: 700 }))
+			hammer.add(new Hammer.Tap({ event: 'doubleMultiTap', pointers: 2, taps: 2, interval: 700 }))
+			hammer.add(new Hammer.Swipe({ event: 'swipeRight', direction: Hammer.DIRECTION_RIGHT }))
+			hammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
+			hammer.add(
+				new Hammer.Swipe({ event: 'multiSwipeUp', direction: Hammer.DIRECTION_UP, pointers: 2 })
+			)
+			hammer.add(new Hammer.Swipe({ event: 'swipeDown', direction: Hammer.DIRECTION_DOWN }))
+
+			hammer.on('doubleTap', e => {
+				e.preventDefault()
+				if (isReady()) isStateOpen = true
+			})
+
+			hammer.on('doubleMultiTap', () => {
+				if (isReady()) openDeleteAllModal()
+			})
+
+			hammer.on('swipeRight', () => {
+				if (isReady()) newScramble()
+			})
+
+			hammer.on('swipeLeft', () => {
+				if (isReady()) openDeleteLastModal()
+			})
+
+			hammer.on('multiSwipeUp', () => {
+				if (isReady()) isCubeTypeOpen = true
+			})
+
+			hammer.on('swipeDown', () => {
+				if (isReady()) {
+					customTime = undefined
+					isCustomTimeModalOpen = true
+					customTimeRef.click()
+					customTimeRef.focus()
+				}
+			})
+		})
+	}
+
 	onMount(async () => {
 		if (browser) {
 			window.addEventListener('keyup', handleKeyUp)
 			window.addEventListener('keydown', handleKeyDown)
 
 			if ($settings.enteringTimes === 'Stackmat') {
-				const { Stackmat } = await import('$lib/stackmat')
-				const stackmatTimer = new Stackmat()
-				stackmatTimer.start()
-
-				stackmatTimer.on('timerConnected', () => {
-					console.log('timer connected')
-				})
-
-				stackmatTimer.on('leftHandDown', () => {
-					console.log('left hand down')
-				})
+				connectStackmat()
 			}
 
-			const elements = [mobileTimerEl, desktopTimerEL]
-			const scrambleElements = [mobileScrambleEl, desktopScrambleEl]
-			const Hammer = await import('hammerjs')
-
-			scrambleElements.forEach(i => {
-				const sHammer = new Hammer.Manager(i)
-
-				sHammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
-				sHammer.add(new Hammer.Swipe({ event: 'swipeRight', direction: Hammer.DIRECTION_RIGHT }))
-
-				sHammer.on('swipeRight', () => {
-					if (isReady()) newScramble()
-				})
-				sHammer.on('swipeLeft', () => {
-					if (isReady()) getLastScramble()
-				})
-			})
-
-			elements.forEach(i => {
-				if ($settings.enteringTimes === 'Timer') {
-					i.addEventListener('touchstart', () => eventDown(true))
-					i.addEventListener('touchend', () => eventUp())
-				}
-
-				const hammer = new Hammer.Manager(i)
-				hammer.add(new Hammer.Tap({ event: 'doubleTap', taps: 2, interval: 700 }))
-				hammer.add(new Hammer.Tap({ event: 'doubleMultiTap', pointers: 2, taps: 2, interval: 700 }))
-				hammer.add(new Hammer.Swipe({ event: 'swipeRight', direction: Hammer.DIRECTION_RIGHT }))
-				hammer.add(new Hammer.Swipe({ event: 'swipeLeft', direction: Hammer.DIRECTION_LEFT }))
-				hammer.add(
-					new Hammer.Swipe({ event: 'multiSwipeUp', direction: Hammer.DIRECTION_UP, pointers: 2 })
-				)
-				hammer.add(new Hammer.Swipe({ event: 'swipeDown', direction: Hammer.DIRECTION_DOWN }))
-
-				hammer.on('doubleTap', e => {
-					e.preventDefault()
-					if (isReady()) isStateOpen = true
-				})
-
-				hammer.on('doubleMultiTap', () => {
-					if (isReady()) openDeleteAllModal()
-				})
-
-				hammer.on('swipeRight', () => {
-					if (isReady()) newScramble()
-				})
-
-				hammer.on('swipeLeft', () => {
-					if (isReady()) openDeleteLastModal()
-				})
-
-				hammer.on('multiSwipeUp', () => {
-					if (isReady()) isCubeTypeOpen = true
-				})
-
-				hammer.on('swipeDown', () => {
-					if (isReady()) {
-						customTime = undefined
-						isCustomTimeModalOpen = true
-						customTimeRef.click()
-						customTimeRef.focus()
-					}
-				})
-			})
+			addGestures()
 		}
 	})
 
@@ -579,6 +590,7 @@
 				i.removeEventListener('touchend', () => eventUp())
 			})
 			if (ganTimerConnection) ganTimerConnection.disconnect()
+			if (stackmatTimer) stackmatTimer.stop()
 		}
 	})
 
