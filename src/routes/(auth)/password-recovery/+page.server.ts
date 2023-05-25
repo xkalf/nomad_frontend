@@ -1,6 +1,6 @@
 import { AuthApiError } from '@supabase/supabase-js'
 import { fail, redirect, type Actions } from '@sveltejs/kit'
-import { superValidate } from 'sveltekit-superforms/server'
+import { setError, setMessage, superValidate } from 'sveltekit-superforms/server'
 import { z } from 'zod'
 import type { PageServerLoad } from './$types'
 
@@ -41,16 +41,12 @@ export const actions: Actions = {
 
     if (error) {
       if (error instanceof AuthApiError && error.status === 400) {
-        return fail(400, {
-          error: 'Нууц үг сэргээхэд алдаа гарлаа.'
-        })
+        return setError(form, 'password-re', 'Нууц үг сэргээхэд алдаа гарлаа.')
       }
 
-      return fail(400, {
-        error: 'Сервер алдаа гарлаа.'
-      })
+      return setError(form, 'password-re', 'Сервер алдаа гарлаа.')
     }
 
-    throw redirect(303, '/')
+    return setMessage(form, 'Нууц үг шинэчлэгдлээ.')
   }
 }

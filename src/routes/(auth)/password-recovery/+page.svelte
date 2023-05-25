@@ -2,10 +2,15 @@
 	import horizontalLogo from '$lib/assets/horizontal-logo.webp'
 	import { superForm } from 'sveltekit-superforms/client'
 	import type { PageServerData } from './$types'
+	import { goto } from '$app/navigation'
 
 	export let data: PageServerData
 
-	const { form, errors, enhance } = superForm(data.form)
+	const { form, errors, enhance, message } = superForm(data.form)
+
+	$: if ($message) {
+		goto('/')
+	}
 </script>
 
 <svelte:head>
@@ -13,12 +18,12 @@
 </svelte:head>
 
 <div class="h-screen md:grid md:grid-cols-2">
-	<div class="hidden md:block bg-primary" />
-	<div class="flex flex-col p-2 h-full md:p-3">
-		<div class="flex flex-col flex-grow justify-center mx-auto md:w-4/5">
-			<div class="flex flex-col justify-center mx-auto w-4/5 md:w-full">
+	<div class="hidden bg-primary md:block" />
+	<div class="flex h-full flex-col p-2 md:p-3">
+		<div class="mx-auto flex flex-grow flex-col justify-center md:w-4/5">
+			<div class="mx-auto flex w-4/5 flex-col justify-center md:w-full">
 				<div class="mx-auto h-auto w-[30%]"><img src={horizontalLogo} alt="rubik logo" /></div>
-				<p class="mt-2 text-center text-black md:text-xs text-[8px]">
+				<p class="mt-2 text-center text-[8px] text-black md:text-xs">
 					Илүү олууллаа болцгооё. Тэмцээнд хэрхэн бүртгүүлэх талаар аль болох дэлгэрэнгүй заавар
 					бичлэг бэлтгэлээ. Анх оролцох гэж байгаа тамирчидад маш их хэрэг болон гэдэгт итгэлтэй
 					байна
@@ -26,12 +31,12 @@
 			</div>
 			<!-- Form -->
 			<form
-				class="flex flex-col gap-4 items-center mt-4 w-full md:gap-6"
+				class="mt-4 flex w-full flex-col items-center gap-4 md:gap-6"
 				action="?/recovery"
 				method="POST"
 				use:enhance
 			>
-				<div class="relative px-4 w-full text-black md:w-4/5">
+				<div class="relative w-full px-4 text-black md:w-4/5">
 					<input
 						class="w-full content-center rounded-xl border border-[#ccc] py-2 px-4 align-top drop-shadow-lg focus:text-black md:py-5 md:px-10"
 						type="password"
@@ -53,12 +58,14 @@
 					/>
 					{#if $errors['password-re']}
 						<small class="text-sm text-red-500">{$errors['password-re']}</small>
+					{:else if $message}
+						<small class="text-sm">{$message}</small>
 					{/if}
 				</div>
 				<div class="relative w-full px-4 text-[#cecfd5] md:w-4/5">
 					<button
 						type="submit"
-						class="p-2 w-full text-white rounded-lg cursor-pointer md:p-4 bg-primary drop-shadow"
+						class="w-full cursor-pointer rounded-lg bg-primary p-2 text-white drop-shadow md:p-4"
 						>Нууц үг сэргээх</button
 					>
 				</div>

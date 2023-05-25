@@ -499,6 +499,10 @@
 
 		stackmatTimer.start()
 
+		stackmatTimer.on('packetReceived', () => {
+			console.log('packet recieved')
+		})
+
 		stackmatTimer.on('timerConnected', () => {
 			console.log('timer connected')
 		})
