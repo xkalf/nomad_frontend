@@ -77,7 +77,7 @@
 	<p>Count : {$solves.length}</p>
 </div>
 <div class="grid max-h-72 md:grid-cols-2">
-	<Solves mobile />
+	<Solves mobile showDate />
 	<Mean isOpen isAdmin />
 </div>
 

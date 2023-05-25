@@ -5,8 +5,17 @@
 
 	export let order: number
 	export let solve: Solve
+	export let showDate = false
 	export let openDeleteModal: () => void
 	export let openShowModal: () => void
+
+	function formatDate(date: Date) {
+		const year = date.getFullYear()
+		const month = date.getMonth() + 1
+		const day = date.getDate()
+
+		return `${year}-${month}-${day}`
+	}
 
 	async function updateSolve(status: SolveStatus) {
 		let st: SolveStatus
@@ -34,7 +43,12 @@
 </script>
 
 <div class="flex justify-between p-2 text-white">
-	<button on:click={openShowModal}>{order}. {formatTime(solve)}</button>
+	<button on:click={openShowModal}
+		>{order}. {formatTime(solve)}
+		{#if showDate}
+			({formatDate(solve.createdAt)})
+		{/if}</button
+	>
 	<div class="flex gap-1">
 		<button
 			class="text-red-500"
