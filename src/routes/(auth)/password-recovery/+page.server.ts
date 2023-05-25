@@ -4,16 +4,12 @@ import { setError, setMessage, superValidate } from 'sveltekit-superforms/server
 import { z } from 'zod'
 import type { PageServerLoad } from './$types'
 
-const passwordRecoverySchema = z
-  .object({
-    password: z.string().min(8, {
-      message: 'Нууц үг 8-аас дээш урттай байна.'
-    }),
-    'password-re': z.string()
-  })
-  .refine(obj => obj.password !== obj['password-re'], {
-    message: 'Нууц үг хоорондоо таарахгүй байна.'
-  })
+const passwordRecoverySchema = z.object({
+  password: z.string().min(8, {
+    message: 'Нууц үг 8-аас дээш урттай байна.'
+  }),
+  'password-re': z.string()
+})
 
 export const load: PageServerLoad = async event => {
   const form = await superValidate(event, passwordRecoverySchema)
@@ -32,6 +28,10 @@ export const actions: Actions = {
       return fail(400, {
         form
       })
+    }
+
+    if (!form.data.password.localeCompare(form.data['password-re'])) {
+      return setError(form, 'password-re', 'Нууц үг хоорондоо таарахгүй байна.')
     }
 
     const { error } = await locals.sb.auth.updateUser({
