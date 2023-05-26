@@ -17,7 +17,7 @@
 </svelte:head>
 
 <div class="h-screen md:grid md:grid-cols-2">
-	<div class="flex flex-col p-4 h-full md:p-3">
+	<div class="flex h-full flex-col p-4 md:p-3">
 		<img src={horizontalLogo} alt="logo" width="200" class="mx-auto mt-8" />
 		<div class="mx-auto mt-8 w-4/5">
 			<form
@@ -56,7 +56,7 @@
 				{#if $errors.lastname}
 					<small class="text-sm text-red-500">{$errors.lastname}</small>
 				{/if}
-				<label for="email">Мэйл</label>
+				<label for="email">И-Мэйл хаяг</label>
 				<div class="relative">
 					<input bind:value={$form.email} name="email" type="email" id="email" class={input} />
 					<Icon class={icon} icon="clarity:email-solid" />
@@ -71,6 +71,14 @@
 				</div>
 				{#if $errors.password}
 					<small class="text-sm text-red-500">{$errors.password}</small>
+				{/if}
+				<label for="passwordRe">Нууц үг давтах</label>
+				<div class="relative">
+					<input class={input} name="passwordRe" id="passwordRe" required type="password" />
+					<Icon class={icon} icon="fa-solid:lock" />
+				</div>
+				{#if $errors.passwordRe}
+					<small class="text-sm text-red-500">{$errors.passwordRe}</small>
 				{/if}
 				<label for="phone">Утас</label>
 				<div class="relative">
@@ -88,7 +96,7 @@
 					<small class="text-sm text-red-500">{$errors.phone}</small>
 				{/if}
 				<div class="flex gap-2">
-					<div class="flex flex-col gap-2 w-1/2">
+					<div class="flex w-1/2 flex-col gap-2">
 						<label for="birthdate">Төрсөн өдөр</label>
 						<div class="relative">
 							<input
@@ -105,10 +113,10 @@
 							<small class="text-sm text-red-500">{$errors.birthdate}</small>
 						{/if}
 					</div>
-					<div class="flex flex-col gap-2 w-1/2">
+					<div class="flex w-1/2 flex-col gap-2">
 						<label for="gender">Хүйс</label>
 						<div class="relative">
-							<select bind:value={$form.gender} name="gender" required class={input + ' py-[18px]'}>
+							<select bind:value={$form.gender} name="gender" required class={`${input} py-[18px]`}>
 								<option value="Male">Эрэгтэй</option>
 								<option value="Female">Эмэгтэй</option>
 							</select>
@@ -119,10 +127,13 @@
 						{/if}
 					</div>
 				</div>
-				<button class="p-4 py-2 mt-2 text-white rounded bg-primary" type="submit">Бүртгүүлэх</button
+				{#if $errors._errors && $errors._errors.length > 0}
+					<small class="text-sm text-red-500">{$errors._errors[0]}</small>
+				{/if}
+				<button class="mt-2 rounded bg-primary p-4 py-2 text-white" type="submit">Бүртгүүлэх</button
 				>
 			</form>
 		</div>
 	</div>
-	<div class="hidden md:block bg-primary" />
+	<div class="hidden bg-primary md:block" />
 </div>

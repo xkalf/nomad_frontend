@@ -1,4 +1,4 @@
-import { AuthApiError, type Provider } from '@supabase/supabase-js'
+import type { Provider } from '@supabase/supabase-js'
 import { fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 import { z } from 'zod'
@@ -68,11 +68,15 @@ export const actions: Actions = {
 		})
 
 		if (err) {
-			if (err instanceof AuthApiError && err.status === 400) {
-				return setError(formData, 'password', 'Хэрэглэгчийн и-мэйл хаяг эсвэл нууц үг буруу байна.')
+			if (err.message === 'Email not confirmed') {
+				return setError(formData, 'password', 'И-мэйл хаягаа шалгана уу.')
 			}
 
-			return setError(formData, 'password', 'Сервер алдаа гарлаа.')
+			if (err.status === 400) {
+				return setError(formData, [], 'Хэрэглэгчийн и-мэйл хаяг эсвэл нууц үг буруу байна.')
+			}
+
+			return setError(formData, [], 'Сервер алдаа гарлаа.')
 		}
 
 		throw redirect(303, '/')

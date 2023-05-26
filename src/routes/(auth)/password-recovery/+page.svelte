@@ -47,12 +47,12 @@
 						class="mt-4 w-full content-center rounded-xl border border-[#ccc] py-2 px-4 align-top drop-shadow-lg focus:text-black md:py-5 md:px-10"
 						type="password"
 						placeholder="Нууц үг давтах"
-						name="password-re"
+						name="passwordRe"
 						autocomplete="new-password"
-						bind:value={$form['password-re']}
+						bind:value={$form.passwordRe}
 					/>
-					{#if $errors['password-re']}
-						<small class="text-sm text-red-500">{$errors['password-re']}</small>
+					{#if $errors.passwordRe}
+						<small class="text-sm text-red-500">{$errors.passwordRe}</small>
 					{:else if $errors._errors && $errors._errors.length > 0}
 						<small class="text-sm text-red-500">{$errors._errors[0]}</small>
 					{/if}

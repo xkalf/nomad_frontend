@@ -18,14 +18,14 @@
 </svelte:head>
 
 <div class="h-screen md:grid md:grid-cols-2">
-	<div class="hidden md:block bg-primary" />
-	<div class="flex flex-col p-2 h-full md:p-3">
-		<div class="flex relative flex-col flex-grow justify-center mx-auto md:w-4/5">
-			<div class="flex flex-col justify-center mx-auto w-4/5 md:w-full">
+	<div class="hidden bg-primary md:block" />
+	<div class="flex h-full flex-col p-2 md:p-3">
+		<div class="relative mx-auto flex flex-grow flex-col justify-center md:w-4/5">
+			<div class="mx-auto flex w-4/5 flex-col justify-center md:w-full">
 				<div class="mx-auto h-auto w-[30%]">
 					<img src={horizontalLogo} alt="rubik logo" />
 				</div>
-				<p class="mt-2 text-center text-black md:text-xs text-[8px]">
+				<p class="mt-2 text-center text-[8px] text-black md:text-xs">
 					Илүү олууллаа болцгооё. Тэмцээнд хэрхэн бүртгүүлэх талаар аль болох дэлгэрэнгүй заавар
 					бичлэг бэлтгэлээ. Анх оролцох гэж байгаа тамирчидад маш их хэрэг болон гэдэгт итгэлтэй
 					байна
@@ -40,7 +40,7 @@
 				method="POST"
 				use:enhance
 			>
-				<div class="relative px-4 w-full text-black md:w-4/5">
+				<div class="relative w-full px-4 text-black md:w-4/5">
 					<input
 						class="w-full content-center rounded-xl border border-[#ccc] py-2 px-4 align-top drop-shadow-lg focus:text-black md:py-5 md:px-10"
 						type="email"
@@ -63,17 +63,19 @@
 					/>
 					{#if $errors.password}
 						<small class="text-sm text-red-500">{$errors.password}</small>
+					{:else if $errors._errors && $errors._errors.length > 0}
+						<small class="text-sm text-red-500">{$errors._errors[0]}</small>
 					{/if}
 					<button
 						type="button"
 						on:click={() => (isPasswordRecovery = true)}
-						class="block mt-2 text-sm text-primary">Нууц үг мартсан?</button
+						class="mt-2 block text-sm text-primary">Нууц үг мартсан?</button
 					>
 				</div>
 				<div class="relative w-full px-4 text-[#cecfd5] md:w-4/5">
 					<button
 						type="submit"
-						class="p-2 w-full text-white rounded-lg md:p-4 bg-primary drop-shadow">Нэвтрэх</button
+						class="w-full rounded-lg bg-primary p-2 text-white drop-shadow md:p-4">Нэвтрэх</button
 					>
 				</div>
 			</form>
@@ -83,17 +85,17 @@
 					isPasswordRecovery ? 'hidden' : 'block'
 				}`}
 			>
-				<div class="flex relative flex-col gap-2 px-4 w-full md:w-4/5">
+				<div class="relative flex w-full flex-col gap-2 px-4 md:w-4/5">
 					<button
 						formaction="?/oAuth&provider=google"
-						class="flex gap-2 justify-center items-center p-2 w-full bg-white rounded-lg border border-black md:p-4 drop-shadow"
+						class="flex w-full items-center justify-center gap-2 rounded-lg border border-black bg-white p-2 drop-shadow md:p-4"
 					>
 						<GoogleIcon />
 						Sign in with Google
 					</button>
 					<button
 						formaction="?/oAuth&provider=facebook"
-						class="flex gap-2 justify-center items-center p-2 w-full bg-white rounded-lg border border-black md:p-4 drop-shadow"
+						class="flex w-full items-center justify-center gap-2 rounded-lg border border-black bg-white p-2 drop-shadow md:p-4"
 					>
 						<FacebookIcon />
 						Sign in with Facebook
@@ -108,7 +110,7 @@
 					isPasswordRecovery ? 'block' : 'hidden'
 				}`}
 			>
-				<div class="relative px-4 w-full text-black md:w-4/5">
+				<div class="relative w-full px-4 text-black md:w-4/5">
 					<input
 						class="w-full content-center rounded-xl border border-[#ccc] py-2 px-4 align-top drop-shadow-lg focus:text-black md:py-5 md:px-10"
 						type="email"
@@ -125,20 +127,20 @@
 					{/if}
 					<button
 						type="submit"
-						class="p-2 mt-4 w-full text-white rounded-lg md:p-4 bg-primary drop-shadow"
+						class="mt-4 w-full rounded-lg bg-primary p-2 text-white drop-shadow md:p-4"
 						>Нууц үг сэргээх</button
 					>
 					<button
 						type="button"
 						on:click={() => (isPasswordRecovery = false)}
-						class="p-2 mt-4 w-full bg-white rounded-lg border md:p-4 border-primary text-primary drop-shadow"
+						class="mt-4 w-full rounded-lg border border-primary bg-white p-2 text-primary drop-shadow md:p-4"
 						>Буцах</button
 					>
 				</div>
 			</form>
-			<div class="absolute bottom-4 left-1/2 text-lg -translate-x-1/2">
+			<div class="absolute bottom-4 left-1/2 -translate-x-1/2 text-lg">
 				<span class="text-[#CECFD5]">Хаяг байгаа юу? </span>
-				<a class="underline uppercase text-primary" href="/register">Бүртгүүлэх</a>
+				<a class="uppercase text-primary underline" href="/register">Бүртгүүлэх</a>
 			</div>
 		</div>
 	</div>

@@ -1,32 +1,36 @@
 import db from '$lib/db'
 import { fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
-import { AuthApiError } from '@supabase/supabase-js'
 import { z } from 'zod'
-import { superValidate } from 'sveltekit-superforms/server'
+import { setError, superValidate } from 'sveltekit-superforms/server'
 
-const registerSchema = z.object({
-	firstname: z
-		.string()
-		.min(2, { message: 'Нэр 2-оос дээш урттай байх ёстой.' })
-		.trim()
-		.transform(i => i.toLocaleLowerCase()),
-	lastname: z
-		.string()
-		.min(2, { message: 'Овог 2-оос дээш урттай байх ёстой.' })
-		.trim()
-		.transform(i => i.toLocaleLowerCase()),
-	password: z.string().min(8, { message: 'Нууц үг 8-аас дээш урттай байна.' }),
-	email: z.string().email({ message: 'Буруу и-мэйл хаяг байна.' }),
-	phone: z
-		.string()
-		.refine(value => value.length === 8 || value.length === 12, {
-			message: 'Утасны дугаар буруу байна.'
-		})
-		.transform(value => (value.length === 12 ? value.slice(4) : value)),
-	birthdate: z.string().transform(i => new Date(i)),
-	gender: z.enum(['Male', 'Female'])
-})
+const registerSchema = z
+	.object({
+		firstname: z
+			.string()
+			.min(2, { message: 'Нэр 2-оос дээш урттай байх ёстой.' })
+			.trim()
+			.transform(i => i.toLocaleLowerCase()),
+		lastname: z
+			.string()
+			.min(2, { message: 'Овог 2-оос дээш урттай байх ёстой.' })
+			.trim()
+			.transform(i => i.toLocaleLowerCase()),
+		password: z.string().min(8, { message: 'Нууц үг 8-аас дээш урттай байна.' }),
+		passwordRe: z.string(),
+		email: z.string().email({ message: 'Буруу и-мэйл хаяг байна.' }),
+		phone: z
+			.string()
+			.refine(value => value.length === 8 || value.length === 12, {
+				message: 'Утасны дугаар буруу байна.'
+			})
+			.transform(value => (value.length === 12 ? value.slice(4) : value)),
+		birthdate: z.string().transform(i => new Date(i)),
+		gender: z.enum(['Male', 'Female'])
+	})
+	.refine(value => value.password === value.passwordRe, {
+		message: 'Нууц үг хоорондоо таарахгүй байна.'
+	})
 
 export const load: PageServerLoad = async event => {
 	if (event.locals.user) {
@@ -56,23 +60,18 @@ export const actions: Actions = {
 		})
 
 		if (error) {
-			if (error instanceof AuthApiError && error.status === 400) {
-				return fail(400, {
-					error: 'И-мэйл хаяг эсвэл нууц үг буруу байна.'
-				})
+			if (error.status === 400) {
+				return setError(body, [], 'И-мэйл хаяг эсвэл нууц үг буруу байна.')
 			}
 
-			return fail(500, {
-				error: 'Сервер алдаа гарлаа.'
-			})
+			return setError(body, [], 'Сервер алдаа гарлаа.')
 		}
 
-		const { password: _, ...rest } = body.data
+		const { password, passwordRe, ...rest } = body.data
 
 		await db.user.create({
 			data: {
-				...rest,
-				birthdate: new Date(rest.birthdate)
+				...rest
 			}
 		})
 
