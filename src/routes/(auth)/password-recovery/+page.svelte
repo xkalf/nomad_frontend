@@ -2,15 +2,10 @@
 	import horizontalLogo from '$lib/assets/horizontal-logo.webp'
 	import { superForm } from 'sveltekit-superforms/client'
 	import type { PageServerData } from './$types'
-	import { goto } from '$app/navigation'
 
 	export let data: PageServerData
 
-	const { form, errors, enhance, message } = superForm(data.form)
-
-	$: if ($message) {
-		goto('/')
-	}
+	const { form, errors, enhance } = superForm(data.form)
 </script>
 
 <svelte:head>
@@ -58,8 +53,8 @@
 					/>
 					{#if $errors['password-re']}
 						<small class="text-sm text-red-500">{$errors['password-re']}</small>
-					{:else if $message}
-						<small class="text-sm">{$message}</small>
+					{:else if $errors._errors && $errors._errors.length > 0}
+						<small class="text-sm text-red-500">{$errors._errors[0]}</small>
 					{/if}
 				</div>
 				<div class="relative w-full px-4 text-[#cecfd5] md:w-4/5">

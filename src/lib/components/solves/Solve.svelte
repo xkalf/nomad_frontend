@@ -9,12 +9,15 @@
 	export let openDeleteModal: () => void
 	export let openShowModal: () => void
 
-	function formatDate(date: Date) {
-		const year = date.getFullYear()
-		const month = date.getMonth() + 1
-		const day = date.getDate()
-
-		return `${year}-${month}-${day}`
+	function formatDate(curr: Date) {
+		const date = new Date(curr)
+		return `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date
+			.getDate()
+			.toString()
+			.padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date
+			.getMinutes()
+			.toString()
+			.padStart(2, '0')}.${date.getSeconds().toString().padStart(2, '0')}`
 	}
 
 	async function updateSolve(status: SolveStatus) {

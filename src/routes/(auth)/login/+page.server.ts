@@ -78,7 +78,7 @@ export const actions: Actions = {
 		throw redirect(303, '/')
 	},
 	recovery: async event => {
-		const { locals } = event
+		const { locals, url } = event
 
 		const form = await superValidate(event, loginSchema)
 
@@ -88,7 +88,9 @@ export const actions: Actions = {
 			}
 		}
 
-		const { error } = await locals.sb.auth.resetPasswordForEmail(form.data.email)
+		const { error } = await locals.sb.auth.resetPasswordForEmail(form.data.email, {
+			redirectTo: url.origin
+		})
 
 		if (error) {
 			if (error.status === 429) {
