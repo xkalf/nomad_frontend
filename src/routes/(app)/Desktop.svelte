@@ -102,9 +102,9 @@
 	class="grid h-screen w-full grid-cols-[minmax(320px,_1fr)_3fr] xl:grid-cols-[minmax(350px,_1fr)_4fr]"
 >
 	<Sidebar {changeCubeType} />
-	<div class="grid overflow-hidden grid-rows-3 p-4 bg-background">
+	<div class="grid touch-manipulation grid-rows-3 overflow-hidden bg-background p-4">
 		<!-- Scramble -->
-		<div bind:this={scrambleContainer} class="flex justify-center items-center text-primary">
+		<div bind:this={scrambleContainer} class="flex items-center justify-center text-primary">
 			<span
 				bind:this={scrambleEl}
 				class={`${scrambleSizeMapper[$cubeType]} whitespace-pre-line text-center`}
@@ -121,15 +121,15 @@
 				>
 					{timerText}
 				</p>
-				<p class="absolute right-2 top-1/2 text-7xl -translate-y-1/2 text-primary">
+				<p class="absolute right-2 top-1/2 -translate-y-1/2 text-7xl text-primary">
 					{nextStatus}
 				</p>
 			{:else}
-				<form class="flex justify-center items-center" on:submit|preventDefault={addCustomSolve}>
+				<form class="flex items-center justify-center" on:submit|preventDefault={addCustomSolve}>
 					<input
 						bind:value={customTime}
 						type="text"
-						class="py-2 px-4 w-3/4 text-center rounded-xl border focus:outline-none border-primary text-[150px] text-primary"
+						class="w-3/4 rounded-xl border border-primary py-2 px-4 text-center text-[150px] text-primary focus:outline-none"
 					/>
 				</form>
 			{/if}
@@ -139,21 +139,21 @@
 			bind:this={timerContainer}
 			class="grid grid-cols-[1fr,_4fr,_3fr] items-end justify-center gap-4 xl:grid-cols-3"
 		>
-			<div class="flex col-start-2 justify-center items-center pb-10">
+			<div class="col-start-2 flex items-center justify-center pb-10">
 				<img src={timerLogo} alt="Nomad Team" />
 			</div>
 			<!-- Tools -->
 			<div class="col-start-3">
 				<div
-					class="flex z-20 flex-col justify-between pt-2 ml-auto max-w-xs rounded-xl xl:pt-4 xl:w-3/4 bg-secondary"
+					class="z-20 ml-auto flex max-w-xs flex-col justify-between rounded-xl bg-secondary pt-2 xl:w-3/4 xl:pt-4"
 				>
 					<!-- @ts-ignore -->
 					<svelte:component this={selectedValue.component} {...selectedValue.props} />
-					<div class="flex flex-wrap gap-2 justify-center items-center py-2 px-2 text-lg md:py-4">
+					<div class="flex flex-wrap items-center justify-center gap-2 py-2 px-2 text-lg md:py-4">
 						<span class="py-1 text-white xl:py-2">Function</span>
 						<select
 							bind:value={selectedValue}
-							class="py-1 px-2 w-4/5 text-black rounded-xl xl:py-2 xl:w-auto bg-background"
+							class="w-4/5 rounded-xl bg-background py-1 px-2 text-black xl:w-auto xl:py-2"
 						>
 							{#each options as o}
 								<option value={o}>{o.label}</option>
