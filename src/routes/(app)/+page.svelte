@@ -192,7 +192,7 @@
 	}
 
 	async function createSolve(time: number, nState: SolveStatus = 'Ok'): Promise<boolean> {
-		if (isFetching) return false
+		if (isFetching || !currentScramble) return false
 
 		isFetching = true
 
@@ -200,7 +200,7 @@
 			method: 'POST',
 			body: JSON.stringify({
 				time,
-				scramble,
+				scramble: currentScramble,
 				sessionId: $session.id,
 				status: nState
 			})

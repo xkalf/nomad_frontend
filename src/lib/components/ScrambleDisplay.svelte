@@ -21,13 +21,19 @@
 		container.appendChild(el)
 	})
 
-	$: if (el) {
-		el.scramble = scramble
+	function changeScramble() {
+		if (el) {
+			el.scramble = scramble
+		}
 	}
 
-	$: if (el) {
-		el.event = scrambleMappper[$cubeType]
-	}
+	$: scramble, changeScramble()
+
+	cubeType.subscribe(value => {
+		if (el) {
+			el.event = scrambleMappper[value]
+		}
+	})
 
 	function onResize() {
 		if (el) {

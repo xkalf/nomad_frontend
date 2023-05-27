@@ -27,6 +27,7 @@
 	let customTime: string | undefined = undefined
 	let scrambleEl: HTMLSpanElement
 	let timerEl: HTMLParagraphElement
+	let selected: 'timer' | 'gan' = 'timer'
 
 	async function addCustomSolve() {
 		if (!browser || !customTime) return
@@ -52,26 +53,6 @@
 	function handleMouseUp() {
 		eventUp()
 	}
-
-	const options = [
-		{
-			label: 'Холилтийн зураг',
-			component: ScrambleDisplay,
-			props: { scramble }
-		},
-		{
-			label: 'Gan Timer',
-			component: GanTimer,
-			props: {
-				connectTimer: async () => {
-					await connectBluetoothTimer()
-					selectedValue = options[0]
-				}
-			}
-		}
-	]
-
-	let selectedValue: (typeof options)[number] = options[0]
 
 	onMount(() => {
 		if (browser) {
@@ -148,16 +129,24 @@
 					class="z-20 ml-auto flex max-w-xs flex-col justify-between rounded-xl bg-secondary pt-2 xl:w-3/4 xl:pt-4"
 				>
 					<!-- @ts-ignore -->
-					<svelte:component this={selectedValue.component} {...selectedValue.props} />
+					{#if selected === 'timer'}
+						<ScrambleDisplay {scramble} />
+					{:else if selected === 'gan'}
+						<GanTimer
+							connectTimer={async () => {
+								await connectBluetoothTimer()
+								selected = 'timer'
+							}}
+						/>
+					{/if}
 					<div class="flex flex-wrap items-center justify-center gap-2 py-2 px-2 text-lg md:py-4">
 						<span class="py-1 text-white xl:py-2">Function</span>
 						<select
-							bind:value={selectedValue}
+							bind:value={selected}
 							class="w-4/5 rounded-xl bg-background py-1 px-2 text-black xl:w-auto xl:py-2"
 						>
-							{#each options as o}
-								<option value={o}>{o.label}</option>
-							{/each}
+							<option value="timer">Холилтын зураг</option>
+							<option value="gan">Gan Timer</option>
 						</select>
 					</div>
 				</div>
