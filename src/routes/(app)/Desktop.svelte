@@ -113,7 +113,7 @@
 			</span>
 		</div>
 		<!-- Time -->
-		<div bind:this={timerContainer} class="relative">
+		<div bind:this={timerContainer} class="relative select-none">
 			{#if $settings.enteringTimes !== 'Typing'}
 				<p
 					bind:this={timerEl}
@@ -139,7 +139,7 @@
 			bind:this={timerContainer}
 			class="grid grid-cols-[1fr,_4fr,_3fr] items-end justify-center gap-4 xl:grid-cols-3"
 		>
-			<div class="col-start-2 flex items-center justify-center pb-10">
+			<div class="col-start-2 flex select-none items-center justify-center pb-10">
 				<img src={timerLogo} alt="Nomad Team" />
 			</div>
 			<!-- Tools -->
