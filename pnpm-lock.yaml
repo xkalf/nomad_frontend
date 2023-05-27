@@ -13,6 +13,9 @@ dependencies:
   hammerjs:
     specifier: ^2.0.8
     version: 2.0.8
+  rxjs:
+    specifier: ^7.8.1
+    version: 7.8.1
   scramble-display:
     specifier: ^0.5.4
     version: 0.5.4

@@ -21,10 +21,12 @@
 	import Mobile from './Mobile.svelte'
 	import { settings } from '$lib/stores/settings'
 	import { displayTime, formatCustomTime } from '$lib/utils/timer-utils'
-	import { type GanTimerConnection, GanTimerState } from 'gan-web-bluetooth'
+	import { GanTimerState, type GanTimerEvent } from 'gan-web-bluetooth'
 	import type { Stackmat } from '$lib/stackmat'
+	import type { SubscriptionLike } from 'rxjs'
+	import { ganTimer } from '$lib/stores/ganTimer'
 
-	let scramble: string = generateScramble($cubeType)
+	let scramble = 'Холилт хийж байна...'
 	let currentScramble: string | null = null
 	let lastScramble: string | null = null
 	let time = 0
@@ -40,7 +42,6 @@
 	let inspectionSeconds: number
 	let nextStatus: SolveStatus | '8sec' | '12sec' = 'Ok'
 	let isFetching = false
-	let ganTimerConnection: GanTimerConnection
 	let mobileTimerEl: HTMLDivElement
 	let mobileScrambleEl: HTMLDivElement
 	let desktopTimerEL: HTMLDivElement
@@ -51,6 +52,7 @@
 	let customTime: string | undefined = undefined
 	let isCustomTimeModalOpen = false
 	let stackmatTimer: Stackmat
+	let subs: SubscriptionLike | undefined = undefined
 
 	const exceptTags = ['INPUT', 'BUTTON', 'TEXTAREA']
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
@@ -61,36 +63,7 @@
 			scramble = generateScramble(value.cube)
 		}
 	})
-	$: ganTimerConnection &&
-		ganTimerConnection.events$.subscribe(timerEvent => {
-			switch (timerEvent.state) {
-				case GanTimerState.HANDS_ON:
-					updateState('waiting')
-					break
-				case GanTimerState.HANDS_OFF:
-					if (checkInspection()) {
-						startInspection()
-						updateState('inspection')
-					} else {
-						updateState('stopped')
-					}
-					break
-				case GanTimerState.RUNNING:
-					startTime()
-					updateState('running')
-					break
-				case GanTimerState.STOPPED:
-					if (timerEvent.recordedTime) stopTime(timerEvent.recordedTime.asTimestamp)
-					break
-				case GanTimerState.IDLE:
-					updateState('stopped')
-					timerText = displayTime(0)
-					break
-				case GanTimerState.GET_SET:
-					updateState('ready')
-					break
-			}
-		})
+
 	$: props = {
 		scramble,
 		textColor,
@@ -100,6 +73,36 @@
 				: nextStatus === '12sec' && state === 'inspection'
 				? '12sec'
 				: ''
+	}
+
+	function handleGanTimerEvent(event: GanTimerEvent) {
+		switch (event.state) {
+			case GanTimerState.HANDS_ON:
+				updateState('waiting')
+				break
+			case GanTimerState.HANDS_OFF:
+				if (checkInspection()) {
+					startInspection()
+					updateState('inspection')
+				} else {
+					updateState('stopped')
+				}
+				break
+			case GanTimerState.RUNNING:
+				startTime()
+				updateState('running')
+				break
+			case GanTimerState.STOPPED:
+				if (event.recordedTime) stopTime(event.recordedTime.asTimestamp)
+				break
+			case GanTimerState.IDLE:
+				updateState('stopped')
+				timerText = displayTime(0)
+				break
+			case GanTimerState.GET_SET:
+				updateState('ready')
+				break
+		}
 	}
 
 	function setTextColor(state: StateType) {
@@ -484,8 +487,12 @@
 
 	async function connectBluetoothTimer() {
 		const { connectGanTimer } = await import('gan-web-bluetooth')
-		ganTimerConnection = await connectGanTimer()
-		timerText = displayTime((await ganTimerConnection.getRecordedTimes()).displayTime.asTimestamp)
+
+		ganTimer.set(await connectGanTimer())
+		timerText = `${displayTime((await $ganTimer.getRecordedTimes()).displayTime.asTimestamp)}`
+		if ($ganTimer) {
+			subs = $ganTimer.events$.subscribe(handleGanTimerEvent)
+		}
 	}
 
 	function isReady() {
@@ -598,6 +605,11 @@
 
 			if ($settings.enteringTimes === 'Stackmat') {
 				connectStackmat()
+			} else if ($settings.enteringTimes === 'Bluetooth') {
+				if (ganTimer) {
+					timerText = `${displayTime((await $ganTimer.getRecordedTimes()).displayTime.asTimestamp)}`
+					subs = $ganTimer.events$.subscribe(handleGanTimerEvent)
+				}
 			}
 
 			addGestures()
@@ -608,13 +620,17 @@
 		if (browser) {
 			window.removeEventListener('keyup', handleKeyUp)
 			window.removeEventListener('keydown', handleKeyDown)
+
+			if (stackmatTimer) stackmatTimer.stop()
+			if (ganTimer) {
+				subs?.unsubscribe()
+			}
+
 			const elements = [mobileTimerEl, desktopTimerEL]
 			elements.forEach(i => {
 				i.removeEventListener('touchstart', () => eventDown(true))
 				i.removeEventListener('touchend', () => eventUp())
 			})
-			if (ganTimerConnection) ganTimerConnection.disconnect()
-			if (stackmatTimer) stackmatTimer.stop()
 		}
 	})
 </script>
