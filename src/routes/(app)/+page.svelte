@@ -192,7 +192,7 @@
 	}
 
 	async function createSolve(time: number, nState: SolveStatus = 'Ok'): Promise<boolean> {
-		if (isFetching || !currentScramble) return false
+		if (isFetching) return false
 
 		isFetching = true
 
@@ -200,7 +200,7 @@
 			method: 'POST',
 			body: JSON.stringify({
 				time,
-				scramble: currentScramble,
+				scramble: lastScramble,
 				sessionId: $session.id,
 				status: nState
 			})
@@ -650,7 +650,7 @@
 	<p class="text-lg text-primary">Сүүлийн хэдэн эвлүүлэлтийг устгах уу?</p>
 	<input
 		bind:value={deleteCount}
-		class="mt-2 w-full rounded-lg bg-secondary p-2 pl-3 text-lg text-white"
+		class="p-2 pl-3 mt-2 w-full text-lg text-white rounded-lg bg-secondary"
 		type="text"
 	/>
 </Modal>
@@ -664,7 +664,7 @@
 	<input
 		bind:value={customTime}
 		bind:this={customTimeRef}
-		class="mt-2 w-full rounded-lg bg-secondary p-2 pl-3 text-lg text-white"
+		class="p-2 pl-3 mt-2 w-full text-lg text-white rounded-lg bg-secondary"
 		type="string"
 		inputmode="numeric"
 	/>
@@ -675,9 +675,9 @@
 		isCubeTypeOpen ? 'block' : 'hidden'
 	} absolute top-1/2 left-1/2 w-64 -translate-x-1/2 -translate-y-1/2 text-center text-2xl text-primary`}
 >
-	<ul class="max-h-64 overflow-y-auto rounded-xl bg-white">
+	<ul class="overflow-y-auto max-h-64 bg-white rounded-xl">
 		{#each cubeTypes as type}
-			<li class="border-b border-secondary py-3 last:border-none">
+			<li class="py-3 border-b last:border-none border-secondary">
 				<button
 					class="w-full"
 					on:click={() => {
@@ -690,7 +690,7 @@
 	</ul>
 
 	<button
-		class="mt-2 w-full rounded-xl bg-white py-3"
+		class="py-3 mt-2 w-full bg-white rounded-xl"
 		on:click={() => {
 			isCubeTypeOpen = false
 		}}>Cancel</button
@@ -702,8 +702,8 @@
 		isStateOpen ? 'block' : 'hidden'
 	} absolute top-1/2 left-1/2 w-64 -translate-x-1/2 -translate-y-1/2 text-center text-2xl text-primary`}
 >
-	<ul class="max-h-64 overflow-y-auto rounded-xl bg-white">
-		<li class="border-b border-secondary py-3">
+	<ul class="overflow-y-auto max-h-64 bg-white rounded-xl">
+		<li class="py-3 border-b border-secondary">
 			<button
 				class="w-full"
 				on:click={async () => {
@@ -712,7 +712,7 @@
 				}}>+2</button
 			>
 		</li>
-		<li class="border-b border-secondary py-3">
+		<li class="py-3 border-b border-secondary">
 			<button
 				class="w-full"
 				on:click={async () => {
@@ -721,7 +721,7 @@
 				}}>DNF</button
 			>
 		</li>
-		<li class="border-b border-secondary py-3">
+		<li class="py-3 border-b border-secondary">
 			<button
 				class="w-full"
 				on:click={async () => {
@@ -742,7 +742,7 @@
 	</ul>
 
 	<button
-		class="mt-2 w-full rounded-xl bg-white py-3"
+		class="py-3 mt-2 w-full bg-white rounded-xl"
 		on:click={() => {
 			isStateOpen = false
 		}}>Cancel</button
