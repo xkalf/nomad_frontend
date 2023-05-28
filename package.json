@@ -4,12 +4,13 @@
 	"private": true,
 	"scripts": {
 		"dev": "NODE_ENV=dev vite dev --host",
-		"build": "pnpx prisma generate && vite build",
+		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write ."
+		"format": "prettier --plugin-search-dir . --write .",
+		"preinstall": "pnpx prisma generate"
 	},
 	"devDependencies": {
 		"@iconify/svelte": "^3.0.1",
