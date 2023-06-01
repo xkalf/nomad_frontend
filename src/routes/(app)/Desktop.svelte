@@ -19,7 +19,7 @@
 	export let eventUp: () => void
 	export let eventDown: (s: boolean) => void
 	export let newScramble: () => void
-	export let createSolve: (time: number) => Promise<boolean>
+	export let createSolve: (time: number, scramble: string) => Promise<boolean>
 	export let connectBluetoothTimer: () => Promise<void>
 
 	export let timerContainer: HTMLDivElement
@@ -38,7 +38,7 @@
 			return
 		}
 
-		const result = await createSolve(time)
+		const result = await createSolve(time, scramble)
 
 		if (result) {
 			newScramble()

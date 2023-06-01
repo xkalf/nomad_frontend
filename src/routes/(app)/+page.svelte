@@ -184,17 +184,23 @@
 
 	async function stopTime(customTime: number | undefined = undefined) {
 		const internalTime = customTime || time
+		const currScramble = scramble
+		newScramble()
 		clearInterval(interval)
 		timerText = displayTime(internalTime)
 		await createSolve(
 			internalTime,
+			currScramble,
 			nextStatus === '8sec' || nextStatus === '12sec' ? 'Ok' : nextStatus
 		)
-		newScramble()
 		nextStatus = 'Ok'
 	}
 
-	async function createSolve(time: number, nState: SolveStatus = 'Ok'): Promise<boolean> {
+	async function createSolve(
+		time: number,
+		scramble: string,
+		nState: SolveStatus = 'Ok'
+	): Promise<boolean> {
 		if (isFetching) return false
 
 		isFetching = true
@@ -325,7 +331,7 @@
 		}
 
 		isFetching = true
-		const result = await createSolve(time)
+		const result = await createSolve(time, scramble)
 		isFetching = false
 
 		if (result) {

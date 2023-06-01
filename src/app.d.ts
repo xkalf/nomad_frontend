@@ -1,7 +1,7 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 
-import type { UserRole } from '@prisma/client'
+import type { PrismaClient, UserRole } from '@prisma/client'
 import type { TypedSupabaseClient } from '@supabase/auth-helpers-sveltekit'
 import type { Session as SbSession } from '@supabase/supabase-js'
 
@@ -17,6 +17,7 @@ declare global {
 			}
 			sb: TypedSupabaseClient
 			session: SbSession | null
+			prisma: PrismaClient
 		}
 		interface PageData {
 			session: import('@supabase/supabase-js').Session | null
