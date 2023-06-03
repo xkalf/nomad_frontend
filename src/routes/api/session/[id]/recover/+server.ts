@@ -10,9 +10,9 @@ export const GET: RequestHandler = async ({ params: { id } }) => {
 	})
 
 	const formatted = deletedSolves.map((i): Prisma.SolveCreateManyInput => {
-		const { solveId, ...rest } = i
+		const { solveId, deleted, id, ...rest } = i
 
-		return { ...rest, id: solveId }
+		return { ...rest }
 	})
 
 	await db.$transaction([
