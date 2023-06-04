@@ -133,6 +133,10 @@
 				<button class="mt-2 rounded bg-primary p-4 py-2 text-white" type="submit">Бүртгүүлэх</button
 				>
 			</form>
+			<div class="absolute bottom-4 left-1/2 -translate-x-1/2 text-lg">
+				<span class="text-[#CECFD5]">Хаяг байгаа юу? </span>
+				<a class="uppercase text-primary underline" href="/login">Нэвтрэх</a>
+			</div>
 		</div>
 	</div>
 	<div class="hidden bg-primary md:block" />

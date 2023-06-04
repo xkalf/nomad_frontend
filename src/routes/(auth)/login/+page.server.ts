@@ -16,9 +16,6 @@ const loginSchema = z.object({
 export const load: PageServerLoad = async event => {
 	const { locals } = event
 	if (locals.session) {
-		if (!locals.user) {
-			throw redirect(303, '/register')
-		}
 		throw redirect(303, '/')
 	}
 
