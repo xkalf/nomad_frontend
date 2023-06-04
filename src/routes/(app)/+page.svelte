@@ -93,10 +93,12 @@
 				updateState('running')
 				break
 			case GanTimerState.STOPPED:
-				if (event.recordedTime) stopTime(event.recordedTime.asTimestamp)
+				if (event.recordedTime) {
+					stopTime(event.recordedTime.asTimestamp)
+					updateState('stopped')
+				}
 				break
 			case GanTimerState.IDLE:
-				updateState('stopped')
 				timerText = displayTime(0)
 				break
 			case GanTimerState.GET_SET:
