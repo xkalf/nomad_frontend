@@ -13,13 +13,13 @@
 	import { getSessionByCube, getSessionById } from '$lib/utils/api'
 	import { cubeTypeMapper, cubeTypes, shortcutMapper, type StateType } from '$lib/utils/types'
 	import { generateScramble } from '$lib/utils/scramble'
-	import type { CubeType, SolveStatus, Solve } from '@prisma/client'
+	import { type CubeType, type SolveStatus, type Solve, EnteringTimes } from '@prisma/client'
 	import { onDestroy, onMount } from 'svelte'
 	import Modal from '$lib/components/Modal.svelte'
 	import { sortMode } from '$lib/stores/sortMode'
 	import Desktop from './Desktop.svelte'
 	import Mobile from './Mobile.svelte'
-	import { settings } from '$lib/stores/settings'
+	import { setSettings, settings } from '$lib/stores/settings'
 	import { displayTime, formatCustomTime } from '$lib/utils/timer-utils'
 	import { GanTimerState, type GanTimerEvent } from 'gan-web-bluetooth'
 	import type { Stackmat } from '$lib/stackmat'
@@ -361,6 +361,21 @@
 		if (data.success === true) changeSolveStats(data.solve)
 	}
 
+	async function updateEnteringTime(value: EnteringTimes) {
+		const response = await fetch('/api/settings', {
+			method: 'PUT',
+			body: JSON.stringify({
+				enteringTimes: value
+			})
+		})
+
+		const data = await response.json()
+
+		if (data.settings) {
+			setSettings(data.settings)
+		}
+	}
+
 	function eventUp() {
 		clearTimeout(timeOutRef)
 		clearTimeout(inspectionWaitRef)
@@ -503,6 +518,7 @@
 		if ($ganTimer) {
 			timerText = `${displayTime((await $ganTimer.getRecordedTimes()).displayTime.asTimestamp)}`
 			subs = $ganTimer.events$.subscribe(handleGanTimerEvent)
+			await updateEnteringTime('Bluetooth')
 		}
 	}
 
