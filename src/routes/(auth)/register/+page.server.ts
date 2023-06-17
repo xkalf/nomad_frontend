@@ -33,10 +33,6 @@ const registerSchema = z
 	})
 
 export const load: PageServerLoad = async event => {
-	if (event.locals.user) {
-		throw redirect(303, '/')
-	}
-
 	const form = await superValidate(event, registerSchema)
 	return {
 		form

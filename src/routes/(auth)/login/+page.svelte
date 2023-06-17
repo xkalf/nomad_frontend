@@ -138,7 +138,7 @@
 					>
 				</div>
 			</form>
-			<div class="absolute bottom-4 left-1/2 -translate-x-1/2 text-lg">
+			<div class="mt-2 flex items-center justify-center space-x-2 text-lg">
 				<span class="text-[#CECFD5]">Хаяг байгаа юу? </span>
 				<a class="uppercase text-primary underline" href="/register">Бүртгүүлэх</a>
 			</div>

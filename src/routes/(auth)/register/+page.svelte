@@ -19,7 +19,7 @@
 <div class="h-screen md:grid md:grid-cols-2">
 	<div class="flex h-full flex-col p-4 md:p-3">
 		<img src={horizontalLogo} alt="logo" width="200" class="mx-auto mt-8" />
-		<div class="mx-auto mt-8 w-4/5">
+		<div class="mx-auto mt-8 w-4/5 md:p-4">
 			<form
 				action="?/register"
 				use:enhance
@@ -95,8 +95,8 @@
 				{#if $errors.phone}
 					<small class="text-sm text-red-500">{$errors.phone}</small>
 				{/if}
-				<div class="flex gap-2">
-					<div class="flex w-1/2 flex-col gap-2">
+				<div class="flex flex-wrap gap-2">
+					<div class="flex w-full flex-col gap-2 md:w-1/2">
 						<label for="birthdate">Төрсөн өдөр</label>
 						<div class="relative">
 							<input
@@ -113,7 +113,7 @@
 							<small class="text-sm text-red-500">{$errors.birthdate}</small>
 						{/if}
 					</div>
-					<div class="flex w-1/2 flex-col gap-2">
+					<div class="flex w-full flex-col gap-2 md:w-1/2">
 						<label for="gender">Хүйс</label>
 						<div class="relative">
 							<select bind:value={$form.gender} name="gender" required class={`${input} py-[18px]`}>
@@ -133,7 +133,7 @@
 				<button class="mt-2 rounded bg-primary p-4 py-2 text-white" type="submit">Бүртгүүлэх</button
 				>
 			</form>
-			<div class="absolute bottom-4 left-1/2 -translate-x-1/2 text-lg">
+			<div class="mt-2 flex items-center justify-center space-x-2 text-lg">
 				<span class="text-[#CECFD5]">Хаяг байгаа юу? </span>
 				<a class="uppercase text-primary underline" href="/login">Нэвтрэх</a>
 			</div>

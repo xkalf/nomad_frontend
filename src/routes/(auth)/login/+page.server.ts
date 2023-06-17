@@ -14,11 +14,6 @@ const loginSchema = z.object({
 })
 
 export const load: PageServerLoad = async event => {
-	const { locals } = event
-	if (locals.session) {
-		throw redirect(303, '/')
-	}
-
 	const form = await superValidate(event, loginSchema)
 
 	return {
