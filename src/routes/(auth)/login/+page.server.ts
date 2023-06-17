@@ -65,10 +65,10 @@ export const actions: Actions = {
 			}
 
 			if (err.status === 400) {
-				return setError(formData, [], 'Хэрэглэгчийн и-мэйл хаяг эсвэл нууц үг буруу байна.')
+				return setError(formData, '', 'Хэрэглэгчийн и-мэйл хаяг эсвэл нууц үг буруу байна.')
 			}
 
-			return setError(formData, [], 'Сервер алдаа гарлаа.')
+			return setError(formData, '', 'Сервер алдаа гарлаа.')
 		}
 
 		throw redirect(303, '/')
