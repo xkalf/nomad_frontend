@@ -46,7 +46,6 @@
 	"type": "module",
 	"dependencies": {
 		"@prisma/client": "^4.9.0",
-		"cubing": "^0.35.6",
 		"drizzle-orm": "^0.26.3",
 		"gan-web-bluetooth": "^1.0.3",
 		"hammerjs": "^2.0.8",

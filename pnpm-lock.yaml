@@ -8,9 +8,6 @@ dependencies:
   '@prisma/client':
     specifier: ^4.9.0
     version: 4.9.0
-  cubing:
-    specifier: ^0.35.6
-    version: 0.35.6
   drizzle-orm:
     specifier: ^0.26.3
     version: 0.26.3(postgres@3.3.5)
@@ -662,12 +659,6 @@ packages:
       '@types/webxr': 0.5.0
     dev: false
 
-  /@types/three@0.146.0:
-    resolution: {integrity: sha512-75AgysUrIvTCB054eQa2pDVFurfeFW8CrMQjpzjt3yHBfuuknoSvvsESd/3EhQxPrz9si3+P0wiDUVsWUlljfA==}
-    dependencies:
-      '@types/webxr': 0.5.0
-    dev: false
-
   /@types/web-bluetooth@0.0.15:
     resolution: {integrity: sha512-w7hEHXnPMEZ+4nGKl/KDRVpxkwYxYExuHOYXyzIzCDzEZ9ZCGMAewulr9IqJu2LR4N37fcnb1XVeuZ09qgOxhA==}
     dev: false
@@ -1096,17 +1087,6 @@ packages:
       comlink: 4.3.1
       random-uint-below: 2.0.0
       three: 0.144.0
-    dev: false
-
-  /cubing@0.35.6:
-    resolution: {integrity: sha512-ULXEfAh5QQgfQjTjIH0969bt3E8f8dBOFgR3YjzTaLZuxmwmpHZt5DBcUIDSMlLJp6ufndyKhXGAPodaplku+Q==}
-    engines: {node: '>=19'}
-    dependencies:
-      '@types/three': 0.146.0
-      '@types/web-bluetooth': 0.0.16
-      comlink: 4.3.1
-      random-uint-below: 2.0.0
-      three: 0.147.0
     dev: false
 
   /d@1.0.1:
@@ -2831,10 +2811,6 @@ packages:
 
   /three@0.144.0:
     resolution: {integrity: sha512-R8AXPuqfjfRJKkYoTQcTK7A6i3AdO9++2n8ubya/GTU+fEHhYKu1ZooRSCPkx69jbnzT7dD/xEo6eROQTt2lJw==}
-    dev: false
-
-  /three@0.147.0:
-    resolution: {integrity: sha512-LPTOslYQXFkmvceQjFTNnVVli2LaVF6C99Pv34fJypp8NbQLbTlu3KinZ0zURghS5zEehK+VQyvWuPZ/Sm8fzw==}
     dev: false
 
   /timers-ext@0.1.7:
