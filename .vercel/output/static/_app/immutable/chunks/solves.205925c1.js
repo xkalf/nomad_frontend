@@ -1,1 +1,0 @@
-import{w as i}from"./index.440ffa8a.js";const s=i([]);function o(e){s.update(t=>[...t,e])}function d(e){s.set(e)}function u(e){s.update(t=>t.filter(a=>a.id!==e))}function l(e){s.update(t=>t.filter(a=>!e.includes(a.id)))}function r(e){s.update(t=>[...t.map(a=>a.id===e.id?e:a)])}function c(){s.update(()=>[])}export{o as a,u as b,r as c,l as d,d as i,c as r,s};
