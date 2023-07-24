@@ -1,0 +1,6 @@
+{
+	"runtime": "nodejs18.x",
+	"handler": "home/amroos/code/nomad_frontend/.svelte-kit/vercel-tmp/index.js",
+	"launcherType": "Nodejs",
+	"experimentalResponseStreaming": true
+}
