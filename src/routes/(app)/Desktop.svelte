@@ -9,7 +9,6 @@
 	import { settings } from '$lib/stores/settings'
 	import { scrambleSizeMapper } from '$lib/utils/types'
 	import { formatCustomTime } from '$lib/utils/timer-utils'
-	import GanTimer from '$lib/components/GanTimer.svelte'
 
 	export let timerText: string
 	export let scramble: string
@@ -28,6 +27,15 @@
 	let scrambleEl: HTMLSpanElement
 	let timerEl: HTMLParagraphElement
 	let selected: 'timer' | 'gan' = 'timer'
+
+	$: if (selected === 'gan') {
+		changeGanTimer()
+	}
+
+	async function changeGanTimer() {
+		await connectBluetoothTimer()
+		selected = 'timer'
+	}
 
 	async function addCustomSolve() {
 		if (!browser || !customTime) return
@@ -131,13 +139,6 @@
 					<!-- @ts-ignore -->
 					{#if selected === 'timer'}
 						<ScrambleDisplay {scramble} />
-					{:else if selected === 'gan'}
-						<GanTimer
-							connectTimer={async () => {
-								await connectBluetoothTimer()
-								selected = 'timer'
-							}}
-						/>
 					{/if}
 					<div class="flex flex-wrap items-center justify-center gap-2 py-2 px-2 text-lg md:py-4">
 						<span class="py-1 text-white xl:py-2">Function</span>

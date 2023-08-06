@@ -13,7 +13,7 @@
 	import { getSessionByCube, getSessionById } from '$lib/utils/api'
 	import { cubeTypeMapper, cubeTypes, shortcutMapper, type StateType } from '$lib/utils/types'
 	import { generateScramble } from '$lib/utils/scramble'
-	import { type CubeType, type SolveStatus, type Solve, EnteringTimes } from '@prisma/client'
+	import type { CubeType, SolveStatus, Solve, EnteringTimes } from '@prisma/client'
 	import { onDestroy, onMount } from 'svelte'
 	import Modal from '$lib/components/Modal.svelte'
 	import { sortMode } from '$lib/stores/sortMode'
@@ -468,6 +468,10 @@
 					e.preventDefault()
 					deleteLastModalOpen = true
 					deleteCount = 1
+					return
+				case 'KeyG':
+					e.preventDefault()
+					connectBluetoothTimer()
 					return
 			}
 
