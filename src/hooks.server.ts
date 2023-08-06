@@ -12,21 +12,23 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	if (session) {
 		try {
-			const user = await db.user.findFirst({
+			const user = await db.user.findFirstOrThrow({
 				where: {
 					OR: [{ authId: session.user.id }, { email: session.user.email }]
 				}
 			})
 
 			if (user) {
-				await db.user.update({
-					where: {
-						id: user.id
-					},
-					data: {
-						authId: session.user.id
-					}
-				})
+				if (!user.authId) {
+					await db.user.update({
+						where: {
+							id: user.id
+						},
+						data: {
+							authId: session.user.id
+						}
+					})
+				}
 				event.locals.user = user
 			}
 		} catch (err) {
