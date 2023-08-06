@@ -60,10 +60,11 @@ export const actions: Actions = {
 
 		if (error) {
 			if (error.status === 400) {
-				return setError(body, [], 'И-мэйл хаяг эсвэл нууц үг буруу байна.')
+				return setError(body, '', 'И-мэйл хаяг эсвэл нууц үг буруу байна.')
 			}
 
-			return setError(body, [], 'Сервер алдаа гарлаа.')
+			console.error(error)
+			return setError(body, '', 'Сервер алдаа гарлаа.')
 		}
 
 		const { password, passwordRe, ...rest } = body.data

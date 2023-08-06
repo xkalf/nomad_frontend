@@ -3,6 +3,7 @@ import { fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 import { z } from 'zod'
 import { setError, superValidate, setMessage } from 'sveltekit-superforms/server'
+import { NODE_ENV } from '$env/static/private'
 
 const loginSchema = z.object({
 	email: z
@@ -24,7 +25,7 @@ export const load: PageServerLoad = async event => {
 export const actions: Actions = {
 	oAuth: async ({ locals, url }) => {
 		const provider = url.searchParams.get('provider') as Provider
-		const redirectUrl = url.origin
+		const redirectUrl = NODE_ENV === 'dev' ? url.origin : 'https://nomad-team.com'
 
 		if (provider) {
 			const { data, error: err } = await locals.sb.auth.signInWithOAuth({
@@ -68,6 +69,7 @@ export const actions: Actions = {
 				return setError(formData, '', 'Хэрэглэгчийн и-мэйл хаяг эсвэл нууц үг буруу байна.')
 			}
 
+			console.error(err.message)
 			return setError(formData, '', 'Сервер алдаа гарлаа.')
 		}
 
