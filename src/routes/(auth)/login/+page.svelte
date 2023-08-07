@@ -25,11 +25,7 @@
 				<div class="mx-auto h-auto w-[30%]">
 					<img src={horizontalLogo} alt="rubik logo" />
 				</div>
-				<p class="mt-2 text-center text-[8px] text-black md:text-xs">
-					Илүү олууллаа болцгооё. Тэмцээнд хэрхэн бүртгүүлэх талаар аль болох дэлгэрэнгүй заавар
-					бичлэг бэлтгэлээ. Анх оролцох гэж байгаа тамирчидад маш их хэрэг болон гэдэгт итгэлтэй
-					байна
-				</p>
+				<p class="mt-2 text-center text-[8px] text-black md:text-xs">Түлхэлт бүр нь мэргэн байг</p>
 			</div>
 			<!-- Form -->
 			<form
