@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import db from '$lib/db'
 import { fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
@@ -44,7 +45,7 @@ export const load: PageServerLoad = async event => {
 
 export const actions: Actions = {
 	register: async event => {
-		const { locals } = event
+		const { locals, url } = event
 		const body = await superValidate(event, registerSchema)
 
 		if (!body.valid) {
@@ -53,9 +54,12 @@ export const actions: Actions = {
 			})
 		}
 
-		const { error } = await locals.sb.auth.signUp({
+		const { error } = await locals.supabase.auth.signUp({
 			email: body.data.email,
-			password: body.data.password
+			password: body.data.password,
+			options: {
+				emailRedirectTo: `${url.origin}/auth/callback`
+			}
 		})
 
 		if (error) {

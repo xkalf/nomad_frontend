@@ -17,6 +17,10 @@ const loginSchema = z.object({
 export const load: PageServerLoad = async event => {
 	const form = await superValidate(event, loginSchema)
 
+	if (event.locals.user) {
+		throw redirect(303, '/')
+	}
+
 	return {
 		form
 	}
@@ -28,7 +32,7 @@ export const actions: Actions = {
 		const redirectUrl = NODE_ENV === 'dev' ? url.origin : 'https://nomad-team.com'
 
 		if (provider) {
-			const { data, error: err } = await locals.sb.auth.signInWithOAuth({
+			const { error: err } = await locals.supabase.auth.signInWithOAuth({
 				provider,
 				options: {
 					redirectTo: redirectUrl
@@ -41,7 +45,7 @@ export const actions: Actions = {
 				})
 			}
 
-			throw redirect(303, data.url)
+			throw redirect(303, '/')
 		}
 	},
 	login: async event => {
@@ -55,7 +59,7 @@ export const actions: Actions = {
 			}
 		}
 
-		const { error: err } = await locals.sb.auth.signInWithPassword({
+		const { error: err } = await locals.supabase.auth.signInWithPassword({
 			email: formData.data.email,
 			password: formData.data.password
 		})
@@ -86,7 +90,7 @@ export const actions: Actions = {
 			}
 		}
 
-		const { error } = await locals.sb.auth.resetPasswordForEmail(form.data.email, {
+		const { error } = await locals.supabase.auth.resetPasswordForEmail(form.data.email, {
 			redirectTo: url.origin
 		})
 

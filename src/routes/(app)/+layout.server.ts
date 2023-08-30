@@ -1,20 +1,17 @@
 import { OPEN } from '$env/static/private'
 import db from '$lib/db'
-import {
-	cubeTypeMapper,
-	type SessionWithSolves,
-	type SessionWithSolvesCount
-} from '$lib/utils/types'
-import type { Settings } from '@prisma/client'
+import { cubeTypeMapper, type SessionWithSolvesCount } from '$lib/utils/types'
+import type { Session, Settings } from '@prisma/client'
 import { redirect } from '@sveltejs/kit'
 import type { LayoutServerLoad } from './$types'
 
 export const load: LayoutServerLoad = async ({ locals, cookies }) => {
+	const session = await locals.getSession()
 	if ((+OPEN || 1) === 0) {
 		throw redirect(303, '/fix')
 	}
 
-	if (!locals.session) {
+	if (!session) {
 		throw redirect(303, '/login')
 	}
 
@@ -25,7 +22,7 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 	const getSessions = async () => {
 		const sessionId = cookies.get('sessionId')
 
-		let session: SessionWithSolves | null = null
+		let session: Session | null = null
 		let sessions: SessionWithSolvesCount[]
 
 		if (sessionId) {
@@ -33,9 +30,6 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 				where: {
 					id: +sessionId,
 					userId: locals.user.id
-				},
-				include: {
-					solves: true
 				}
 			})
 		}
@@ -46,9 +40,6 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 					cube: 'N3',
 					main: true,
 					userId: locals.user.id
-				},
-				include: {
-					solves: true
 				}
 			})
 		}
@@ -60,9 +51,6 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 					name: cubeTypeMapper['N3'],
 					main: true,
 					userId: locals.user.id
-				},
-				include: {
-					solves: true
 				}
 			})
 		}

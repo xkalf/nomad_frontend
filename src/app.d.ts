@@ -2,8 +2,7 @@
 // for information about these interfaces
 
 import type { PrismaClient, UserRole } from '@prisma/client'
-import type { TypedSupabaseClient } from '@supabase/auth-helpers-sveltekit'
-import type { Session as SbSession } from '@supabase/supabase-js'
+import type { Session, SupabaseClient } from '@supabase/supabase-js'
 
 // and what to do when importing types
 declare global {
@@ -15,15 +14,15 @@ declare global {
 				role: UserRole
 				id: number
 			}
-			sb: TypedSupabaseClient
-			session: SbSession | null
+			supabase: SupabaseClient
+			getSession(): Promise<Session | null>
 			prisma: PrismaClient
 		}
 		interface PageData {
-			session: import('@supabase/supabase-js').Session | null
+			session: Session | null
 		}
 		// interface Platform {}
 	}
 }
 
-export { }
+export {}

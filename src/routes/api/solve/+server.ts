@@ -1,11 +1,12 @@
 import type { RequestHandler } from './$types'
 import db from '$lib/db'
+import { error } from '@sveltejs/kit'
 
 export const GET: RequestHandler = async ({ url }) => {
 	const sessionId = url.searchParams.get('sessionId')
 
 	if (!sessionId) {
-		return new Response(JSON.stringify({ success: false }))
+		throw error(500, 'Session ID Not found')
 	}
 
 	const solves = await db.solve.findMany({

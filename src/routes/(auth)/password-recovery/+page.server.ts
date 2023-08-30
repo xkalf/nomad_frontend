@@ -26,6 +26,7 @@ export const actions: Actions = {
 	recovery: async event => {
 		const { locals } = event
 		const form = await superValidate(event, passwordRecoverySchema)
+		const session = await locals.getSession()
 
 		if (!form.valid) {
 			return fail(400, {
@@ -33,17 +34,17 @@ export const actions: Actions = {
 			})
 		}
 
-		const { error } = await locals.sb.auth.updateUser({
-			email: locals.session?.user.email,
+		const { error } = await locals.supabase.auth.updateUser({
+			email: session?.user.email,
 			password: form.data.password
 		})
 
 		if (error) {
 			if (error.status === 400) {
-				return setError(form, [], 'Дахиж нууц үг ээ сэргээнэ үү.')
+				return setError(form, '', 'Дахиж нууц үг ээ сэргээнэ үү.')
 			}
 
-			return setError(form, [], 'Сервер алдаа гарлаа.')
+			return setError(form, '', 'Сервер алдаа гарлаа.')
 		}
 
 		throw redirect(303, '/')

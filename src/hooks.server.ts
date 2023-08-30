@@ -1,14 +1,25 @@
 import db from '$lib/db'
 import type { Handle } from '@sveltejs/kit'
-import '$lib/supabase'
-import { getSupabase } from '@supabase/auth-helpers-sveltekit'
+import { createSupabaseServerClient } from '@supabase/auth-helpers-sveltekit'
+import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public'
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const { session, supabaseClient } = await getSupabase(event)
+	event.locals.supabase = createSupabaseServerClient({
+		supabaseUrl: PUBLIC_SUPABASE_URL,
+		supabaseKey: PUBLIC_SUPABASE_ANON_KEY,
+		event
+	})
 
-	event.locals.sb = supabaseClient
-	event.locals.session = session
+	event.locals.getSession = async () => {
+		const {
+			data: { session }
+		} = await event.locals.supabase.auth.getSession()
+		return session
+	}
+
 	event.locals.prisma = db
+
+	const session = await event.locals.getSession()
 
 	if (session) {
 		try {
@@ -37,6 +48,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	return resolve(event, {
-		transformPageChunk: ({ html }) => html.replace('data-theme=""', 'data-theme="nomad"')
+		transformPageChunk: ({ html }) => html.replace('data-theme=""', 'data-theme="nomad"'),
+		filterSerializedResponseHeaders(name) {
+			return name === 'content-range'
+		}
 	})
 }

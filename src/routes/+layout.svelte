@@ -3,11 +3,27 @@
 	import logo from '$lib/assets/vertical-logo.png'
 	import { page } from '$app/stores'
 	import { onMount } from 'svelte'
-	import { supabaseClient } from '$lib/supabase'
-	import { invalidateAll } from '$app/navigation'
+	import { invalidate } from '$app/navigation'
+	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query'
+	import { browser } from '$app/environment'
+	import type { LayoutData } from './$types'
+
+	export let data: LayoutData
+
+	let { supabase, session } = data
+	$: ({ supabase, session } = data)
+
+	const queryClient = new QueryClient({
+		defaultOptions: {
+			queries: {
+				enabled: browser
+			}
+		}
+	})
 
 	$: {
 		if (typeof gtag !== 'undefined') {
+			// eslint-disable-next-line no-undef
 			gtag('config', 'G-5BDWRZD9W5', {
 				page_title: document.title,
 				page_path: $page.url.href
@@ -18,8 +34,11 @@
 	onMount(() => {
 		const {
 			data: { subscription }
-		} = supabaseClient.auth.onAuthStateChange(() => {
-			invalidateAll()
+		} = supabase.auth.onAuthStateChange((_event, _session) => {
+			console.log(_session)
+			if (_session?.expires_at !== session?.expires_at) {
+				invalidate('supabase:auth')
+			}
 		})
 
 		return () => {
@@ -47,4 +66,6 @@
 	<meta name="og:type" content="website" />
 </svelte:head>
 
-<slot />
+<QueryClientProvider client={queryClient}>
+	<slot />
+</QueryClientProvider>
