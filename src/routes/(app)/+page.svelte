@@ -25,6 +25,8 @@
 	import type { Stackmat } from '$lib/stackmat'
 	import type { SubscriptionLike } from 'rxjs'
 	import { ganTimer } from '$lib/stores/ganTimer'
+	import aliya from '$lib/assets/voices/aliya'
+	import sergelenbat from '$lib/assets/voices/sergelenbat'
 
 	let scramble = 'Холилт хийж байна...'
 	let currentScramble: string | null = null
@@ -78,31 +80,31 @@
 	function handleGanTimerEvent(event: GanTimerEvent) {
 		switch (event.state) {
 			case GanTimerState.HANDS_ON:
-				updateState('waiting')
+				state = 'waiting'
 				break
 			case GanTimerState.HANDS_OFF:
 				if (checkInspection()) {
 					startInspection()
-					updateState('inspection')
+					state = 'inspection'
 				} else {
-					updateState('stopped')
+					state = 'stopped'
 				}
 				break
 			case GanTimerState.RUNNING:
 				startTime()
-				updateState('running')
+				state = 'running'
 				break
 			case GanTimerState.STOPPED:
 				if (event.recordedTime) {
 					stopTime(event.recordedTime.asTimestamp)
-					updateState('stopped')
+					state = 'stopped'
 				}
 				break
 			case GanTimerState.IDLE:
 				timerText = displayTime(0)
 				break
 			case GanTimerState.GET_SET:
-				updateState('ready')
+				state = 'ready'
 				break
 		}
 	}
@@ -114,6 +116,50 @@
 			return 'text-red-500'
 		} else {
 			return 'text-primary'
+		}
+	}
+
+	function playVoice(status: typeof nextStatus) {
+		if (!browser) return
+
+		const audio = new Audio()
+		audio.volume = 1
+
+		switch ($settings.voiceAlert) {
+			case 'Aliya':
+				switch (status) {
+					case 'Dnf':
+						new Audio(aliya.dnf).play()
+						break
+					case 'Plus2':
+						new Audio(aliya.plusTwo).play()
+						break
+					case '8sec':
+						audio.src = aliya.eigth
+						audio.play()
+						console.log('hello')
+						break
+					case '12sec':
+						new Audio(aliya.twelve).play()
+						break
+				}
+				break
+			case 'Sergelenbat':
+				switch (status) {
+					case 'Dnf':
+						new Audio(sergelenbat.dnf).play()
+						break
+					case 'Plus2':
+						new Audio(sergelenbat.plusTwo).play()
+						break
+					case '8sec':
+						new Audio(sergelenbat.eigth).play()
+						break
+					case '12sec':
+						new Audio(sergelenbat.plusTwo).play()
+						break
+				}
+				break
 		}
 	}
 
@@ -165,16 +211,28 @@
 			inspectionSeconds -= 1
 
 			if (inspectionSeconds <= -2) {
-				nextStatus = 'Dnf'
-				timerText = 'DNF'
+				if (nextStatus !== 'Dnf') {
+					nextStatus = 'Dnf'
+					timerText = 'DNF'
+					playVoice('Dnf')
+				}
 			} else if (inspectionSeconds <= 0) {
-				nextStatus = 'Plus2'
-				timerText = '+2'
+				if (nextStatus !== 'Plus2') {
+					nextStatus = 'Plus2'
+					timerText = '+2'
+					playVoice('Plus2')
+				}
 			} else if (inspectionSeconds < 4) {
-				nextStatus = '12sec'
+				if (nextStatus !== '12sec') {
+					nextStatus = '12sec'
+					playVoice('12sec')
+				}
 				timerText = inspectionSeconds.toString()
 			} else if (inspectionSeconds < 8) {
-				nextStatus = '8sec'
+				if (nextStatus !== '8sec') {
+					nextStatus = '8sec'
+					playVoice('8sec')
+				}
 				timerText = inspectionSeconds.toString()
 			} else if ($settings.timerUpdate === 'None') {
 				timerText = 'inspection'
@@ -382,14 +440,14 @@
 
 		if (state === 'ready') {
 			startTime()
-			updateState('running')
+			state = 'running'
 		} else if ($settings.useWcaInspection !== 'Never' && state === 'inspectionReady') {
 			startInspection()
-			updateState('inspection')
+			state = 'inspection'
 		} else if (state === 'waiting' && checkInspection()) {
-			updateState('inspection')
+			state = 'inspection'
 		} else if (state !== 'stopping') {
-			updateState('stopped')
+			state = 'stopped'
 		}
 	}
 
@@ -404,20 +462,20 @@
 		const freezeTime = isTouch && $settings.freezeTime === 0 ? 300 : $settings.freezeTime
 
 		function setReady() {
-			updateState('waiting')
+			state = 'waiting'
 			timeOutRef = setTimeout(() => {
-				updateState('ready')
+				state = 'ready'
 			}, freezeTime)
 		}
 
 		function setInspectionReady() {
 			if (isTouch) {
-				updateState('inspectionWaiting')
+				state = 'inspectionWaiting'
 				inspectionWaitRef = setTimeout(() => {
-					updateState('inspectionReady')
+					state = 'inspectionReady'
 				}, 300)
 			} else {
-				updateState('inspectionReady')
+				state = 'inspectionReady'
 			}
 		}
 
@@ -431,10 +489,10 @@
 			setReady()
 		} else if (state === 'running') {
 			stopTime()
-			updateState('stopping')
+			state = 'stopping'
 
 			setTimeout(() => {
-				updateState('stopped')
+				state = 'stopped'
 			}, 300)
 		}
 	}
@@ -507,10 +565,10 @@
 			e.preventDefault()
 
 			stopTime()
-			updateState('stopping')
+			state = 'stopping'
 
 			setTimeout(() => {
-				updateState('stopped')
+				state = 'stopped'
 			}, 300)
 		}
 	}
@@ -617,10 +675,6 @@
 		})
 	}
 
-	function updateState(input: StateType) {
-		state = input
-	}
-
 	function openDeleteLastModal() {
 		deleteLastModalOpen = true
 	}
@@ -717,81 +771,81 @@
 	/>
 </Modal>
 
-<div
-	class={`${
-		isCubeTypeOpen ? 'block' : 'hidden'
-	} absolute top-1/2 left-1/2 w-64 -translate-x-1/2 -translate-y-1/2 text-center text-2xl text-primary`}
->
-	<ul class="max-h-64 overflow-y-auto rounded-xl bg-white">
-		{#each cubeTypes as type}
-			<li class="border-b border-secondary py-3 last:border-none">
+{#if isCubeTypeOpen}
+	<div
+		class="absolute top-1/2 left-1/2 w-64 -translate-x-1/2 -translate-y-1/2 text-center text-2xl text-primary"
+	>
+		<ul class="max-h-64 overflow-y-auto rounded-xl bg-white">
+			{#each cubeTypes as type}
+				<li class="border-b border-secondary py-3 last:border-none">
+					<button
+						class="w-full"
+						on:click={() => {
+							changeCubeType(type)
+							isCubeTypeOpen = false
+						}}>{cubeTypeMapper[type]}</button
+					>
+				</li>
+			{/each}
+		</ul>
+
+		<button
+			class="mt-2 w-full rounded-xl bg-white py-3"
+			on:click={() => {
+				isCubeTypeOpen = false
+			}}>Cancel</button
+		>
+	</div>
+{/if}
+
+{#if isStateOpen}
+	<div
+		class="absolute top-1/2 left-1/2 w-64 -translate-x-1/2 -translate-y-1/2 text-center text-2xl text-primary"
+	>
+		<ul class="max-h-64 overflow-y-auto rounded-xl bg-white">
+			<li class="border-b border-secondary py-3">
 				<button
 					class="w-full"
-					on:click={() => {
-						changeCubeType(type)
-						isCubeTypeOpen = false
-					}}>{cubeTypeMapper[type]}</button
+					on:click={async () => {
+						await updateLastSolve('Plus2')
+						isStateOpen = false
+					}}>+2</button
 				>
 			</li>
-		{/each}
-	</ul>
+			<li class="border-b border-secondary py-3">
+				<button
+					class="w-full"
+					on:click={async () => {
+						await updateLastSolve('Dnf')
+						isStateOpen = false
+					}}>DNF</button
+				>
+			</li>
+			<li class="border-b border-secondary py-3">
+				<button
+					class="w-full"
+					on:click={async () => {
+						await updateLastSolve('Ok')
+						isStateOpen = false
+					}}>OK</button
+				>
+			</li>
+			<li class="py-3">
+				<button
+					class="w-full"
+					on:click={async () => {
+						await connectBluetoothTimer()
+						isStateOpen = false
+					}}>Gan Timer</button
+				>
+			</li>
+		</ul>
 
-	<button
-		class="mt-2 w-full rounded-xl bg-white py-3"
-		on:click={() => {
-			isCubeTypeOpen = false
-		}}>Cancel</button
-	>
-</div>
-
-<div
-	class={`${
-		isStateOpen ? 'block' : 'hidden'
-	} absolute top-1/2 left-1/2 w-64 -translate-x-1/2 -translate-y-1/2 text-center text-2xl text-primary`}
->
-	<ul class="max-h-64 overflow-y-auto rounded-xl bg-white">
-		<li class="border-b border-secondary py-3">
-			<button
-				class="w-full"
-				on:click={async () => {
-					await updateLastSolve('Plus2')
-					isStateOpen = false
-				}}>+2</button
-			>
-		</li>
-		<li class="border-b border-secondary py-3">
-			<button
-				class="w-full"
-				on:click={async () => {
-					await updateLastSolve('Dnf')
-					isStateOpen = false
-				}}>DNF</button
-			>
-		</li>
-		<li class="border-b border-secondary py-3">
-			<button
-				class="w-full"
-				on:click={async () => {
-					await updateLastSolve('Ok')
-					isStateOpen = false
-				}}>OK</button
-			>
-		</li>
-		<li class="py-3">
-			<button
-				class="w-full"
-				on:click={async () => {
-					await connectBluetoothTimer()
-					isStateOpen = false
-				}}>Gan Timer</button
-			>
-		</li>
-	</ul>
-
-	<button
-		class="mt-2 w-full rounded-xl bg-white py-3"
-		on:click={() => {
-			isStateOpen = false
-		}}>Cancel</button
-	>
-</div>
+		<button
+			class="mt-2 w-full rounded-xl bg-white py-3"
+			on:click={() => {
+				isStateOpen = false
+			}}>Cancel</button
+		>
+	</div>
+{/if}

@@ -27,6 +27,7 @@ export function throttleAlpha(cb: (...args: unknown[]) => Promise<void> | void, 
 
 type ThrottleFunc<T extends (...args: unknown[]) => unknown> = (func: T, delay: number) => T
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const throttleBeta: ThrottleFunc<any> = (cb, delay = 1000) => {
 	let shouldWait = false
 	let waitingArgs: unknown[] | null = null

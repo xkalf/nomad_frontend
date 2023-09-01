@@ -7,6 +7,7 @@
 	import type { Settings } from '@prisma/client'
 	import InputNumber from './InputNumber.svelte'
 	import ItemContainer from './ItemContainer.svelte'
+	import { voiceAlertMapper } from '$lib/utils/types'
 
 	type SettingsForm = Omit<Settings, 'id' | 'createdAt' | 'updatedAt' | 'userId'>
 
@@ -101,13 +102,13 @@
 
 <div class="h-screen md:grid md:grid-cols-[minmax(350px,_1fr)_4fr]">
 	<SidebarContainer />
-	<div class="flex overflow-hidden flex-col h-screen">
-		<div class="overflow-y-auto p-4 pb-8 h-auto md:p-14 md:min-h-screen bg-background">
+	<div class="flex h-screen flex-col overflow-hidden">
+		<div class="h-auto overflow-y-auto bg-background p-4 pb-8 md:min-h-screen md:p-14">
 			<!-- Display -->
 			<p class="mb-4 text-4xl text-primary">Дэлгэц</p>
 			<div class="page">
 				<ItemContainer label="Ойртуулж холдуулах">
-					<div class="grid grid-cols-3 items-center px-4 mx-auto md:px-0 md:w-1/2">
+					<div class="mx-auto grid grid-cols-3 items-center px-4 md:w-1/2 md:px-0">
 						<span class="text-lg text-white">{settingsForm.zoom}%</span>
 						<input
 							bind:value={settingsForm.zoom}
@@ -133,9 +134,9 @@
 					<InputNumber bind:value={settingsForm.timerSize} />
 				</ItemContainer>
 				<ItemContainer label="Үндсэн холилтийн хэмжээ ашиглах" mobileSize="lg" size="md">
-					<div class="flex justify-center mx-auto w-1/2">
+					<div class="mx-auto flex w-1/2 justify-center">
 						<input
-							class="w-6 h-6"
+							class="h-6 w-6"
 							type="checkbox"
 							bind:checked={settingsForm.defaultScrambleSize}
 						/>
@@ -156,7 +157,7 @@
 					</div>
 				</ItemContainer>
 				<ItemContainer label="Дэлгэцний арын зурагний тодруулж бүдгэрүүлэх" size="md">
-					<div class="grid grid-cols-3 items-center px-4 mx-auto md:px-0 md:w-1/2">
+					<div class="mx-auto grid grid-cols-3 items-center px-4 md:w-1/2 md:px-0">
 						<span class="text-lg text-white">{settingsForm.backgroundImageOpacity}%</span>
 						<input
 							type="range"
@@ -170,12 +171,12 @@
 				</ItemContainer>
 			</div>
 			<div
-				class="hidden grid-cols-2 py-4 px-8 mt-8 text-2xl bg-white rounded-xl border-2 md:grid border-primary text-primary"
+				class="mt-8 hidden grid-cols-2 rounded-xl border-2 border-primary bg-white py-4 px-8 text-2xl text-primary md:grid"
 			>
 				{#each shortCuts as shortCut}
 					<div class="py-2">
-						<span class="p-2 rounded-xl bg-background">{shortCut.base}</span>
-						<span class="p-2 rounded-xl bg-background">{shortCut.key}</span>
+						<span class="rounded-xl bg-background p-2">{shortCut.base}</span>
+						<span class="rounded-xl bg-background p-2">{shortCut.key}</span>
 						<span>{shortCut.label}</span>
 					</div>
 				{/each}
@@ -184,8 +185,8 @@
 			<p class="mt-8 mb-4 text-4xl text-primary">Хугацаа хэмжигч</p>
 			<div class="page">
 				<ItemContainer label="Хулганаар хугацаа хэмжигчийг эхлүүлэх">
-					<div class="flex justify-center mx-auto w-1/2">
-						<input class="w-6 h-6" type="checkbox" bind:checked={settingsForm.useMouseTimer} />
+					<div class="mx-auto flex w-1/2 justify-center">
+						<input class="h-6 w-6" type="checkbox" bind:checked={settingsForm.useMouseTimer} />
 					</div>
 				</ItemContainer>
 				<ItemContainer label="Ажиглалтын хугацаа">
@@ -198,7 +199,7 @@
 					</div>
 				</ItemContainer>
 				<ItemContainer label="Дуут дохиог чангалах">
-					<div class="grid grid-cols-3 items-center px-4 mx-auto md:px-0 md:w-1/2">
+					<div class="mx-auto grid grid-cols-3 items-center px-4 md:w-1/2 md:px-0">
 						<span class="text-lg text-white">{settingsForm.voiceVolume}%</span>
 						<input
 							type="range"
@@ -212,11 +213,9 @@
 				<ItemContainer label="Ажиглалтын хугацааг дуут дохиогоор сануулах" size="md">
 					<div class="mx-auto w-1/2">
 						<select class="select" bind:value={settingsForm.voiceAlert}>
-							<option value="None">үгүй</option>
-							<option value="Male">Эрэгтэй</option>
-							<option value="Female">Эмэгтэй</option>
-							<option value="Mygmardorj">Мягмардорж</option>
-							<option value="Aliya">Алья</option>
+							<option value="None">{voiceAlertMapper['None']}</option>
+							<option value="Aliya">{voiceAlertMapper['Aliya']}</option>
+							<option value="Sergelenbat">{voiceAlertMapper['Sergelenbat']}</option>
 						</select>
 					</div>
 				</ItemContainer>
@@ -271,7 +270,7 @@
 				</ItemContainer>
 			</div>
 			<form action="/logout" method="post">
-				<button class="block p-4 mt-4 w-full text-white rounded-lg md:hidden bg-primary"
+				<button class="mt-4 block w-full rounded-lg bg-primary p-4 text-white md:hidden"
 					>Гарах</button
 				>
 			</form>

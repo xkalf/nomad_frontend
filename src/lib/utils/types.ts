@@ -1,4 +1,4 @@
-import { Prisma, type CubeType } from '@prisma/client'
+import { Prisma, type CubeType, VoiceAlert } from '@prisma/client'
 
 export const scrambleMappper: Record<CubeType, string> = {
 	N2: '222',
@@ -119,3 +119,9 @@ const solveWithDetail = Prisma.validator<Prisma.SolveArgs>()({
 })
 
 export type SolveWithDetail = Prisma.SolveGetPayload<typeof solveWithDetail>
+
+export const voiceAlertMapper: Record<VoiceAlert, string> = {
+	Sergelenbat: 'Сэргэлэнбат',
+	None: 'Үгүй',
+	Aliya: 'Алия'
+}

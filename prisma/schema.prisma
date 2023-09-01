@@ -1,6 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["filteredRelationCount"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -204,11 +203,9 @@ enum UseWcaInspection {
 }
 
 enum VoiceAlert {
+  Sergelenbat
   None
-  Male
-  Female
   Aliya
-  Mygmardorj
 }
 
 enum EnteringTimes {
