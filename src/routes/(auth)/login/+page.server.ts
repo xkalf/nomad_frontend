@@ -29,13 +29,20 @@ export const load: PageServerLoad = async event => {
 export const actions: Actions = {
 	oAuth: async ({ locals, url }) => {
 		const provider = url.searchParams.get('provider') as Provider
-		const redirectUrl = NODE_ENV === 'dev' ? url.origin : 'https://nomad-team.com'
+		const redirectUrl =
+			NODE_ENV === 'dev' ? `${url.origin}/auth/callback` : 'https://nomad-team.com/auth/callback'
 
 		if (provider) {
 			const { error: err } = await locals.supabase.auth.signInWithOAuth({
 				provider,
 				options: {
-					redirectTo: redirectUrl
+					redirectTo: redirectUrl,
+					...(provider === 'google' && {
+						queryParams: {
+							access_type: 'offline',
+							prompt: 'consent'
+						}
+					})
 				}
 			})
 

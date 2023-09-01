@@ -4,22 +4,11 @@
 	import { page } from '$app/stores'
 	import { onMount } from 'svelte'
 	import { invalidate } from '$app/navigation'
-	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query'
-	import { browser } from '$app/environment'
-	import type { LayoutData } from './$types'
 
-	export let data: LayoutData
+	export let data
 
 	let { supabase, session } = data
 	$: ({ supabase, session } = data)
-
-	const queryClient = new QueryClient({
-		defaultOptions: {
-			queries: {
-				enabled: browser
-			}
-		}
-	})
 
 	$: {
 		if (typeof gtag !== 'undefined') {
@@ -35,7 +24,6 @@
 		const {
 			data: { subscription }
 		} = supabase.auth.onAuthStateChange((_event, _session) => {
-			console.log(_session)
 			if (_session?.expires_at !== session?.expires_at) {
 				invalidate('supabase:auth')
 			}
@@ -66,6 +54,4 @@
 	<meta name="og:type" content="website" />
 </svelte:head>
 
-<QueryClientProvider client={queryClient}>
-	<slot />
-</QueryClientProvider>
+<slot />

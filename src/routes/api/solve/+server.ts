@@ -1,15 +1,14 @@
 import type { RequestHandler } from './$types'
-import db from '$lib/db'
 import { error } from '@sveltejs/kit'
 
-export const GET: RequestHandler = async ({ url }) => {
+export const GET: RequestHandler = async ({ url, locals: { prisma } }) => {
 	const sessionId = url.searchParams.get('sessionId')
 
 	if (!sessionId) {
 		throw error(500, 'Session ID Not found')
 	}
 
-	const solves = await db.solve.findMany({
+	const solves = await prisma.solve.findMany({
 		where: {
 			sessionId: +sessionId
 		},
@@ -20,10 +19,10 @@ export const GET: RequestHandler = async ({ url }) => {
 	return new Response(JSON.stringify({ success: true, solves }))
 }
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, locals: { prisma } }) => {
 	const data = await request.json()
 
-	const solve = await db.solve.create({
+	const solve = await prisma.solve.create({
 		data: {
 			...data
 		}
@@ -32,9 +31,9 @@ export const POST: RequestHandler = async ({ request }) => {
 	return new Response(JSON.stringify(solve))
 }
 
-export const DELETE: RequestHandler = async ({ request }) => {
+export const DELETE: RequestHandler = async ({ request, locals: { prisma } }) => {
 	const data = (await request.json()) as { ids: number[] }
-	const solves = await db.solve.findMany({
+	const solves = await prisma.solve.findMany({
 		where: {
 			id: {
 				in: data.ids
@@ -42,8 +41,8 @@ export const DELETE: RequestHandler = async ({ request }) => {
 		}
 	})
 
-	await db.$transaction([
-		db.solveDeleted.createMany({
+	await prisma.$transaction([
+		prisma.solveDeleted.createMany({
 			data: [
 				...solves.map(i => {
 					const { id, ...rest } = i
@@ -51,7 +50,7 @@ export const DELETE: RequestHandler = async ({ request }) => {
 				})
 			]
 		}),
-		db.solve.deleteMany({
+		prisma.solve.deleteMany({
 			where: {
 				id: {
 					in: data.ids
