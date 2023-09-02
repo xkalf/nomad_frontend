@@ -33,7 +33,7 @@ export const actions: Actions = {
 			NODE_ENV === 'dev' ? `${url.origin}/auth/callback` : 'https://nomad-team.com/auth/callback'
 
 		if (provider) {
-			const { error: err } = await locals.supabase.auth.signInWithOAuth({
+			const { data, error: err } = await locals.supabase.auth.signInWithOAuth({
 				provider,
 				options: {
 					redirectTo: redirectUrl,
@@ -52,7 +52,7 @@ export const actions: Actions = {
 				})
 			}
 
-			throw redirect(303, '/')
+			throw redirect(303, data.url)
 		}
 	},
 	login: async event => {
