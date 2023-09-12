@@ -29,8 +29,7 @@ export const load: PageServerLoad = async event => {
 export const actions: Actions = {
 	oAuth: async ({ locals, url }) => {
 		const provider = url.searchParams.get('provider') as Provider
-		const redirectUrl =
-			NODE_ENV === 'dev' ? `${url.origin}/auth/callback` : 'https://nomad-team.com/auth/callback'
+		const redirectUrl = NODE_ENV === 'dev' ? `${url.origin}` : 'https://nomad-team.com'
 
 		if (provider) {
 			const { data, error: err } = await locals.supabase.auth.signInWithOAuth({

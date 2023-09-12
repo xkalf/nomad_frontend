@@ -4,11 +4,13 @@
 	import GoogleIcon from '$lib/icons/GoogleIcon.svelte'
 	import { superForm } from 'sveltekit-superforms/client'
 	import type { PageServerData } from './$types'
+	import Icon from '@iconify/svelte'
 
 	export let data: PageServerData
 	const { form, errors, enhance, message } = superForm(data.form)
 
 	let isPasswordRecovery = false
+	let isShow = false
 
 	$: isPasswordRecovery, message.set(undefined)
 </script>
@@ -49,14 +51,29 @@
 					{#if $errors.email}
 						<small class="text-sm text-red-500">{$errors.email}</small>
 					{/if}
-					<input
-						class="mt-4 w-full content-center rounded-xl border border-[#ccc] py-2 px-4 align-top drop-shadow-lg focus:text-black md:py-5 md:px-10"
-						type="password"
-						placeholder="Нууц үг"
-						name="password"
-						bind:value={$form.password}
-						autocomplete="current-password"
-					/>
+					<div class="w-full">
+						{#if isShow}
+							<input
+								class="mt-4 w-full content-center rounded-xl border border-[#ccc] py-2 px-4 align-top drop-shadow-lg focus:text-black md:py-5 md:px-10"
+								type="text"
+								placeholder="Нууц үг"
+								name="password"
+								bind:value={$form.password}
+								autocomplete="current-password"
+							/>
+							<Icon icon="md:eye-off" width="25" height="25" class="absolute right-4 top-1/2" />
+						{:else}
+							<input
+								class="mt-4 w-full content-center rounded-xl border border-[#ccc] py-2 px-4 align-top drop-shadow-lg focus:text-black md:py-5 md:px-10"
+								type="password"
+								placeholder="Нууц үг"
+								name="password"
+								bind:value={$form.password}
+								autocomplete="current-password"
+							/>
+							<Icon icon="md:eye" width="25" height="25" class="absolute right-4 top-1/2" />
+						{/if}
+					</div>
 					{#if $errors.password}
 						<small class="text-sm text-red-500">{$errors.password}</small>
 					{:else if $errors._errors && $errors._errors.length > 0}
@@ -121,17 +138,17 @@
 					{:else if $message}
 						<small class="text-sm">{$message}</small>
 					{/if}
-					<button
-						type="submit"
-						class="mt-4 w-full rounded-lg bg-primary p-2 text-white drop-shadow md:p-4"
-						>Нууц үг сэргээх</button
-					>
-					<button
-						type="button"
-						on:click={() => (isPasswordRecovery = false)}
-						class="mt-4 w-full rounded-lg border border-primary bg-white p-2 text-primary drop-shadow md:p-4"
-						>Буцах</button
-					>
+					<!-- <button -->
+					<!-- 	type="submit" -->
+					<!-- 	class="p-2 mt-4 w-full text-white rounded-lg md:p-4 bg-primary drop-shadow" -->
+					<!-- 	>Нууц үг сэргээх</button -->
+					<!-- > -->
+					<!-- <button -->
+					<!-- 	type="button" -->
+					<!-- 	on:click={() => (isPasswordRecovery = false)} -->
+					<!-- 	class="p-2 mt-4 w-full bg-white rounded-lg border md:p-4 border-primary text-primary drop-shadow" -->
+					<!-- 	>Буцах</button -->
+					<!-- > -->
 				</div>
 			</form>
 			<div class="mt-2 flex items-center justify-center space-x-2 text-lg">
