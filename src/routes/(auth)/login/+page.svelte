@@ -1,7 +1,5 @@
 <script lang="ts">
 	import horizontalLogo from '$lib/assets/horizontal-logo.webp'
-	import FacebookIcon from '$lib/icons/FacebookIcon.svelte'
-	import GoogleIcon from '$lib/icons/GoogleIcon.svelte'
 	import { superForm } from 'sveltekit-superforms/client'
 	import type { PageServerData } from './$types'
 	import Icon from '@iconify/svelte'
@@ -92,29 +90,29 @@
 					>
 				</div>
 			</form>
-			<form
-				method="POST"
-				class={`mt-4 flex w-full flex-col items-center gap-4 md:gap-6 ${
-					isPasswordRecovery ? 'hidden' : 'block'
-				}`}
-			>
-				<div class="relative flex w-full flex-col gap-2 px-4 md:w-4/5">
-					<button
-						formaction="?/oAuth&provider=google"
-						class="flex w-full items-center justify-center gap-2 rounded-lg border border-black bg-white p-2 drop-shadow md:p-4"
-					>
-						<GoogleIcon />
-						Sign in with Google
-					</button>
-					<button
-						formaction="?/oAuth&provider=facebook"
-						class="flex w-full items-center justify-center gap-2 rounded-lg border border-black bg-white p-2 drop-shadow md:p-4"
-					>
-						<FacebookIcon />
-						Sign in with Facebook
-					</button>
-				</div>
-			</form>
+			<!-- <form -->
+			<!-- 	method="POST" -->
+			<!-- 	class={`mt-4 flex w-full flex-col items-center gap-4 md:gap-6 ${ -->
+			<!-- 		isPasswordRecovery ? 'hidden' : 'block' -->
+			<!-- 	}`} -->
+			<!-- > -->
+			<!-- 	<div class="flex relative flex-col gap-2 px-4 w-full md:w-4/5"> -->
+			<!-- 		<button -->
+			<!-- 			formaction="?/oAuth&provider=google" -->
+			<!-- 			class="flex gap-2 justify-center items-center p-2 w-full bg-white rounded-lg border border-black md:p-4 drop-shadow" -->
+			<!-- 		> -->
+			<!-- 			<GoogleIcon /> -->
+			<!-- 			Sign in with Google -->
+			<!-- 		</button> -->
+			<!-- 		<button -->
+			<!-- 			formaction="?/oAuth&provider=facebook" -->
+			<!-- 			class="flex gap-2 justify-center items-center p-2 w-full bg-white rounded-lg border border-black md:p-4 drop-shadow" -->
+			<!-- 		> -->
+			<!-- 			<FacebookIcon /> -->
+			<!-- 			Sign in with Facebook -->
+			<!-- 		</button> -->
+			<!-- 	</div> -->
+			<!-- </form> -->
 			<form
 				method="post"
 				use:enhance
