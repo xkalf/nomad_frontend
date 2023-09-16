@@ -3,7 +3,6 @@ import { fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 import { z } from 'zod'
 import { setError, superValidate, setMessage } from 'sveltekit-superforms/server'
-import { NODE_ENV } from '$env/static/private'
 
 const loginSchema = z.object({
 	email: z
@@ -29,19 +28,18 @@ export const load: PageServerLoad = async event => {
 export const actions: Actions = {
 	oAuth: async ({ locals, url }) => {
 		const provider = url.searchParams.get('provider') as Provider
-		const redirectUrl = NODE_ENV === 'dev' ? `${url.origin}` : 'https://nomad-team.com'
 
 		if (provider) {
 			const { data, error: err } = await locals.supabase.auth.signInWithOAuth({
 				provider,
 				options: {
-					redirectTo: redirectUrl,
 					...(provider === 'google' && {
 						queryParams: {
 							access_type: 'offline',
 							prompt: 'consent'
 						}
-					})
+					}),
+					redirectTo: `${url.origin}/auth/callback`
 				}
 			})
 

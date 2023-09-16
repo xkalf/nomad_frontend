@@ -13,7 +13,7 @@
 <div class="hidden max-h-screen flex-col overflow-hidden bg-sidebar p-6 md:flex">
 	<div class="flex justify-between py-4 text-primary">
 		<p class="lowercase">{$page.data.user.email}</p>
-		<form action="/logout" method="POST">
+		<form action="/auth/logout" method="POST">
 			<button type="submit">Гарах</button>
 		</form>
 	</div>

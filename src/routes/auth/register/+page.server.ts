@@ -79,6 +79,9 @@ export const actions: Actions = {
 			}
 		})
 
-		throw redirect(303, '/')
+		return {
+			message: 'И-мэйл хаягаа шалгана уу',
+			success: true
+		}
 	}
 }
