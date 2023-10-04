@@ -79,9 +79,6 @@ export const actions: Actions = {
 			}
 		})
 
-		return {
-			message: 'И-мэйл хаягаа шалгана уу',
-			success: true
-		}
+		throw redirect(303, '/auth/login')
 	}
 }
