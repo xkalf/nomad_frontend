@@ -212,7 +212,6 @@ enum EnteringTimes {
   Timer
   Typing
   Stackmat
-  Bluetooth
 }
 
 enum TimerUpdate {
