@@ -102,13 +102,13 @@
 
 <div class="h-screen md:grid md:grid-cols-[minmax(350px,_1fr)_4fr]">
 	<SidebarContainer />
-	<div class="flex h-screen flex-col overflow-hidden">
-		<div class="h-auto overflow-y-auto bg-background p-4 pb-8 md:min-h-screen md:p-14">
+	<div class="flex overflow-hidden flex-col h-screen">
+		<div class="overflow-y-auto p-4 pb-8 h-auto md:p-14 md:min-h-screen bg-background">
 			<!-- Display -->
 			<p class="mb-4 text-4xl text-primary">Дэлгэц</p>
 			<div class="page">
 				<ItemContainer label="Ойртуулж холдуулах">
-					<div class="mx-auto grid grid-cols-3 items-center px-4 md:w-1/2 md:px-0">
+					<div class="grid grid-cols-3 items-center px-4 mx-auto md:px-0 md:w-1/2">
 						<span class="text-lg text-white">{settingsForm.zoom}%</span>
 						<input
 							bind:value={settingsForm.zoom}
@@ -134,9 +134,9 @@
 					<InputNumber bind:value={settingsForm.timerSize} />
 				</ItemContainer>
 				<ItemContainer label="Үндсэн холилтийн хэмжээ ашиглах" mobileSize="lg" size="md">
-					<div class="mx-auto flex w-1/2 justify-center">
+					<div class="flex justify-center mx-auto w-1/2">
 						<input
-							class="h-6 w-6"
+							class="w-6 h-6"
 							type="checkbox"
 							bind:checked={settingsForm.defaultScrambleSize}
 						/>
@@ -157,7 +157,7 @@
 					</div>
 				</ItemContainer>
 				<ItemContainer label="Дэлгэцний арын зурагний тодруулж бүдгэрүүлэх" size="md">
-					<div class="mx-auto grid grid-cols-3 items-center px-4 md:w-1/2 md:px-0">
+					<div class="grid grid-cols-3 items-center px-4 mx-auto md:px-0 md:w-1/2">
 						<span class="text-lg text-white">{settingsForm.backgroundImageOpacity}%</span>
 						<input
 							type="range"
@@ -171,12 +171,12 @@
 				</ItemContainer>
 			</div>
 			<div
-				class="mt-8 hidden grid-cols-2 rounded-xl border-2 border-primary bg-white py-4 px-8 text-2xl text-primary md:grid"
+				class="hidden grid-cols-2 py-4 px-8 mt-8 text-2xl bg-white rounded-xl border-2 md:grid border-primary text-primary"
 			>
 				{#each shortCuts as shortCut}
 					<div class="py-2">
-						<span class="rounded-xl bg-background p-2">{shortCut.base}</span>
-						<span class="rounded-xl bg-background p-2">{shortCut.key}</span>
+						<span class="p-2 rounded-xl bg-background">{shortCut.base}</span>
+						<span class="p-2 rounded-xl bg-background">{shortCut.key}</span>
 						<span>{shortCut.label}</span>
 					</div>
 				{/each}
@@ -185,8 +185,8 @@
 			<p class="mt-8 mb-4 text-4xl text-primary">Хугацаа хэмжигч</p>
 			<div class="page">
 				<ItemContainer label="Хулганаар хугацаа хэмжигчийг эхлүүлэх">
-					<div class="mx-auto flex w-1/2 justify-center">
-						<input class="h-6 w-6" type="checkbox" bind:checked={settingsForm.useMouseTimer} />
+					<div class="flex justify-center mx-auto w-1/2">
+						<input class="w-6 h-6" type="checkbox" bind:checked={settingsForm.useMouseTimer} />
 					</div>
 				</ItemContainer>
 				<ItemContainer label="Ажиглалтын хугацаа">
@@ -199,7 +199,7 @@
 					</div>
 				</ItemContainer>
 				<ItemContainer label="Дуут дохиог чангалах">
-					<div class="mx-auto grid grid-cols-3 items-center px-4 md:w-1/2 md:px-0">
+					<div class="grid grid-cols-3 items-center px-4 mx-auto md:px-0 md:w-1/2">
 						<span class="text-lg text-white">{settingsForm.voiceVolume}%</span>
 						<input
 							type="range"
@@ -253,7 +253,6 @@
 							<option value="Timer">Хугацаа хэмжигч</option>
 							<option value="Typing">Бичих</option>
 							<option value="Stackmat">Хугацаа хэмжигчийг AUX холбох</option>
-							<option value="Bluetooth">Хугацаа хэмжигчийг BLUETOOTH холбох</option>
 						</select>
 					</div>
 				</ItemContainer>
@@ -270,7 +269,7 @@
 				</ItemContainer>
 			</div>
 			<form action="/logout" method="post">
-				<button class="mt-4 block w-full rounded-lg bg-primary p-4 text-white md:hidden"
+				<button class="block p-4 mt-4 w-full text-white rounded-lg md:hidden bg-primary"
 					>Гарах</button
 				>
 			</form>
