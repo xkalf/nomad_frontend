@@ -58,9 +58,7 @@
 				</form>
 			{:else}
 				<form
-					class={`mt-4 flex w-full flex-col items-center gap-4 md:gap-6 ${
-						isPasswordRecovery ? 'hidden' : 'block'
-					}`}
+					class="mt-4 flex w-full flex-col items-center gap-4 md:gap-6"
 					action="?/login"
 					method="POST"
 					use:enhance
@@ -78,27 +76,28 @@
 						{#if $errors.email}
 							<small class="text-sm text-red-500">{$errors.email}</small>
 						{/if}
-						<div class="w-full">
+						<div class="flex w-full items-center">
 							{#if isShow}
 								<input
-									class="mt-4 w-full content-center rounded-xl border border-[#ccc] py-2 px-4 align-top drop-shadow-lg focus:text-black md:py-5 md:px-10"
+									class="mt-4 w-11/12 content-center rounded-xl border border-[#ccc] py-2 px-4 align-top drop-shadow-lg focus:text-black md:py-5 md:px-10"
 									type="text"
 									placeholder="Нууц үг"
 									name="password"
 									bind:value={$form.password}
 									autocomplete="current-password"
 								/>
-								<Icon icon="md:eye-off" width="25" height="25" class="absolute right-4 top-1/2" />
+								<button type="button" on:click={() => (isShow = false)}>Нуух</button>
 							{:else}
 								<input
-									class="mt-4 w-full content-center rounded-xl border border-[#ccc] py-2 px-4 align-top drop-shadow-lg focus:text-black md:py-5 md:px-10"
+									on:click={() => (isShow = true)}
+									class="mt-4 w-11/12 content-center rounded-xl border border-[#ccc] py-2 px-4 align-top drop-shadow-lg focus:text-black md:py-5 md:px-10"
 									type="password"
 									placeholder="Нууц үг"
 									name="password"
 									bind:value={$form.password}
 									autocomplete="current-password"
 								/>
-								<Icon icon="md:eye" width="25" height="25" class="absolute right-4 top-1/2" />
+								<button type="button" on:click={() => (isShow = true)}>Харах</button>
 							{/if}
 						</div>
 						{#if $errors.password}
