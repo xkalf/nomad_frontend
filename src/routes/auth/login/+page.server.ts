@@ -17,7 +17,7 @@ export const load: PageServerLoad = async event => {
 	const form = await superValidate(event, loginSchema)
 
 	if (event.locals.user) {
-		throw redirect(303, '/')
+		redirect(303, '/');
 	}
 
 	return {
@@ -49,7 +49,7 @@ export const actions: Actions = {
 				})
 			}
 
-			throw redirect(303, data.url)
+			redirect(303, data.url);
 		}
 	},
 	login: async event => {
@@ -81,7 +81,7 @@ export const actions: Actions = {
 			return setError(formData, '', 'Сервер алдаа гарлаа.')
 		}
 
-		throw redirect(303, '/')
+		redirect(303, '/');
 	},
 	recovery: async event => {
 		const { locals, url } = event

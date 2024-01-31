@@ -8,15 +8,15 @@ import type { LayoutServerLoad } from './$types'
 export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 	const session = await locals.getSession()
 	if ((+OPEN || 1) === 0) {
-		throw redirect(303, '/fix')
+		redirect(303, '/fix')
 	}
 
 	if (!session) {
-		throw redirect(303, '/auth/login')
+		redirect(303, '/auth/login')
 	}
 
 	if (!locals.user) {
-		throw redirect(303, '/auth/register')
+		redirect(303, '/auth/register')
 	}
 
 	const getSessions = async () => {
@@ -107,7 +107,7 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
 
 	return {
 		user: locals.user,
-		getSessions: getSessions(),
-		settings: getSettings()
+		getSessions: await getSessions(),
+		settings: await getSettings()
 	}
 }

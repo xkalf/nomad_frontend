@@ -47,6 +47,6 @@ export const actions: Actions = {
 			return setError(form, '', 'Сервер алдаа гарлаа.')
 		}
 
-		throw redirect(303, '/')
+		redirect(303, '/');
 	}
 }

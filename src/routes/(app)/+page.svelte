@@ -60,9 +60,9 @@
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
 
 	$: textColor = setTextColor(state)
-	session.subscribe(value => {
+	session.subscribe(async value => {
 		if (value?.cube && browser) {
-			scramble = generateScramble(value.cube)
+			scramble = await generateScramble(value.cube)
 		}
 	})
 

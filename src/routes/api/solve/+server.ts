@@ -5,7 +5,7 @@ export const GET: RequestHandler = async ({ url, locals: { prisma } }) => {
 	const sessionId = url.searchParams.get('sessionId')
 
 	if (!sessionId) {
-		throw error(500, 'Session ID Not found')
+		error(500, 'Session ID Not found');
 	}
 
 	const solves = await prisma.solve.findMany({

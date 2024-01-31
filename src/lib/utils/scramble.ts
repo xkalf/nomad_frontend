@@ -1,8 +1,8 @@
 import type { CubeType } from '@prisma/client'
 import { scrambleMappper } from './types'
-import { Scrambow } from 'scrambow'
 
-export function generateScramble(cubeType: CubeType): string {
+export async function generateScramble(cubeType: CubeType): Promise<string> {
+	const { Scrambow } = await import('scrambow')
 	const scrambow = new Scrambow()
 	const bldTypes: CubeType[] = ['Bld3', 'Bld4', 'Bld5']
 	const blindTypeMapper: { [key: string]: CubeType } = {
