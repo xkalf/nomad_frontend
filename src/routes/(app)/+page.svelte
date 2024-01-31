@@ -360,12 +360,12 @@
 		setCubeType(type)
 	}
 
-	function newScramble() {
+	async function newScramble() {
 		lastScramble = scramble
 		if (currentScramble) {
 			scramble = currentScramble
 		} else {
-			scramble = generateScramble($cubeType)
+			scramble = await generateScramble($cubeType)
 		}
 		currentScramble = null
 	}

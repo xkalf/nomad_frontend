@@ -6,7 +6,7 @@ settings:
 
 dependencies:
   '@prisma/client':
-    specifier: ^4.9.0
+    specifier: ^4.16.2
     version: 4.16.2
   gan-web-bluetooth:
     specifier: ^1.0.3
@@ -38,16 +38,16 @@ devDependencies:
     specifier: ^2.33.1
     version: 2.33.1
   '@sveltejs/adapter-netlify':
-    specifier: ^3.0.0
+    specifier: ^3.0.1
     version: 3.0.1(@sveltejs/kit@2.0.6)
   '@sveltejs/adapter-vercel':
-    specifier: ^4.0.0
+    specifier: ^4.0.3
     version: 4.0.3(@sveltejs/kit@2.0.6)
   '@sveltejs/kit':
-    specifier: ^2.0.0
+    specifier: ^2.0.6
     version: 2.0.6(@sveltejs/vite-plugin-svelte@3.0.1)(svelte@4.0.0)(vite@5.0.10)
   '@sveltejs/vite-plugin-svelte':
-    specifier: ^3.0.0
+    specifier: ^3.0.1
     version: 3.0.1(svelte@4.0.0)(vite@5.0.10)
   '@types/bcrypt':
     specifier: ^5.0.0
@@ -116,7 +116,7 @@ devDependencies:
     specifier: ^5.0.2
     version: 5.0.2
   vite:
-    specifier: ^5.0.0
+    specifier: ^5.0.10
     version: 5.0.10(@types/node@20.2.1)
   zod:
     specifier: ^3.20.2
@@ -1155,7 +1155,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.21.4
-      caniuse-lite: 1.0.30001519
+      caniuse-lite: 1.0.30001581
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -1213,7 +1213,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001519
+      caniuse-lite: 1.0.30001581
       electron-to-chromium: 1.4.284
       node-releases: 2.0.8
       update-browserslist-db: 1.0.10(browserslist@4.21.4)
@@ -1241,8 +1241,8 @@ packages:
     engines: {node: '>= 6'}
     dev: true
 
-  /caniuse-lite@1.0.30001519:
-    resolution: {integrity: sha512-0QHgqR+Jv4bxHMp8kZ1Kn8CH55OikjKJ6JmKkZYP1F3D7w+lnFXF70nG5eNfsZS89jadi5Ywy5UCSKLAglIRkg==}
+  /caniuse-lite@1.0.30001581:
+    resolution: {integrity: sha512-whlTkwhqV2tUmP3oYhtNfaWGYHDdS3JYFQBKXxcUR9qqPWsRhFHhoISO2Xnl/g0xyKzht9mI1LZpiNWfMzHixQ==}
     dev: true
 
   /chalk@4.1.2:
