@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CubeType, type Session, type Solve, type User } from '@prisma/client'
+	import { CubeType, type Session, type User } from '@prisma/client'
 	import type { LayoutServerData } from './$types'
 	import { cubeTypeMapper } from '$lib/utils/types'
 	import { browser } from '$app/environment'
@@ -29,9 +29,9 @@
 			  })
 			| undefined
 	} = {
-		user: data.users[0],
+		user: undefined,
 		cube: 'N3',
-		session: data.users[0].sessions[0]
+		session: undefined
 	}
 	let sessions: (Session & {
 		_count: {
@@ -55,9 +55,11 @@
 
 <div class="flex items-center gap-4 p-4 text-xl">
 	<select bind:value={selected.user}>
-		{#each data.users as user}
-			<option value={user}>{user.firstname}</option>
-		{/each}
+		{#await data.users then users}
+			{#each users as user}
+				<option value={user}>{user.firstname}</option>
+			{/each}
+		{/await}
 	</select>
 
 	<select bind:value={selected.cube}>
